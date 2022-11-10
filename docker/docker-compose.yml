@@ -1,0 +1,12 @@
+version: '3.4'
+services:
+  cicrc:
+    container_name: cicrc-webserver
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - default
+    ports:
+      - 80:80
+    restart: always
