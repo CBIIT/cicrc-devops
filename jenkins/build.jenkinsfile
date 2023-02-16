@@ -47,6 +47,12 @@ pipeline {
 
   	stage('build'){
 
+	    environment {
+
+			BRANCH = "${params.Branch}"
+
+        }
+
  		steps {
 
  			script {
@@ -56,7 +62,7 @@ pipeline {
 				# build CICRC Docker container
 				whoami
 				echo 'BUILDING NOW'
-				cd $WORKSPACE/cicrc-devops/docker && docker build .
+				cd $WORKSPACE/cicrc-devops/docker && docker build -t cicrc-web:$BRANCH.$BUILD_NUMBER .
 
 				'''
 
