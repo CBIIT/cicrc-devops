@@ -72,7 +72,9 @@ pipeline {
 				
 				#aws_acct = $(aws sts get-caller-identity --query "Account" --output text)
 				#echo "Account:  $aws_acct"
+				# login and push to ECR
 				docker login -u AWS -p $(aws ecr get-login-password --region $REGION) $ECR_REPO
+				docker push $aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER
 				
 				
 
