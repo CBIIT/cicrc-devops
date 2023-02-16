@@ -10,12 +10,12 @@ pipeline {
 		gitParameter(branchFilter: 'origin/(.*)', 
 			defaultValue: 'main', 
 			name: 'CICRC-Branch', 
-			type: 'GitParameterDefinition',
+			type: 'PT_BRANCH_TAG',
 			quickFilterEnabled: true, 
 			selectedValue: 'DEFAULT', 
 			sortMode: 'ASCENDING_SMART', 
 			tagFilter: '*', 
-			useRepository: 'https://github.com/CBIIT/CICRC')
+			useRepository: 'https://github.com/CBIIT/CICRC.git')
 
   }
 
@@ -44,8 +44,7 @@ pipeline {
 			extensions: [[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops/docker']],
 			submoduleCfg: [],
-			userRemoteConfigs:
-			[[credentialsId: 'cicrc-github',url: 'https://github.com/CBIIT/CICRC.git']]])
+			userRemoteConfigs: [[credentialsId: 'cicrc-github',url: 'https://github.com/CBIIT/CICRC.git']]])
 
         }
 
