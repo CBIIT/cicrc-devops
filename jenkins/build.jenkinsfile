@@ -39,7 +39,7 @@ pipeline {
             extensions: [[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops/docker/CICRC']],
             submoduleCfg: [], 
-            userRemoteConfigs: [[credentialsId: 'cicrc-github', url: 'https://github.com/CBIIT/CICRC.git']]])
+            userRemoteConfigs: [[credentialsId: 'cicrc-github-jenkins', url: 'https://github.com/CBIIT/CICRC.git']]])
 
         }
 
