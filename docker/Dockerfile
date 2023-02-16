@@ -1,6 +1,6 @@
 # Pull the base image from PHP-Apache
 #FROM php:8.1.12-apache-bullseye AS build
-FROM bullseye-slim AS build
+FROM debian:bullseye-slim AS build
 MAINTAINER ESI Devops Team
 
 # Install Dependencies
