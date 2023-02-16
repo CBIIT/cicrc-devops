@@ -7,26 +7,21 @@ pipeline {
 
 	parameters {
 
-		gitParameter(branchFilter: 'origin/(.*)', 
-			defaultValue: 'main', 
-			name: 'CICRC-Branch', 
-			type: 'PT_BRANCH_TAG',
-			quickFilterEnabled: true, 
-			selectedValue: 'DEFAULT', 
-			sortMode: 'ASCENDING_SMART', 
-			tagFilter: '*', 
-			useRepository: 'https://github.com/CBIIT/CICRC.git')
+		gitParameter(branchFilter: 'origin/(.*)',
+            defaultValue: 'main',
+            name: 'Branch',
+            type: 'PT_BRANCH_TAG',
+            quickFilterEnabled: false,
+            selectedValue: 'DEFAULT',
+            sortMode: 'ASCENDING_SMART',
+            tagFilter: '*',
+            useRepository: 'https://github.com/CBIIT/CICRC.git')
 
-  }
-
-  options {
-  
-  	ansiColor('xterm')
-  
   }
 
   stages{
   	stage('checkout'){
+
   		steps {
 
   		checkout([$class: 'GitSCM',
@@ -39,12 +34,12 @@ pipeline {
 			[[url: 'https://github.com/CBIIT/cicrc-devops.git']]])
 
 		checkout([$class: 'GitSCM',
-			branches: [[name: "${params.CICRC-Branch}"]],
-			doGenerateSubmoduleConfigurations: false,
-			extensions: [[$class: 'RelativeTargetDirectory',
+            branches: [[name: "${params.Branch}"]], 
+            doGenerateSubmoduleConfigurations: false,
+            extensions: [[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops/docker/CICRC']],
-			submoduleCfg: [],
-			userRemoteConfigs: [[credentialsId: 'cicrc-github',url: 'https://github.com/CBIIT/CICRC.git']]])
+            submoduleCfg: [], 
+            userRemoteConfigs: [[credentialsId: 'cicrc-github', url: 'https://github.com/CBIIT/CICRC.git']]])
 
         }
 
@@ -55,31 +50,31 @@ pipeline {
  		steps {
 
  			script {
-			
-			    sh label: 'Docker-Build', script: '''#!/bin/bash
-								
-				# build CICRC Docker container
-				cd $WORKSPACE/cicrc-devops/docker && docker build .
 
+			    sh label: 'Docker-Build', script: '''#!/bin/bash
+
+				# build CICRC Docker container
+				echo 'BUILDING NOW'
+				cd $WORKSPACE/cicrc-devops/docker && docker build .
 
 				'''
 
 			}
-			
+
  		}
-		
+
   	}
 
   }
-  
-//  post {
-//
-//    cleanup {
-//
-//        cleanWs()
-//
-//    }
-//
-//  }
-  
+
+  post {
+
+    cleanup {
+
+        cleanWs()
+
+    }
+
+  }
+
 }
