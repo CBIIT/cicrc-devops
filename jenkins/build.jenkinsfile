@@ -49,7 +49,7 @@ pipeline {
 
 	    environment {
 
-			BRANCH = "${params.Branch}"
+			CODE_BRANCH = "${params.Branch}"
 
         }
 
@@ -62,7 +62,7 @@ pipeline {
 				# build CICRC Docker container
 				whoami
 				echo 'BUILDING NOW'
-				cd $WORKSPACE/cicrc-devops/docker && docker build -t cicrc-web:$BRANCH.$BUILD_NUMBER .
+				cd $WORKSPACE/cicrc-devops/docker && docker build -t cicrc-web:$CODE_BRANCH.$BUILD_NUMBER .
 
 				'''
 
