@@ -65,7 +65,7 @@ pipeline {
 				whoami
 				echo 'BUILDING NOW'
 				
-				aws_account = $(aws sts get-caller-identity --query "Account" --output text)
+				aws_account=$(aws sts get-caller-identity --query "Account" --output text)
 				echo "Account:  $aws_account"
 				
 				cd $WORKSPACE/cicrc-devops/docker && docker build -t $aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER .
