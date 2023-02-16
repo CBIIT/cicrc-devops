@@ -1,11 +1,7 @@
 # Pull the base image from PHP-Apache
-FROM php:8.1.12-apache-bullseye AS base
+#FROM php:8.1.12-apache-bullseye AS build
+FROM bullseye-slim AS build
 MAINTAINER ESI Devops Team
-
-ENV APACHE_DOCUMENT_ROOT=/var/www/html
-
-RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
-COPY default.conf /etc/apache2/sites-enabled
 
 # Install Dependencies
 RUN apt update && apt install -y zlib1g-dev libpng-dev git unzip && rm -rf /var/lib/apt/lists/* && docker-php-ext-install gd
@@ -19,10 +15,26 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 RUN composer global require drush/drush:11.3.2
 
-COPY src /var/www/html
+COPY CICRC /var/www/html
 
 RUN cd /var/www/html/ && composer update && composer install
 
+FROM php:8.1.12-apache-bullseye AS final
+
+ENV APACHE_DOCUMENT_ROOT=/var/www/html
+
+RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
+COPY default.conf /etc/apache2/sites-enabled
+
+#COPY --from=build /var/www/html/web /var/www/html/web
+#COPY --from=build /var/www/html/vendor /var/www/html/vendor
+#COPY --from=build /var/www/html/config /var/www/html/config
+
+COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
+COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
+COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
+
+#RUN chown -R www-data:www-data /var/www/html
 WORKDIR /var/www/html
 
 EXPOSE 80
