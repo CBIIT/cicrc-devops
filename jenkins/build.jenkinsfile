@@ -54,6 +54,7 @@ pipeline {
 			    sh label: 'Docker-Build', script: '''#!/bin/bash
 
 				# build CICRC Docker container
+				whoami
 				echo 'BUILDING NOW'
 				cd $WORKSPACE/cicrc-devops/docker && docker build .
 
