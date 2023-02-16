@@ -39,13 +39,13 @@ pipeline {
 			[[url: 'https://github.com/CBIIT/cicrc-devops.git']]])
 
 		checkout([$class: 'GitSCM',
-			branches: [[name: "${params.FrontendTag}"]],
+			branches: [[name: "${params.CICRC-Branch}"]],
 			doGenerateSubmoduleConfigurations: false,
 			extensions: [[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops/docker']],
 			submoduleCfg: [],
 			userRemoteConfigs:
-			[[credentialsId: 'cicrc-github',url: 'https://github.com/CBIIT/CICRC']]])
+			[[credentialsId: 'cicrc-github',url: 'https://github.com/CBIIT/CICRC.git']]])
 
         }
 
