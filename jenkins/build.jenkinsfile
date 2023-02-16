@@ -42,7 +42,7 @@ pipeline {
 			branches: [[name: "${params.CICRC-Branch}"]],
 			doGenerateSubmoduleConfigurations: false,
 			extensions: [[$class: 'RelativeTargetDirectory',
-			relativeTargetDir: 'cicrc-devops/docker']],
+			relativeTargetDir: 'cicrc-devops/docker/CICRC']],
 			submoduleCfg: [],
 			userRemoteConfigs: [[credentialsId: 'cicrc-github',url: 'https://github.com/CBIIT/CICRC.git']]])
 
