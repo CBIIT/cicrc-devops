@@ -45,7 +45,7 @@ pipeline {
 			relativeTargetDir: 'cicrc-devops/docker']],
 			submoduleCfg: [],
 			userRemoteConfigs:
-			[[credentialsId: 'git_credential_token',url: 'https://github.com/CBIIT/CICRC']]])
+			[[credentialsId: 'cicrc-github',url: 'https://github.com/CBIIT/CICRC']]])
 
         }
 
