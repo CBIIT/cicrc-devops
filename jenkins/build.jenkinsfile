@@ -1,0 +1,86 @@
+pipeline {
+	agent {
+		node {
+			label 'slave-ncias-d2999-c'
+		}
+	}
+
+	parameters {
+
+		gitParameter(branchFilter: 'origin/(.*)', 
+			defaultValue: 'main', 
+			name: 'CICRC-Branch', 
+			type: 'GitParameterDefinition',
+			quickFilterEnabled: true, 
+			selectedValue: 'DEFAULT', 
+			sortMode: 'ASCENDING_SMART', 
+			tagFilter: '*', 
+			useRepository: 'https://github.com/CBIIT/CICRC')
+
+  }
+
+  options {
+  
+  	ansiColor('xterm')
+  
+  }
+
+  stages{
+  	stage('checkout'){
+  		steps {
+
+  		checkout([$class: 'GitSCM',
+			branches: [[name: '*/main']],
+			doGenerateSubmoduleConfigurations: false,
+			extensions: [[$class: 'RelativeTargetDirectory',
+			relativeTargetDir: 'cicrc-devops']],
+			submoduleCfg: [],
+			userRemoteConfigs:
+			[[url: 'https://github.com/CBIIT/cicrc-devops.git']]])
+
+		checkout([$class: 'GitSCM',
+			branches: [[name: "${params.FrontendTag}"]],
+			doGenerateSubmoduleConfigurations: false,
+			extensions: [[$class: 'RelativeTargetDirectory',
+			relativeTargetDir: 'cicrc-devops/docker']],
+			submoduleCfg: [],
+			userRemoteConfigs:
+			[[credentialsId: 'git_credential_token',url: 'https://github.com/CBIIT/CICRC']]])
+
+        }
+
+  	}
+
+  	stage('build'){
+
+ 		steps {
+
+ 			script {
+			
+			    sh label: 'Docker-Build', script: '''#!/bin/bash
+								
+				# build CICRC Docker container
+				cd $WORKSPACE/cicrc-devops/docker && docker build .
+
+
+				'''
+
+			}
+			
+ 		}
+		
+  	}
+
+  }
+  
+#  post {
+#  
+#    cleanup {
+#
+#        cleanWs()
+#
+#    }
+#	
+#  }
+  
+}
