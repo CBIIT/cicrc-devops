@@ -62,21 +62,14 @@ pipeline {
 			    sh label: 'Docker-Build', script: '''#!/bin/bash
 
 				# build CICRC Docker container
-				whoami
-				echo 'BUILDING NOW'
-				
+				echo "Building: $ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER"
 				aws_account=$(aws sts get-caller-identity --query "Account" --output text)
-				echo "Account:  $aws_account"
-				
+
 				cd $WORKSPACE/cicrc-devops/docker && docker build -t $aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER .
-				
-				#aws_acct = $(aws sts get-caller-identity --query "Account" --output text)
-				#echo "Account:  $aws_acct"
+
 				# login and push to ECR
 				docker login -u AWS -p $(aws ecr get-login-password --region $REGION) $ECR_REPO
 				docker push $aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER
-				
-				
 
 				'''
 
