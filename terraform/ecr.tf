@@ -16,5 +16,4 @@ module "ecr" {
   project                  = var.project
   ecr_repo_names           = var.ecr_repo_names
   tags                     = var.tags
-  env                      = terraform.workspace
 }
