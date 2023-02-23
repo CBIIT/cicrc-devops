@@ -74,22 +74,6 @@ variable "region" {
 #  }))
 #}
 
-#variable "domain_name" {
-#  description = "domain name for the application"
-#  type = string
-#}
-
-#variable "application_subdomain" {
-#  description = "subdomain of the app"
-#  type = string
-#}
-
-#variable "s3_force_destroy" {
-#  description = "force destroy bucket"
-#  default = true
-#  type = bool
-#}
-
 variable "iam_prefix" {
   type        = string
   default     = "power-user"
