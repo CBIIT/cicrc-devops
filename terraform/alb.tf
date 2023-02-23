@@ -1,22 +1,22 @@
 # data
-data "aws_acm_certificate" "amazon_issued" {
-  domain      = var.certificate_domain_name
-  types       = [local.cert_types]
-  most_recent = true
-}
+#data "aws_acm_certificate" "amazon_issued" {
+#  domain      = var.certificate_domain_name
+#  types       = [local.cert_types]
+#  most_recent = true
+#}
 
 # locals
 locals {
   alb_subnet_ids      = terraform.workspace == "prod" || terraform.workspace == "stage" ? var.public_subnet_ids : var.private_subnet_ids
   alb_log_bucket_name = terraform.workspace == "prod" || terraform.workspace == "stage" ? "prod-alb-access-logs" : "nonprod-alb-access-logs"
-  cert_types          = "IMPORTED"
+  #cert_types          = "IMPORTED"
 }
 
 # vars
-variable "certificate_domain_name" {
-  description = "domain name for the ssl cert"
-  type        = string
-}
+#variable "certificate_domain_name" {
+#  description = "domain name for the ssl cert"
+#  type        = string
+#}
 
 variable "public_subnet_ids" {
   description = "Provide list of public subnets to use in this VPC. Example 10.0.1.0/24,10.0.2.0/24"
@@ -38,7 +38,7 @@ module "alb" {
   alb_subnet_ids      = local.alb_subnet_ids
   tags                = var.tags
   project             = var.project
-  alb_certificate_arn = data.aws_acm_certificate.amazon_issued.arn
+  #alb_certificate_arn = data.aws_acm_certificate.amazon_issued.arn
 }
 
 module "s3" {
