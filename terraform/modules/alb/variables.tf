@@ -36,10 +36,10 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "alb_certificate_arn" {
-  description = "arn for the ssl cert"
-  type        = string
-}
+#variable "alb_certificate_arn" {
+#  description = "arn for the ssl cert"
+#  type        = string
+#}
 
 variable "env" {
   description = "name of the environment to provision"
