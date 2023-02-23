@@ -6,7 +6,7 @@ locals {
 
 
 module "alb" {
-  source = "modules/alb"
+  source = "./modules/alb"
   vpc_id = var.vpc_id
   alb_log_bucket_name = module.s3.bucket_name
   env = terraform.workspace
@@ -17,7 +17,7 @@ module "alb" {
 }
 
 module "s3" {
-  source = "modules/alb"
+  source = "./modules/s3"
   bucket_name = local.alb_log_bucket_name
   project = var.project
   env = terraform.workspace

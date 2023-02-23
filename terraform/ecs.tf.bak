@@ -1,5 +1,5 @@
 module "ecs" {
-  source = "modules/ecs"
+  source = "./modules/ecs"
   project = var.project
   tags = var.tags
   vpc_id = var.vpc_id
