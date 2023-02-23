@@ -4,7 +4,7 @@ resource "aws_ecr_repository" "ecr" {
   image_tag_mutability = "MUTABLE"
   tags = merge(
     {
-      "Name" = format("%s-%s-%s", each.key, "ecr-registry")
+      "Name" = format("%s-%s", each.key, "ecr-registry")
     },
     var.tags,
   )
