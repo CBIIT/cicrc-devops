@@ -1,11 +1,11 @@
 variable "project" {
   description = "name of the project"
-  type = string
+  type        = string
 }
 
 variable "tags" {
   description = "tags to associate with this instance"
-  type = map(string)
+  type        = map(string)
 }
 
 variable "vpc_id" {
@@ -15,8 +15,8 @@ variable "vpc_id" {
 
 variable "region" {
   description = "aws region to use for this resource"
-  type = string
-  default = "us-east-1"
+  type        = string
+  default     = "us-east-1"
 }
 
 #variable "certificate_domain_name" {
@@ -90,32 +90,8 @@ variable "region" {
 #  type = bool
 #}
 
-variable "ecr_repo_names" {
-  description = "list of repo names"
-  type = list(string)
+variable "iam_prefix" {
+  type        = string
+  default     = "power-user"
+  description = "nci iam power user prefix"
 }
-
-variable "create_ecr_repos" {
-  type = bool
-  default = false
-  description = "choose whether to create ecr repos or not"
-}
-
-#variable "create_env_specific_repo" {
-#  description = "choose to create environment specific repo. Example bento-dev-frontend"
-#  type = bool
-#  default = false
-#}
-
-#variable "iam_prefix" {
-#  type = string
-#  default = "power-user"
-#  description = "nci iam power user prefix"
-#}
-
-
-#variable "allow_cloudwatch_stream" {
-#  type = bool
-#  default = true
-#  description = "allow cloudwatch stream for the containers"
-#}
