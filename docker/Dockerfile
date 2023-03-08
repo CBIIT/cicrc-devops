@@ -1,6 +1,6 @@
 # Pull the base image from PHP-Apache
-#FROM php:8.1.12-apache-bullseye AS build
-FROM php:8.1.12-bullseye AS build
+FROM php:8.1.12-apache-bullseye AS build
+#FROM php:8.1.12-bullseye AS build
 MAINTAINER ESI Devops Team
 
 # Install Dependencies
@@ -19,22 +19,17 @@ COPY CICRC /var/www/html
 
 RUN cd /var/www/html/ && composer update && composer install
 
-FROM php:8.1.12-apache-bullseye AS final
+#FROM php:8.1.12-apache-bullseye AS final
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html
 
 RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
 COPY default.conf /etc/apache2/sites-enabled
 
-#COPY --from=build /var/www/html/web /var/www/html/web
-#COPY --from=build /var/www/html/vendor /var/www/html/vendor
-#COPY --from=build /var/www/html/config /var/www/html/config
-
 COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
-COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
+#COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
 COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
 
-#RUN chown -R www-data:www-data /var/www/html
 WORKDIR /var/www/html
 
 EXPOSE 80
