@@ -30,8 +30,7 @@ COPY default.conf /etc/apache2/sites-enabled
 #COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
 #COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
 
-COPY --chown=www-data:www-data /var/www/html/web /var/www/html/web
-COPY --chown=www-data:www-data /var/www/html/config /var/www/html/config
+RUN chown -R www-data:www-data /var/www/html
 
 WORKDIR /var/www/html
 
