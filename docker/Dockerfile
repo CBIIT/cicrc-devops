@@ -26,9 +26,12 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html
 RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
 COPY default.conf /etc/apache2/sites-enabled
 
-COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
+#COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
 #COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
-COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
+#COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
+
+COPY --chown=www-data:www-data /var/www/html/web /var/www/html/web
+COPY --chown=www-data:www-data /var/www/html/config /var/www/html/config
 
 WORKDIR /var/www/html
 
