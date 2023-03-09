@@ -31,14 +31,13 @@ RUN docker-php-ext-install pdo_mysql
 #COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
 #COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
 #COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
+COPY cicrc-entrypoint.sh /var/www/html
 
 RUN chown -R www-data:www-data /var/www/html
 
 WORKDIR /var/www/html
 
 EXPOSE 80
-
-COPY cicrc-entrypoint.sh /tmp/
 
 #ARG DB_NAME
 #ENV DB_NAME=${DB_NAME}
@@ -49,4 +48,4 @@ COPY cicrc-entrypoint.sh /tmp/
 #ARG DB_HOST
 #ENV DB_HOST=${DB_HOST}
 
-ENTRYPOINT [ "/bin/sh", "-c", "/tmp/cicrc-entrypoint.sh && apache2-foreground" ]
+ENTRYPOINT [ "/bin/sh", "-c", "/var/www/html/cicrc-entrypoint.sh && apache2-foreground" ]
