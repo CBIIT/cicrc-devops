@@ -31,7 +31,8 @@ RUN docker-php-ext-install pdo_mysql
 #COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
 #COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
 #COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
-COPY cicrc-entrypoint.sh /var/www/html
+COPY cicrc-entrypoint.sh /var/www/html \
+&& chmod +x /var/www/html/cicrc-entrypoint.sh
 
 RUN chown -R www-data:www-data /var/www/html
 
