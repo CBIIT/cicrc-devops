@@ -26,6 +26,8 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html
 RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
 COPY default.conf /etc/apache2/sites-enabled
 
+RUN docker-php-ext-install pdo_mysql
+
 #COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
 #COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
 #COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
@@ -35,3 +37,16 @@ RUN chown -R www-data:www-data /var/www/html
 WORKDIR /var/www/html
 
 EXPOSE 80
+
+COPY cicrc-entrypoint.sh /tmp/
+
+#ARG DB_NAME
+#ENV DB_NAME=${DB_NAME}
+#ARG DB_USER
+#ENV DB_USER=${DB_USER}
+#ARG DB_PASS
+#ENV DB_PASS=${DB_PASS}
+#ARG DB_HOST
+#ENV DB_HOST=${DB_HOST}
+
+ENTRYPOINT [ "/bin/sh", "-c", "/tmp/cicrc-entrypoint.sh && apache2-foreground" ]
