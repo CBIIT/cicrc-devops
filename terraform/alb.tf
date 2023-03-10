@@ -1,34 +1,3 @@
-# data
-#data "aws_acm_certificate" "amazon_issued" {
-#  domain      = var.certificate_domain_name
-#  types       = [local.cert_types]
-#  most_recent = true
-#}
-
-# locals
-locals {
-  alb_subnet_ids      = terraform.workspace == "prod" || terraform.workspace == "stage" ? var.public_subnet_ids : var.private_subnet_ids
-  alb_log_bucket_name = terraform.workspace == "prod" || terraform.workspace == "stage" ? "prod-alb-access-logs" : "nonprod-alb-access-logs"
-  #cert_types          = "IMPORTED"
-}
-
-# vars
-#variable "certificate_domain_name" {
-#  description = "domain name for the ssl cert"
-#  type        = string
-#}
-
-variable "public_subnet_ids" {
-  description = "Provide list of public subnets to use in this VPC. Example 10.0.1.0/24,10.0.2.0/24"
-  type        = list(string)
-}
-
-variable "s3_force_destroy" {
-  description = "force destroy bucket"
-  default     = true
-  type        = bool
-}
-
 # modules
 module "alb" {
   source              = "./modules/alb"

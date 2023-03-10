@@ -7,6 +7,7 @@ module "ecs" {
   application_url = local.application_url
   env = terraform.workspace
   microservices = var.microservices
-  alb_https_listener_arn = module.alb.alb_https_listener_arn
+  #alb_https_listener_arn = module.alb.alb_https_listener_arn
+  alb_https_listener_arn = module.alb.alb_http_listener_arn
   allow_cloudwatch_stream = true
 }
