@@ -3,9 +3,6 @@ FROM php:8.1.12-apache-bullseye AS build
 #FROM php:8.1.12-bullseye AS build
 MAINTAINER ESI Devops Team
 
-COPY cicrc-entrypoint.sh /var/www/html/cicrc-entrypoint.sh \
-  && chmod +x /var/www/html/cicrc-entrypoint.sh
-
 # Install Dependencies
 RUN apt update && apt install -y zlib1g-dev libpng-dev git unzip && rm -rf /var/lib/apt/lists/* && docker-php-ext-install gd
 
@@ -34,8 +31,8 @@ RUN docker-php-ext-install pdo_mysql
 #COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
 #COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
 #COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
-#COPY cicrc-entrypoint.sh /var/www/html/cicrc-entrypoint.sh \
-#  && chmod +x /var/www/html/cicrc-entrypoint.sh
+COPY cicrc-entrypoint.sh /var/www/html/cicrc-entrypoint.sh
+RUN chmod +x /var/www/html/cicrc-entrypoint.sh
 
 RUN chown -R www-data:www-data /var/www/html
 
