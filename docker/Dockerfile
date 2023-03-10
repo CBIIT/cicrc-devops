@@ -1,6 +1,5 @@
 # Pull the base image from PHP-Apache
-FROM php:8.1.12-apache-bullseye AS build
-#FROM php:8.1.12-bullseye AS build
+FROM php:8.1.12-bullseye AS build
 MAINTAINER ESI Devops Team
 
 # Install Dependencies
@@ -19,34 +18,24 @@ COPY CICRC /var/www/html
 
 RUN cd /var/www/html/ && composer update && composer install
 
-#FROM php:8.1.12-apache-bullseye AS final
+FROM php:8.1.12-apache-bullseye AS final
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html
-
-RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
-COPY default.conf /etc/apache2/sites-enabled
-
+# Install pdo extensions
 RUN docker-php-ext-install pdo_mysql
 
-#COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
-#COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
-#COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
-COPY cicrc-entrypoint.sh /var/www/html/cicrc-entrypoint.sh
-RUN chmod +x /var/www/html/cicrc-entrypoint.sh
+# Copy required config files 
+RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
+COPY default.conf /etc/apache2/sites-enabled
+COPY --chown=www-data:www-data --chmod=0755 cicrc-entrypoint.sh /var/www/html/cicrc-entrypoint.sh
 
-RUN chown -R www-data:www-data /var/www/html
+# Copy code
+COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
+COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
+COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
 
+ENV APACHE_DOCUMENT_ROOT=/var/www/html
 WORKDIR /var/www/html
 
 EXPOSE 80
-
-#ARG DB_NAME
-#ENV DB_NAME=${DB_NAME}
-#ARG DB_USER
-#ENV DB_USER=${DB_USER}
-#ARG DB_PASS
-#ENV DB_PASS=${DB_PASS}
-#ARG DB_HOST
-#ENV DB_HOST=${DB_HOST}
 
 ENTRYPOINT [ "/bin/sh", "-c", "/var/www/html/cicrc-entrypoint.sh && apache2-foreground" ]

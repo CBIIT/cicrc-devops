@@ -66,11 +66,11 @@ pipeline {
 				aws_account=$(aws sts get-caller-identity --query "Account" --output text)
 				repo_url="$aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO"
 
-				cd $WORKSPACE/cicrc-devops/docker && docker build -t $repo_url:$CODE_BRANCH.$BUILD_NUMBER .
+				cd $WORKSPACE/cicrc-devops/docker && DOCKER_BUILDKIT=1 docker build -t $repo_url:$CODE_BRANCH.$BUILD_NUMBER .
 
 				# login and push to ECR
 				docker login -u AWS -p $(aws ecr get-login-password --region $REGION) $repo_url
-				docker push $aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER
+				docker push $repo_url:$CODE_BRANCH.$BUILD_NUMBER
 
 				'''
 
@@ -82,14 +82,14 @@ pipeline {
 
   }
 
-//  post {
-//
-//    cleanup {
-//
-//        cleanWs()
-//
-//    }
-//
-//  }
+  post {
+
+    cleanup {
+
+        cleanWs()
+
+    }
+
+  }
 
 }
