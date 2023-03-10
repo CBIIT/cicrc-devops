@@ -84,11 +84,11 @@ pipeline {
 
   post {
 
-    cleanup {
-
-        cleanWs()
-
-    }
+//    cleanup {
+//
+//        cleanWs()
+//
+//    }
 
   }
 
