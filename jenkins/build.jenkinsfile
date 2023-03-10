@@ -68,6 +68,35 @@ pipeline {
 
 				cd $WORKSPACE/cicrc-devops/docker && DOCKER_BUILDKIT=1 docker build -t $repo_url:$CODE_BRANCH.$BUILD_NUMBER .
 
+				'''
+
+			}
+
+ 		}
+
+  	}
+
+  	stage('push to ECR'){
+
+	    environment {
+
+			CODE_BRANCH = "${params.Branch}"
+			REGION      = "us-east-1"
+			ECR_REPO    = "cicrc-web"
+
+        }
+
+ 		steps {
+
+ 			script {
+
+			    sh label: 'Docker-Push', script: '''#!/bin/bash
+
+				# pushing CICRC container to ECR
+				echo "Pushing: $ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER"
+				aws_account=$(aws sts get-caller-identity --query "Account" --output text)
+				repo_url="$aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO"
+
 				# login and push to ECR
 				docker login -u AWS -p $(aws ecr get-login-password --region $REGION) $repo_url
 				docker push $repo_url:$CODE_BRANCH.$BUILD_NUMBER
