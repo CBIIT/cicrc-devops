@@ -1,0 +1,81 @@
+pipeline {
+	agent {
+		node {
+			label 'slave-ncias-d2999-c'
+		}
+	}
+
+	parameters {
+
+        string(
+            defaultValue: '',
+            description: 'The Image to Deploy',
+            name: 'Image_Tag')
+
+  }
+
+  stages{
+  	stage('checkout'){
+
+  		steps {
+
+  		checkout([$class: 'GitSCM',
+			branches: [[name: '*/main']],
+			doGenerateSubmoduleConfigurations: false,
+			extensions: [[$class: 'RelativeTargetDirectory',
+			relativeTargetDir: 'cicrc-devops']],
+			submoduleCfg: [],
+			userRemoteConfigs:
+			[[url: 'https://github.com/CBIIT/cicrc-devops.git']]])
+
+        }
+
+  	}
+
+  	stage('Update Task Definition'){
+
+	    environment {
+
+			IMAGE_TAG = "${params.Image_Tag}"
+			REGION      = "us-east-1"
+			ECR_REPO    = "cicrc-web"
+
+        }
+
+ 		steps {
+
+ 			script {
+
+			    sh label: 'Task-Defiinition-Update', script: '''#!/bin/bash
+
+				# create new revision for CICRC Task Definition
+				echo "Updating Task Defintion to Use: $ECR_REPO:$IMAGE_TAG"
+				ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+				IMAGE_ID="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG"
+
+				sed -i "s|{{account_id}}|$ACCOUNT_ID|" cicrc-devops/web_task.json
+				sed -i "s|{{image_id}}|$IMAGE_ID|" cicrc-devops/web_task.json
+
+				aws ecs register-task-definition --cli-input-json file://cicrc-devops/web_task.json
+
+				'''
+
+			}
+
+ 		}
+
+  	}
+
+  }
+
+  post {
+
+    cleanup {
+
+        cleanWs()
+
+    }
+
+  }
+
+}

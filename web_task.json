@@ -1,0 +1,45 @@
+{
+    "family": "cicrc-dev-web",
+    "taskRoleArn": "arn:aws:iam::{{account_id}}:role/power-user-cicrc-dev-ecs-task-role",
+    "executionRoleArn": "arn:aws:iam::{{account_id}}:role/power-user-cicrc-dev-ecs-task-execution-role",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "networkMode": "awsvpc",
+    "cpu": "256",
+    "memory": "512",
+    "containerDefinitions": [
+        {
+            "name": "web",
+            "image": "{{image_id}}",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "web-80-tcp",
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "secrets": [
+                {
+                    "name": "DB_NAME",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/dev:DB_NAME::"
+                },
+                {
+                    "name": "DB_PASS",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/dev:DB_PASS::"
+                },
+                {
+                    "name": "DB_HOST",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/dev:DB_HOST::"
+                },
+                {
+                    "name": "DB_USER",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/dev:DB_USER::"
+                }
+            ]
+        }
+    ]
+}
