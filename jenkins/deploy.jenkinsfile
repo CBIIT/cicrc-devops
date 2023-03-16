@@ -43,9 +43,10 @@ pipeline {
 
 	    environment {
 
-			IMAGE_TAG = "${params.Image_Tag}"
-			REGION    = "us-east-1"
-			ECR_REPO  = "cicrc-web"
+			IMAGE_TAG   = "${params.Image_Tag}"
+			ENVIRONMENT = "${params.Environment}
+			REGION      = "us-east-1"
+			ECR_REPO    = "cicrc-web"
 
         }
 
@@ -62,6 +63,7 @@ pipeline {
 
 				sed -i "s|{{account_id}}|$ACCOUNT_ID|" cicrc-devops/web_task.json
 				sed -i "s|{{image_id}}|$IMAGE_ID|" cicrc-devops/web_task.json
+				sed -i "s|{{environment}}|$ENVIRONMENT|" cicrc-devops/web_task.json
 
 				aws ecs register-task-definition --cli-input-json file://cicrc-devops/web_task.json
 

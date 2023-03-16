@@ -1,7 +1,7 @@
 {
-    "family": "cicrc-dev-web",
-    "taskRoleArn": "arn:aws:iam::{{account_id}}:role/power-user-cicrc-dev-ecs-task-role",
-    "executionRoleArn": "arn:aws:iam::{{account_id}}:role/power-user-cicrc-dev-ecs-task-execution-role",
+    "family": "cicrc-{{environment}}-web",
+    "taskRoleArn": "arn:aws:iam::{{account_id}}:role/power-user-cicrc-{{environment}}-ecs-task-role",
+    "executionRoleArn": "arn:aws:iam::{{account_id}}:role/power-user-cicrc-{{environment}}-ecs-task-execution-role",
     "requiresCompatibilities": [
         "FARGATE"
     ],
@@ -25,19 +25,19 @@
             "secrets": [
                 {
                     "name": "DB_NAME",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/dev:DB_NAME::"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/{{environment}}:DB_NAME::"
                 },
                 {
                     "name": "DB_PASS",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/dev:DB_PASS::"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/{{environment}}:DB_PASS::"
                 },
                 {
                     "name": "DB_HOST",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/dev:DB_HOST::"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/{{environment}}:DB_HOST::"
                 },
                 {
                     "name": "DB_USER",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/dev:DB_USER::"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/{{environment}}:DB_USER::"
                 }
             ]
         }
