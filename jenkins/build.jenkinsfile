@@ -124,7 +124,7 @@ pipeline {
     success {
 
 		script {
-			if (${params.Deploy_Image} != "NO_DEPLOYMENT") {
+			if (params.Deploy_Image != "NO_DEPLOYMENT") {
 				echo "Deploy the image: ${params.Branch}.$BUILD_NUMBER    to the environment:  ${params.Deploy_Image}"
 				build job: '_default/_lower/CICRC/CICRC-Image-Deploy', parameters: [string(name: 'Image_Tag', value: "${params.Branch}.$BUILD_NUMBER"), extendedChoice(name: 'Environment', value: "${params.Deploy_Image}")]
 			}
