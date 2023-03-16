@@ -43,9 +43,9 @@ pipeline {
 
 	    environment {
 
-			IMG_TAG = "${params.Image_Tag}"
-			ENV = "${params.Environment}"
-			REGION = "us-east-1"
+			IMG_TAG  = "${params.Image_Tag}"
+			ENV      = "${params.Environment}"
+			REGION   = "us-east-1"
 			ECR_REPO = "cicrc-web"
 
         }
@@ -79,7 +79,6 @@ pipeline {
 
 	    environment {
 
-			IMAGE_TAG    = "${params.Image_Tag}"
 			REGION       = "us-east-1"
 			CLUSTER      = "cicrc-${params.Environment}-ecs"
 			SERVICE_NAME = "cicrc-${params.Environment}-web"
