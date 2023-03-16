@@ -43,10 +43,10 @@ pipeline {
 
 	    environment {
 
-			IMAGE_TAG   = "${params.Image_Tag}"
+			IMAGE_TAG = "${params.Image_Tag}"
 			ENV = "${params.Environment}"
-			REGION      = "us-east-1"
-			ECR_REPO    = "cicrc-web"
+			REGION = "us-east-1"
+			ECR_REPO = "cicrc-web"
 
         }
 
@@ -54,7 +54,7 @@ pipeline {
 
  			script {
 
-			    sh label: 'Task-Defiinition-Update', script: '''#!/bin/bash
+			    sh label: 'Task-Definition-Update', script: '''#!/bin/bash
 
 				# create new revision for CICRC Task Definition
 				echo "Updating Task Defintion to Use: $ECR_REPO:$IMAGE_TAG"
