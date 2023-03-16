@@ -44,7 +44,7 @@ pipeline {
 	    environment {
 
 			IMAGE_TAG   = "${params.Image_Tag}"
-			ENVIRONMENT = "${params.Environment}
+			ENVIRONMENT = "${params.Environment}"
 			REGION      = "us-east-1"
 			ECR_REPO    = "cicrc-web"
 
