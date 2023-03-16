@@ -43,7 +43,7 @@ pipeline {
 
 	    environment {
 
-			IMAGE_TAG = "${params.Image_Tag}"
+			IMG_TAG = "${params.Image_Tag}"
 			ENV = "${params.Environment}"
 			REGION = "us-east-1"
 			ECR_REPO = "cicrc-web"
@@ -57,9 +57,9 @@ pipeline {
 			    sh label: 'Task-Definition-Update', script: '''#!/bin/bash
 
 				# create new revision for CICRC Task Definition
-				echo "Updating Task Defintion to Use: $ECR_REPO:$IMAGE_TAG"
+				echo "Updating Task Defintion to Use: $ECR_REPO:$IMG_TAG"
 				ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-				IMAGE_ID="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG"
+				IMAGE_ID="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMG_TAG"
 
 				sed -i "s|{{account_id}}|$ACCOUNT_ID|" cicrc-devops/web_task.json
 				sed -i "s|{{image_id}}|$IMAGE_ID|" cicrc-devops/web_task.json
