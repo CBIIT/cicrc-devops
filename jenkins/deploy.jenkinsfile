@@ -12,6 +12,13 @@ pipeline {
             description: 'The Image to Deploy',
             name: 'Image_Tag')
 
+        extendedChoice(
+            name: 'Environment',
+            defaultValue: 'dev',
+            description: 'Choose the environment to deploy to',
+            type: 'PT_SINGLE_SELECT',
+            value: 'dev,qa')
+
   }
 
   stages{
@@ -37,8 +44,8 @@ pipeline {
 	    environment {
 
 			IMAGE_TAG = "${params.Image_Tag}"
-			REGION      = "us-east-1"
-			ECR_REPO    = "cicrc-web"
+			REGION    = "us-east-1"
+			ECR_REPO  = "cicrc-web"
 
         }
 
@@ -57,6 +64,37 @@ pipeline {
 				sed -i "s|{{image_id}}|$IMAGE_ID|" cicrc-devops/web_task.json
 
 				aws ecs register-task-definition --cli-input-json file://cicrc-devops/web_task.json
+
+				'''
+
+			}
+
+ 		}
+
+  	}
+
+    stage('Update Service'){
+
+	    environment {
+
+			IMAGE_TAG    = "${params.Image_Tag}"
+			REGION       = "us-east-1"
+			CLUSTER      = "cicrc-${params.Environment}-ecs"
+			SERVICE_NAME = "cicrc-${params.Environment}-web"
+
+        }
+
+ 		steps {
+
+ 			script {
+
+			    sh label: 'Service-Update', script: '''#!/bin/bash
+
+				# Redeploy Service Using The Latest Task Definition
+				echo "Updating Service: $SERVICE_NAME"
+
+				TASK_REVISION=$(aws ecs describe-task-definition --task-definition $SERVICE_NAME | egrep "revision" | awk '{print $2}' | sed 's/,//')
+				aws ecs update-service --cluster $CLUSTER --region $REGION --service $SERVICE_NAME --task-definition $SERVICE_NAME:$TASK_REVISION --desired-count 1
 
 				'''
 
