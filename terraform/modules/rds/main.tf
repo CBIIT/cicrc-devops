@@ -1,14 +1,18 @@
 resource "aws_db_instance" "rds_mysql" {
   allocated_storage    = 10
-  db_name              = "cicrc-dev-mysql"
+  max_allocated_storage = 100
+  #db_name              = "cicrc-dev-mysql"
   engine               = "mysql"
-  engine_version       = "8.0.30"
+  engine_version       = "8.0"
   instance_class       = "db.t3.micro"
-  username             = "cicrc"
+  username             = "cicrc-master"
   password             = "foobarbaz"
   parameter_group_name = "default.mysql8.0"
   db_subnet_group_name = "dev-vpc-sngrp"
   skip_final_snapshot  = true
+  
+  backup_retention_period = 7
+  copy_tags_to_snapshot = true
 }
 
 ################################################################################
