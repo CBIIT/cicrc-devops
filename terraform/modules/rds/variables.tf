@@ -8,6 +8,10 @@ variable "env" {
   type        = string
 }
 
+variable "vpc_id" {
+  type        = string
+  description = "VPC ID the DB instance will be created in"
+}
 
 variable "db_security_groups" {
   description = "The DB security groups to use"

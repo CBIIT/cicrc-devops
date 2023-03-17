@@ -10,7 +10,7 @@ resource "aws_db_instance" "rds_mysql" {
   parameter_group_name = var.parameter_group_name
   db_subnet_group_name = aws_db_subnet_group.db_subnets.id
   skip_final_snapshot  = true
-  vpc_security_group_ids = var.db_security_groups
+  vpc_security_group_ids = [aws_security_group.rds.id]
   
   backup_retention_period = var.backup_retention_period
   backup_window = var.backup_window
