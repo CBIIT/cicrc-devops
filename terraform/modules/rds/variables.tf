@@ -1,3 +1,8 @@
+variable "db_security_groups" {
+  description = "The DB security groups to use"
+  type        = list(string)
+}
+
 #variable "identifier" {
 #  description = "The name of the RDS instance"
 #  type        = string

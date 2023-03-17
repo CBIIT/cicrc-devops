@@ -5,11 +5,12 @@ resource "aws_db_instance" "rds_mysql" {
   engine               = "mysql"
   engine_version       = "8.0"
   instance_class       = "db.t3.micro"
-  username             = "cicrc-master"
+  username             = "cicrcdba"
   password             = "foobarbaz"
   parameter_group_name = "default.mysql8.0"
   db_subnet_group_name = "dev-vpc-sngrp"
   skip_final_snapshot  = true
+  vpc_security_group_ids = var.db_security_group
   
   backup_retention_period = 7
   copy_tags_to_snapshot = true
