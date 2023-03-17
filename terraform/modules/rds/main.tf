@@ -14,21 +14,8 @@ resource "aws_db_instance" "rds_mysql" {
   vpc_security_group_ids = var.db_security_groups
   
   backup_retention_period = 7
+  backup_window = "02:00-03:00"
   copy_tags_to_snapshot = true
+  
+  tags = var.tags
 }
-
-################################################################################
-# CloudWatch Log Group
-################################################################################
-#
-#resource "aws_cloudwatch_log_group" "cw_log" {
-#  for_each = toset([for log in var.enabled_cloudwatch_logs_exports : log if var.create && var.create_cloudwatch_log_group])
-#
-#  name              = "/aws/rds/instance/${var.identifier}/${each.value}"
-#  retention_in_days = var.cloudwatch_log_group_retention_in_days
-#  kms_key_id        = var.cloudwatch_log_group_kms_key_id
-#
-#  tags = var.tags
-#}
-#
-################################################################################
