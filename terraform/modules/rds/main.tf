@@ -1,20 +1,19 @@
 resource "aws_db_instance" "rds_mysql" {
   identifier        = "cicrc-dev-mysql"
-  #db_name              = "cicrc-dev-mysql"
-  allocated_storage    = 10
-  max_allocated_storage = 100
-  engine               = "mysql"
-  engine_version       = "8.0"
-  instance_class       = "db.t3.micro"
+  allocated_storage    = var.allocated_storage
+  max_allocated_storage = var.max_allocated_storage
+  engine               = var.engine
+  engine_version       = var.engine_version
+  instance_class       = var.instance_class
   username             = "cicrcdba"
   password             = "foobarbaz"
-  parameter_group_name = "default.mysql8.0"
+  parameter_group_name = var.parameter_group_name
   db_subnet_group_name = aws_db_subnet_group.db_subnets.id
   skip_final_snapshot  = true
   vpc_security_group_ids = var.db_security_groups
   
-  backup_retention_period = 7
-  backup_window = "02:00-03:00"
+  backup_retention_period = var.backup_retention_period
+  backup_window = var.backup_window
   copy_tags_to_snapshot = true
   
   tags = var.tags
