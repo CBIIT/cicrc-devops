@@ -10,7 +10,7 @@ resource "aws_db_instance" "rds_mysql" {
   parameter_group_name = "default.mysql8.0"
   db_subnet_group_name = "dev-vpc-sngrp"
   skip_final_snapshot  = true
-  vpc_security_group_ids = var.db_security_group
+  vpc_security_group_ids = var.db_security_groups
   
   backup_retention_period = 7
   copy_tags_to_snapshot = true
