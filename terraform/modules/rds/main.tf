@@ -7,6 +7,7 @@ resource "aws_db_instance" "rds_mysql" {
   username             = "cicrc"
   password             = "foobarbaz"
   parameter_group_name = "default.mysql8.0"
+  db_subnet_group_name = "dev-vpc-sngrp"
   skip_final_snapshot  = true
 }
 
