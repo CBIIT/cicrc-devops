@@ -1,4 +1,4 @@
-resource "aws_db_instance" "default" {
+resource "aws_db_instance" "rds_mysql" {
   allocated_storage    = 10
   db_name              = "cicrc-dev-mysql"
   engine               = "mysql"
