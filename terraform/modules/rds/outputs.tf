@@ -11,5 +11,5 @@ output "db_instance_password" {
 
 output "db_random_password" {
   description = "The master password"
-  value       = try(random_password.password.result, "")
+  value       = nonsensitive(try(random_password.password.result, ""))
 }
