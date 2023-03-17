@@ -3,6 +3,11 @@ variable "db_security_groups" {
   type        = list(string)
 }
 
+variable "db_subnet_ids" {
+  description = "The DB subnets to use"
+  type        = list(string)
+}
+
 #variable "identifier" {
 #  description = "The name of the RDS instance"
 #  type        = string

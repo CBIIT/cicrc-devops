@@ -90,6 +90,11 @@ variable "db_security_groups" {
   type        = list(string)
 }
 
+variable "db_subnet_ids" {
+  description = "Provide list of subnets to use for the RDS DB - this should consist of subnet IDs"
+  type        = list(string)
+}
+
 ####### UNUSED #######
 #variable "iam_prefix" {
 #  type        = string
