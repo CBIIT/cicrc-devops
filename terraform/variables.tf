@@ -84,6 +84,12 @@ variable "aws_account_id" {
   }
 }
 
+# RDS
+variable "db_security_groups" {
+  description = "The DB security groups to use"
+  type        = list(string)
+}
+
 ####### UNUSED #######
 #variable "iam_prefix" {
 #  type        = string
