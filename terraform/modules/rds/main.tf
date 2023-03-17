@@ -6,7 +6,7 @@ resource "aws_db_instance" "rds_mysql" {
   engine_version       = var.engine_version
   instance_class       = var.instance_class
   username             = local.dba_username
-  password             = local.rds_master_password
+  password             = random_password.password.result
   parameter_group_name = var.parameter_group_name
   db_subnet_group_name = aws_db_subnet_group.db_subnets.id
   skip_final_snapshot  = true
@@ -24,4 +24,13 @@ resource "aws_db_subnet_group" "db_subnets" {
   subnet_ids = var.db_subnet_ids
 
   tags = var.tags
+}
+
+resource "random_password" "password" {
+  length           = 10
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+   keepers = {
+    Name =  local.dba_username
+  }
 }
