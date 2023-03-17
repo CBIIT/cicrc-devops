@@ -1,12 +1,12 @@
 resource "aws_db_instance" "rds_mysql" {
-  identifier        = "cicrc-dev-mysql"
+  identifier        = local.identifier
   allocated_storage    = var.allocated_storage
   max_allocated_storage = var.max_allocated_storage
   engine               = var.engine
   engine_version       = var.engine_version
   instance_class       = var.instance_class
-  username             = "cicrcdba"
-  password             = "foobarbaz"
+  username             = local.dba_username
+  password             = local.rds_master_password
   parameter_group_name = var.parameter_group_name
   db_subnet_group_name = aws_db_subnet_group.db_subnets.id
   skip_final_snapshot  = true

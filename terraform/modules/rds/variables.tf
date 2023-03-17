@@ -1,3 +1,14 @@
+variable "project" {
+  description = "name of the project"
+  type        = string
+}
+
+variable "env" {
+  description = "name of the environment"
+  type        = string
+}
+
+
 variable "db_security_groups" {
   description = "The DB security groups to use"
   type        = list(string)
@@ -7,11 +18,6 @@ variable "db_subnet_ids" {
   description = "The DB subnets to use"
   type        = list(string)
 }
-
-#variable "identifier" {
-#  description = "The name of the RDS instance"
-#  type        = string
-#}
 
 variable "allocated_storage" {
   description = "The allocated storage in gigabytes"
