@@ -1,7 +1,7 @@
-variable "identifier" {
-  description = "The name of the RDS instance"
-  type        = string
-}
+#variable "identifier" {
+#  description = "The name of the RDS instance"
+#  type        = string
+#}
 
 variable "allocated_storage" {
   description = "The allocated storage in gigabytes"
