@@ -1,4 +1,4 @@
 # modules
 module "rds" {
-  source         = "./modules/ecr"
+  source         = "./modules/rds"
 }
