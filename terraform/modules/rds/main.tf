@@ -1,7 +1,8 @@
 resource "aws_db_instance" "rds_mysql" {
+  identifier        = "cicrc-dev-mysql"
+  #db_name              = "cicrc-dev-mysql"
   allocated_storage    = 10
   max_allocated_storage = 100
-  #db_name              = "cicrc-dev-mysql"
   engine               = "mysql"
   engine_version       = "8.0"
   instance_class       = "db.t3.micro"
