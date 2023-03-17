@@ -23,14 +23,14 @@ resource "aws_security_group_rule" "all_egress" {
 
 #create app security group
 resource "aws_security_group" "app" {
-  name = "${var.project}-${var.env}-app-sg"
-  description       = "Allow application to communicate with other aws resources"
-  vpc_id = var.vpc_id
+  name        = "${var.project}-${var.env}-app-sg"
+  description = "Allow application to communicate with other aws resources"
+  vpc_id      = var.vpc_id
   tags = merge(
-  {
-    "Name" = format("%s-%s-app-sg",var.project,terraform.workspace),
-  },
-  var.tags,
+    {
+      "Name" = format("%s-%s-app-sg", var.project, terraform.workspace),
+    },
+    var.tags,
   )
 }
 

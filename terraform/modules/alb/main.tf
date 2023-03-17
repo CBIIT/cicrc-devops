@@ -33,16 +33,16 @@ resource "aws_lb_listener" "http" {
   port              = local.http_port
   protocol          = "HTTP"
 
-#  default_action {
-#    type = "redirect"
-#
-#    redirect {
-#      port        = local.https_port
-#      protocol    = "HTTPS"
-#      status_code = "HTTP_301"
-#    }
-#  }
-  
+  #  default_action {
+  #    type = "redirect"
+  #
+  #    redirect {
+  #      port        = local.https_port
+  #      protocol    = "HTTPS"
+  #      status_code = "HTTP_301"
+  #    }
+  #  }
+
   default_action {
     type = "fixed-response"
 

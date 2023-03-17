@@ -37,7 +37,7 @@ resource "aws_ecr_lifecycle_policy" "ecr_life_cycle" {
 }
 
 resource "aws_ecr_registry_policy" "this" {
-  count = var.allow_ecr_replication ? 1: 0
+  count = var.allow_ecr_replication ? 1 : 0
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -60,7 +60,7 @@ resource "aws_ecr_registry_policy" "this" {
 }
 
 resource "aws_ecr_replication_configuration" "replication" {
-  count = var.enable_ecr_replication ? 1: 0
+  count = var.enable_ecr_replication ? 1 : 0
   replication_configuration {
     rule {
       destination {

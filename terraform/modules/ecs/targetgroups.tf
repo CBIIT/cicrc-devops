@@ -38,11 +38,11 @@ resource "aws_lb_listener_rule" "alb_listener" {
     target_group_arn = aws_lb_target_group.target_group[each.key].arn
   }
 
-#  condition {
-#    host_header {
-#      values = [var.application_url]
-#    }
-#  }
+  #  condition {
+  #    host_header {
+  #      values = [var.application_url]
+  #    }
+  #  }
   condition {
     path_pattern {
       values = each.value.path

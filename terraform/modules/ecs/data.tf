@@ -41,15 +41,15 @@ data "aws_iam_policy_document" "task_execution_kms" {
 
 data "aws_iam_policy_document" "task_execution_secrets" {
   statement {
-  effect = "Allow"
-  actions = [
-    "secretsmanager:GetSecretValue",
-    "secretsmanager:ListSecrets",
-    "secretsmanager:DescribeSecret",
-    "secretsmanager:ListSecretVersionIds",
-    "secretsmanager:GetResourcePolicy"
-  ]
-  resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:*"]
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:ListSecrets",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecretVersionIds",
+      "secretsmanager:GetResourcePolicy"
+    ]
+    resources = ["arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:*"]
   }
 }
 
@@ -126,7 +126,7 @@ data "aws_iam_policy_document" "ecs_exec_cloudwatch" {
       "logs:DescribeLogStream",
       "logs:CreateLogGroup"
     ]
-    resources = [ var.allow_cloudwatch_stream ? "*" : aws_cloudwatch_log_group.ecs_execute_command_log_group.arn]
+    resources = [var.allow_cloudwatch_stream ? "*" : aws_cloudwatch_log_group.ecs_execute_command_log_group.arn]
   }
 
   #need to refine this to exec log groups by referencing ARN in resources

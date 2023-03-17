@@ -22,19 +22,19 @@ variable "region" {
 
 variable "private_subnet_ids" {
   description = "Provide list private subnets to use in this VPC. Example 10.0.10.0/24,10.0.11.0/24"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "microservices" {
   type = map(object({
-    name = string
-    port = number
-    health_check_path = string
-    priority_rule_number = number
-    image_url = string
-    cpu = number
-    memory = number
-    path = list(string)
+    name                      = string
+    port                      = number
+    health_check_path         = string
+    priority_rule_number      = number
+    image_url                 = string
+    cpu                       = number
+    memory                    = number
+    path                      = list(string)
     number_container_replicas = number
   }))
 }

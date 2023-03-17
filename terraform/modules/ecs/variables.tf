@@ -89,14 +89,14 @@ variable "container_insights_setting" {
 }
 
 variable "allow_cloudwatch_stream" {
-  type = bool
-  default = false
+  type        = bool
+  default     = false
   description = "allow cloudwatch stream for the containers"
 
 }
 
 variable "domain_name" {
-  type = string
+  type        = string
   description = "domain name of this app"
-  default = "bento-tools.org"
+  default     = "bento-tools.org"
 }

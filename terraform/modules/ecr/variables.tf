@@ -14,22 +14,22 @@ variable "project" {
 }
 
 variable "replication_destination_registry_id" {
-  type = string
+  type        = string
   description = "registry id for destination image"
-  default = ""
+  default     = ""
 }
 variable "replication_source_registry_id" {
-  type = string
+  type        = string
   description = "registry id for source image"
-  default = ""
+  default     = ""
 }
 variable "enable_ecr_replication" {
   description = "enable ecr replication"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 variable "allow_ecr_replication" {
   description = "allow ecr replication"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
