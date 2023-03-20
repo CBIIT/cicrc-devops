@@ -20,7 +20,7 @@ resource "aws_db_instance" "rds_mysql" {
 }
 
 resource "aws_db_subnet_group" "db_subnets" {
-  name       = "cicrc-dev-subnets"
+  name       = local.db_subnet_group
   subnet_ids = var.db_subnet_ids
 
   tags = var.tags
