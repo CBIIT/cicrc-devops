@@ -85,10 +85,10 @@ variable "aws_account_id" {
 }
 
 # RDS
-variable "db_security_groups" {
-  description = "The DB security groups to use"
-  type        = list(string)
-}
+#variable "db_security_groups" {
+#  description = "The DB security groups to use"
+#  type        = list(string)
+#}
 
 variable "db_subnet_ids" {
   description = "Provide list of subnets to use for the RDS DB - this should consist of subnet IDs"

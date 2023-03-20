@@ -13,10 +13,10 @@ variable "vpc_id" {
   description = "VPC ID the DB instance will be created in"
 }
 
-variable "db_security_groups" {
-  description = "The DB security groups to use"
-  type        = list(string)
-}
+#variable "db_security_groups" {
+#  description = "The DB security groups to use"
+#  type        = list(string)
+#}
 
 variable "db_subnet_ids" {
   description = "The DB subnets to use"
