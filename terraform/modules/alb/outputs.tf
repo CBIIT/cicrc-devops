@@ -8,10 +8,10 @@ output "alb_http_listener_arn" {
   value       = aws_lb_listener.http.arn
 }
 
-#output "alb_https_listener_arn" {
-#  description = "https listener arn"
-#  value       = aws_lb_listener.https.arn
-#}
+output "alb_https_listener_arn" {
+  description = "https listener arn"
+  value       = aws_lb_listener.https.arn
+}
 
 output "alb_zone_id" {
   description = "https listener arn"

@@ -33,15 +33,26 @@ resource "aws_lb_listener" "http" {
   port              = local.http_port
   protocol          = "HTTP"
 
-  #  default_action {
-  #    type = "redirect"
-  #
-  #    redirect {
-  #      port        = local.https_port
-  #      protocol    = "HTTPS"
-  #      status_code = "HTTP_301"
-  #    }
-  #  }
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = local.https_port
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+
+
+  tags = var.tags
+}
+
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = local.https_port
+  protocol          = "HTTPS"
+  ssl_policy        = var.alb_ssl_policy
+  certificate_arn   = var.alb_certificate_arn
 
   default_action {
     type = "fixed-response"
@@ -55,23 +66,3 @@ resource "aws_lb_listener" "http" {
 
   tags = var.tags
 }
-
-#resource "aws_lb_listener" "https" {
-#  load_balancer_arn = aws_lb.alb.arn
-#  port              = local.https_port
-#  protocol          = "HTTPS"
-#  ssl_policy        = var.alb_ssl_policy
-#  certificate_arn   = var.alb_certificate_arn
-#
-#  default_action {
-#    type = "fixed-response"
-#
-#    fixed_response {
-#      content_type = "text/plain"
-#      message_body = var.alb_default_message
-#      status_code  = "200"
-#    }
-#  }
-#
-#  tags = var.tags
-#}
