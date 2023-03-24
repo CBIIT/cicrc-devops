@@ -40,10 +40,10 @@ variable "microservices" {
 }
 
 # ALB
-#variable "certificate_domain_name" {
-#  description = "domain name for the ssl cert"
-#  type        = string
-#}
+variable "certificate_domain_name" {
+  description = "domain name for the ssl cert"
+  type        = string
+}
 
 variable "public_subnet_ids" {
   description = "Provide list of public subnets to use in this VPC. Example 10.0.1.0/24,10.0.2.0/24"
@@ -83,12 +83,6 @@ variable "aws_account_id" {
     us-east-1 = "127311923021"
   }
 }
-
-# RDS
-#variable "db_security_groups" {
-#  description = "The DB security groups to use"
-#  type        = list(string)
-#}
 
 variable "db_subnet_ids" {
   description = "Provide list of subnets to use for the RDS DB - this should consist of subnet IDs"
