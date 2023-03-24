@@ -12,17 +12,17 @@ resource "aws_security_group_rule" "alb_http_inbound" {
 }
 
 # create alb https ingress
-#resource "aws_security_group_rule" "alb_https_inbound" {
-#  from_port   = local.https_port
-#  protocol    = local.tcp_protocol
-#  to_port     = local.https_port
-#  cidr_blocks = local.allowed_alb_ip_range
-#  security_group_id = module.alb.alb_securitygroup_id
-#  type              = "ingress"
-#  depends_on = [
-#      module.alb
-#    ]
-#}
+resource "aws_security_group_rule" "alb_https_inbound" {
+  from_port   = local.https_port
+  protocol    = local.tcp_protocol
+  to_port     = local.https_port
+  cidr_blocks = local.allowed_alb_ip_range
+  security_group_id = module.alb.alb_securitygroup_id
+  type              = "ingress"
+  depends_on = [
+      module.alb
+    ]
+}
 
 # create ecs ingress sg
 resource "aws_security_group_rule" "inbound_fargate" {
