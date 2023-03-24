@@ -8,7 +8,7 @@ locals {
   cert_types          = "IMPORTED"
 
   # ECS
-  application_url = terraform.workspace == "prod" ? var.domain_name : "${var.application_subdomain}-${terraform.workspace}.${var.domain_name}"
+  application_url = terraform.workspace == "prod" ? "${var.application_subdomain}.${var.domain_name}" : "${var.application_subdomain}-${terraform.workspace}.${var.domain_name}"
   #application_url = ""
 
   # SG

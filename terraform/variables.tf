@@ -89,6 +89,16 @@ variable "db_subnet_ids" {
   type        = list(string)
 }
 
+variable "domain_name" {
+  description = "domain name for the application"
+  type        = string
+}
+
+variable "application_subdomain" {
+  description = "subdomain of the app"
+  type        = string
+}
+
 ####### UNUSED #######
 #variable "iam_prefix" {
 #  type        = string
