@@ -6,11 +6,11 @@ data "aws_vpc" "vpc" {
 }
 
 # ALB
-#data "aws_acm_certificate" "amazon_issued" {
-#  domain      =  var.certificate_domain_name
-#  types       = [local.cert_types]
-#  most_recent = true
-#}
+data "aws_acm_certificate" "amazon_issued" {
+  domain      =  var.certificate_domain_name
+  types       = [local.cert_types]
+  most_recent = true
+}
 
 # S3
 data "aws_iam_policy_document" "s3_alb_policy" {

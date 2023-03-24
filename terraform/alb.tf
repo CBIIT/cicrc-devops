@@ -7,7 +7,7 @@ module "alb" {
   alb_subnet_ids      = local.alb_subnet_ids
   tags                = var.tags
   project             = var.project
-  #alb_certificate_arn = data.aws_acm_certificate.amazon_issued.arn
+  alb_certificate_arn = data.aws_acm_certificate.amazon_issued.arn
 }
 
 module "s3" {
