@@ -21,6 +21,18 @@ pipeline {
 
   }
 
+  options {
+
+	timestamps()
+
+  }
+
+  environment {
+
+	REGION      = "us-east-1"
+
+  }
+
   stages{
   	stage('checkout'){
 
@@ -45,7 +57,6 @@ pipeline {
 
 			IMG_TAG  = "${params.Image_Tag}"
 			ENV      = "${params.Environment}"
-			REGION   = "us-east-1"
 			ECR_REPO = "cicrc-web"
 
         }
@@ -79,7 +90,6 @@ pipeline {
 
 	    environment {
 
-			REGION       = "us-east-1"
 			CLUSTER      = "cicrc-${params.Environment}-ecs"
 			SERVICE_NAME = "cicrc-${params.Environment}-web"
 
