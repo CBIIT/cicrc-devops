@@ -16,7 +16,12 @@ resource "aws_db_instance" "rds_mysql" {
   backup_window           = var.backup_window
   copy_tags_to_snapshot   = true
 
-  tags = var.tags
+  tags = merge(
+    {
+      "Runtime" = local.rds_schedule
+    },
+    var.tags,
+  )
 }
 
 resource "aws_db_subnet_group" "db_subnets" {

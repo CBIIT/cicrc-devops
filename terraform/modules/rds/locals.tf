@@ -8,5 +8,6 @@ locals {
   protocol        = "tcp"
   all_ips         = ["0.0.0.0/0"]
   any             = "-1"
+  rds_schedule    = var.env == "stage" || var.env == "prod" ? "" : "dc-office-hours"
 
 }
