@@ -43,5 +43,11 @@ resource "aws_lb_listener_rule" "alb_listener" {
       values = [var.application_url]
     }
   }
+  
+  condition {
+    path_pattern {
+      values = each.value.path
+    }
+  }
 
 }
