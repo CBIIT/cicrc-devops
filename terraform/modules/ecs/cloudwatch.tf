@@ -6,7 +6,7 @@ resource "aws_cloudwatch_log_group" "ecs_execute_command_log_group" {
 resource "aws_cloudwatch_log_group" "ecs_log_group" {
   for_each = var.microservices
   name     = "${var.project}/ecs/${var.env}/${each.value.name}"
-  retention_in_days = each.value.log_retention
+  retention_in_days = 180
 
   tags = {
     Environment = "${var.env}"
