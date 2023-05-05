@@ -9,28 +9,29 @@ resource "aws_ecs_task_definition" "task" {
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
 
-  container_definitions = jsonencode([
-    {
-      name      = each.value.name
-      image     = each.value.image_url
-      essential = true
-      portMappings = [
-        {
-          protocol      = "tcp"
-          containerPort = each.value.port
+  container_definitions = <<DEFINITION
+    [
+      {
+        "name": each.value.name,
+        "image": each.value.image_url,
+        "essential": true,
+        "portMappings": [
+          {
+            "protocol": "tcp",
+            "containerPort": each.value.port
+          }
+        ],
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": aws_cloudwatch_log_group.ecs_log_group.name,
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "ecs"
+          }
         }
-      ]
-      logConfiguration = [
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.ecs_log_group.name
-          awslogs-region        = "us-east-1"
-          awslogs-stream-prefix = "ecs"
-        }
-      ]
-    }
-  ])
-
+      }
+    ]
+    DEFINITION
   tags = merge(
     {
       "Name" = format("%s-%s-%s-%s", var.project, var.env, each.value.name, "task-definition")
