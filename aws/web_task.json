@@ -40,6 +40,15 @@
                     "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/{{environment}}:DB_USER::"
                 }
             ]
+			"logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "web_test",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "cicrc/{{environment}}",
+                    "awslogs-create-group": "true"
+                }
+            }
         }
     ]
 }
