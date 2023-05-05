@@ -45,8 +45,7 @@
                 "options": {
                     "awslogs-group": "cicrc/ecs/{{environment}}/web",
                     "awslogs-region": "us-east-1",
-                    "awslogs-stream-prefix": "ecs",
-                    "awslogs-create-group": "false"
+                    "awslogs-stream-prefix": "ecs"
                 }
             }
         }
