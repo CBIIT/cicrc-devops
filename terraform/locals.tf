@@ -23,6 +23,7 @@ locals {
   allowed_alb_ip_range = terraform.workspace == "prod" || terraform.workspace == "stage" ?  local.all_ips : local.nih_ip_cidrs
   #allowed_alb_ip_range         = local.nih_ip_cidrs
   fargate_security_group_ports = ["80", "443", "3306"]
+  efs_security_group_ports = ["2049"]
 
   ##### UNUSED #####
   #alb_log_bucket_name = var.cloud_platform == "leidos" ? "alb-access-logs" : "${var.cloud_platform}-alb-access-logs"
