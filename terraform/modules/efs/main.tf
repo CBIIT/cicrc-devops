@@ -3,9 +3,13 @@ resource "aws_efs_file_system" "efs" {
    performance_mode = "generalPurpose"
    throughput_mode = "bursting"
    encrypted = "true"
-   tags = {
-     Project = "CICRC"
-   }
+   
+   tags = merge(
+    {
+      "Name" = format("%s-%s-%s", var.project, var.env, "efs")
+    },
+    var.tags,
+  )
  }
 
 resource "aws_efs_mount_target" "efs-mt" {
