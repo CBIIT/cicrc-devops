@@ -8,8 +8,3 @@ resource "aws_cloudwatch_log_group" "ecs_log_group" {
     Project     = "CICRC"
   }
 }
-
-
-output "output_name" {
-  value = try(aws_cloudwatch_log_group.ecs_log_group, "")
-}

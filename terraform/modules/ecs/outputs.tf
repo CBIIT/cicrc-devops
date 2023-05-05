@@ -51,3 +51,7 @@ output "app_security_group_id" {
 output "app_security_group_arn" {
   value = aws_security_group.app.arn
 }
+
+output "ecs_log_groups" {
+  value = try(aws_cloudwatch_log_group.ecs_log_group, "")
+}
