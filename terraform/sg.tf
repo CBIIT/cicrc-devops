@@ -50,7 +50,7 @@ resource "aws_security_group_rule" "app_inbound" {
 }
 
 # create efs ingress sg
-resource "aws_security_group_rule" "inbound_fargate" {
+resource "aws_security_group_rule" "inbound_efs" {
   for_each          = toset(local.efs_security_group_ports)
   from_port         = each.key
   protocol          = local.tcp_protocol
