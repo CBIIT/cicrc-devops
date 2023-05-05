@@ -1,5 +1,5 @@
 resource "aws_efs_file_system" "efs" {
-   creation_token = "efs"
+   creation_token = "efs-${var.env}"
    performance_mode = "generalPurpose"
    throughput_mode = "bursting"
    encrypted = "true"
