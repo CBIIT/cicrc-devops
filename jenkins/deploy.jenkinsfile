@@ -71,10 +71,12 @@ pipeline {
 				echo "Updating Task Defintion to Use: $ECR_REPO:$IMG_TAG"
 				ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 				IMAGE_ID="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMG_TAG"
+				EFS_ID=$(aws efs describe-file-systems  --query "FileSystems[?Name=='cicrc-$ENV-efs'].FileSystemId"  --output text)
 
 				sed -i "s|{{account_id}}|$ACCOUNT_ID|" cicrc-devops/aws/web_task.json
 				sed -i "s|{{image_id}}|$IMAGE_ID|" cicrc-devops/aws/web_task.json
 				sed -i "s|{{environment}}|$ENV|" cicrc-devops/aws/web_task.json
+				sed -i "s|{{efs_id}}|$EFS_ID|" cicrc-devops/aws/web_task.json
 
 				aws ecs register-task-definition --cli-input-json file://cicrc-devops/aws/web_task.json
 

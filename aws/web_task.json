@@ -22,6 +22,12 @@
                 }
             ],
             "essential": true,
+			"mountPoints": [
+                {
+                    "containerPath": "/var/www/html/sites/default/files",
+                    "sourceVolume": "cicrc-efs"
+                }
+            ],
             "secrets": [
                 {
                     "name": "DB_NAME",
@@ -49,5 +55,14 @@
                 }
             }
         }
-    ]
+    ],
+	"volumes": [
+        {
+            "name": "cicrc-efs",
+            "efsVolumeConfiguration": {
+                "fileSystemId": "{{efs_id}}",
+                "transitEncryption": "ENABLED"
+            }
+        }
+    ],
 }
