@@ -24,7 +24,7 @@
             "essential": true,
 			"mountPoints": [
                 {
-                    "containerPath": "/var/www/html/sites/default/files",
+                    "containerPath": "/var/www/html/web/sites/default/files",
                     "sourceVolume": "cicrc-efs"
                 }
             ],
