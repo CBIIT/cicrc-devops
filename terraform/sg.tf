@@ -48,3 +48,14 @@ resource "aws_security_group_rule" "app_inbound" {
     module.alb
   ]
 }
+
+# create efs ingress sg
+resource "aws_security_group_rule" "inbound_fargate" {
+  for_each          = toset(local.efs_security_group_ports)
+  from_port         = each.key
+  protocol          = local.tcp_protocol
+  to_port           = each.key
+  security_group_id = module.efs.efs_security_group_id
+  cidr_blocks       = [data.aws_vpc.vpc.cidr_block]
+  type              = "ingress"
+}
