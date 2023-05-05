@@ -43,9 +43,9 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "web_test",
+                    "awslogs-group": "cicrc/{{environment}}/web",
                     "awslogs-region": "us-east-1",
-                    "awslogs-stream-prefix": "cicrc/{{environment}}",
+                    "awslogs-stream-prefix": "ecs",
                     "awslogs-create-group": "true"
                 }
             }
