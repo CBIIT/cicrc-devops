@@ -39,7 +39,7 @@
                     "name": "DB_USER",
                     "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/{{environment}}:DB_USER::"
                 }
-            ]
+            ],
 			"logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
