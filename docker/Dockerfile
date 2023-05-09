@@ -24,10 +24,10 @@ FROM php:8.1.12-apache-bullseye AS final
 RUN docker-php-ext-install pdo_mysql
 
 # Copy code
-COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
-#COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
-#COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
-#COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
+COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
+COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
+COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
+COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
 
 # Copy required config files 
 RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
