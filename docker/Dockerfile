@@ -16,22 +16,23 @@ RUN composer global require drush/drush:11.3.2
 
 COPY CICRC /var/www/html
 
-RUN cd /var/www/html/ && composer update && composer install
+RUN cd /var/www/html/ && composer install
 
 FROM php:8.1.12-apache-bullseye AS final
 
 # Install pdo extensions
 RUN docker-php-ext-install pdo_mysql
 
+# Copy code
+COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
+#COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
+#COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
+#COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
+
 # Copy required config files 
 RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
 COPY default.conf /etc/apache2/sites-enabled
 COPY --chown=www-data:www-data --chmod=0755 cicrc-entrypoint.sh /var/www/html/cicrc-entrypoint.sh
-
-# Copy code
-COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
-COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
-COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html
 WORKDIR /var/www/html
