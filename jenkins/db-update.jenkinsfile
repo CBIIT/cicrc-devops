@@ -51,7 +51,11 @@ pipeline {
 
   environment {
 
-	REGION      = "us-east-1"
+	BACKUP_FILE  = "${params.Backup_File}"
+	S3_BUCKET    = "${params.S3_Bucket}"
+	BACKUP_TIER  = "${params.Backup_Tier}"
+	RESTORE_TIER = "${params.Restore_Tier}"
+	REGION       = "us-east-1"
 
   }
 
@@ -72,12 +76,6 @@ pipeline {
                 reuseNode true
             }
         }
-		
-		environment {
-
-			ECR_REPO = "cicrc-web"
-
-        }
 
  		steps {
 
@@ -85,7 +83,7 @@ pipeline {
 
 			    sh label: 'Backup-DB', script: '''#!/bin/bash
 
-				echo "Backing up DB:    ${params.Backup_File}"
+				echo "Backing up DB:    $BACKUP_FILE"
 
 				#mysqldump --version
 
