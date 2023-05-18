@@ -9,15 +9,37 @@ pipeline {
 
         string(
             defaultValue: '',
-            description: 'The Image to Deploy',
-            name: 'Image_Tag')
+            description: 'The file name of the MySQL backup file',
+            name: 'Backup_File')
+
+        string(
+            defaultValue: '',
+            description: 'The S3 bucket to store the backup file',
+            name: 'S3_Bucket')
 
         extendedChoice(
-            name: 'Environment',
+            name: 'Backup_Tier',
             defaultValue: 'dev',
-            description: 'Choose the environment to deploy to',
+            description: 'Choose the environment to back up',
             type: 'PT_SINGLE_SELECT',
             value: 'dev,qa')
+
+        extendedChoice(
+            name: 'Restore_Tier',
+            defaultValue: 'dev',
+            description: 'Choose the environment to restore to',
+            type: 'PT_SINGLE_SELECT',
+            value: 'dev,qa')
+
+        booleanParam(
+            defaultValue: true,
+			description: 'Perform DB backup task',
+            name: 'Backup_Database')
+
+        booleanParam(
+            defaultValue: true,
+			description: 'Perform DB restore task',
+            name: 'Restore_Database')
 
   }
 
@@ -37,7 +59,11 @@ pipeline {
 
   	stage('backup db'){
 
-	    agent {
+	    when {
+            ${params.Backup_Database}
+        }
+
+		agent {
             docker {
                 image 'mysql:8.0'
                 //args '--net=host -u root -v /var/run/docker.sock:/var/run/docker.sock'
@@ -75,11 +101,15 @@ pipeline {
 
 	stage('push backup to S3'){
 
-  		steps {
+  		when {
+            ${params.Backup_Database}
+        }
 
-  		script {
+		steps {
 
-			    sh label: 'aws test', script: '''#!/bin/bash
+  		    script {
+
+			    sh label: 'Push-To-S3', script: '''#!/bin/bash
 
 				which aws
 
