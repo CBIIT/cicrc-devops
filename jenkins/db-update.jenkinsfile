@@ -179,13 +179,7 @@ pipeline {
 
 			    sh label: 'Restore-DB', script: '''#!/bin/bash
 
-				whoami
-
-				groups
-
-				mysqldump --version
-
-				pwd
+				echo "test:    $ECR_REPO"
 
 				'''
 
