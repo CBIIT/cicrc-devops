@@ -34,29 +34,6 @@ pipeline {
   }
 
   stages{
-  	stage('aws test'){
-
-  		steps {
-
-  		script {
-
-			    sh label: 'aws test', script: '''#!/bin/bash
-
-				whoami
-
-				groups
-
-				which aws
-
-				pwd
-
-				'''
-
-			}
-
-        }
-
-  	}
 
   	stage('backup db'){
 
@@ -93,6 +70,28 @@ pipeline {
 			}
 
  		}
+
+  	}
+
+	stage('push backup to S3'){
+
+  		steps {
+
+  		script {
+
+			    sh label: 'aws test', script: '''#!/bin/bash
+
+				which aws
+
+				pwd
+
+				echo $WORKSPACE
+
+				'''
+
+			}
+
+        }
 
   	}
 
