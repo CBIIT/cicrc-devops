@@ -61,7 +61,7 @@ pipeline {
 
 	    when {
             expression {
-                return ${params.Backup_Database};
+                return params.Backup_Database;
             }
         }
 
@@ -105,7 +105,7 @@ pipeline {
 
 	    when {
             expression {
-                return ${params.Backup_Database};
+                return params.Backup_Database;
             }
         }
 
