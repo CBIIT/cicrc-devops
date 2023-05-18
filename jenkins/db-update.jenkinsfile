@@ -85,7 +85,7 @@ pipeline {
 
 			    sh label: 'Backup-DB', script: '''#!/bin/bash
 
-				echo("Backing up DB:    ${params.Backup_File}")
+				echo "Backing up DB:    ${params.Backup_File}"
 
 				#mysqldump --version
 
