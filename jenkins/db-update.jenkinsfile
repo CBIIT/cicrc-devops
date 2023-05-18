@@ -129,6 +129,78 @@ pipeline {
 
   	}
 
+	stage('pull backup from S3'){
+
+	    when {
+            expression {
+                return params.Restore_Database;
+            }
+        }
+
+		steps {
+
+  		    script {
+
+			    sh label: 'Pull-From-S3', script: '''#!/bin/bash
+
+				which aws
+
+				pwd
+
+				echo $WORKSPACE
+
+				'''
+
+			}
+
+        }
+
+  	}
+
+  	stage('restore db'){
+
+	    when {
+            expression {
+                return params.Restore_Database;
+            }
+        }
+
+		agent {
+            docker {
+                image 'mysql:8.0'
+                //args '--net=host -u root -v /var/run/docker.sock:/var/run/docker.sock'
+                reuseNode true
+            }
+        }
+		
+		environment {
+
+			ECR_REPO = "cicrc-web"
+
+        }
+
+ 		steps {
+
+ 			script {
+
+			    sh label: 'Restore-DB', script: '''#!/bin/bash
+
+				whoami
+
+				groups
+
+				mysqldump --version
+
+				pwd
+
+				'''
+
+			}
+
+ 		}
+
+  	}
+
   }
 
   post {
