@@ -60,7 +60,9 @@ pipeline {
   	stage('backup db'){
 
 	    when {
-            ${params.Backup_Database}
+            expression {
+                return ${params.Backup_Database};
+            }
         }
 
 		agent {
@@ -101,8 +103,10 @@ pipeline {
 
 	stage('push backup to S3'){
 
-  		when {
-            ${params.Backup_Database}
+	    when {
+            expression {
+                return ${params.Backup_Database};
+            }
         }
 
 		steps {
