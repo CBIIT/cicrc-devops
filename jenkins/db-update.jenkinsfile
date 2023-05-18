@@ -1,0 +1,92 @@
+pipeline {
+	agent {
+		node {
+			label 'slave-ncias-d2999-c'
+		}
+	}
+
+	parameters {
+
+        string(
+            defaultValue: '',
+            description: 'The Image to Deploy',
+            name: 'Image_Tag')
+
+        extendedChoice(
+            name: 'Environment',
+            defaultValue: 'dev',
+            description: 'Choose the environment to deploy to',
+            type: 'PT_SINGLE_SELECT',
+            value: 'dev,qa')
+
+  }
+
+  options {
+
+	timestamps()
+
+  }
+
+  environment {
+
+	REGION      = "us-east-1"
+
+  }
+
+  stages{
+  	stage('checkout'){
+
+  		steps {
+
+  		checkout([$class: 'GitSCM',
+			branches: [[name: '*/main']],
+			doGenerateSubmoduleConfigurations: false,
+			extensions: [[$class: 'RelativeTargetDirectory',
+			relativeTargetDir: 'cicrc-devops']],
+			submoduleCfg: [],
+			userRemoteConfigs:
+			[[url: 'https://github.com/CBIIT/cicrc-devops.git']]])
+
+        }
+
+  	}
+
+  	stage('backup db'){
+
+	    environment {
+
+			ECR_REPO = "cicrc-web"
+
+        }
+
+ 		steps {
+
+ 			script {
+
+			    sh label: 'Task-Definition-Update', script: '''#!/bin/bash
+
+				whoami
+
+				groups
+
+				'''
+
+			}
+
+ 		}
+
+  	}
+
+  }
+
+  post {
+
+    cleanup {
+
+        cleanWs()
+
+    }
+
+  }
+
+}
