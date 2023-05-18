@@ -53,7 +53,15 @@ pipeline {
 
   	stage('backup db'){
 
-	    environment {
+	    agent {
+            docker {
+                image 'mysql:8.0'
+                //args '--net=host -u root -v /var/run/docker.sock:/var/run/docker.sock'
+                reuseNode true
+            }
+        }
+		
+		environment {
 
 			ECR_REPO = "cicrc-web"
 
@@ -68,6 +76,10 @@ pipeline {
 				whoami
 
 				groups
+
+				which mysqldump
+
+				pwd
 
 				'''
 
