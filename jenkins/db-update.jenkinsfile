@@ -77,7 +77,7 @@ pipeline {
 
 				groups
 
-				which mysqldump
+				mysqldump --version
 
 				pwd
 
