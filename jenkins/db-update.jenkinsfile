@@ -34,18 +34,25 @@ pipeline {
   }
 
   stages{
-  	stage('checkout'){
+  	stage('aws test'){
 
   		steps {
 
-  		checkout([$class: 'GitSCM',
-			branches: [[name: '*/main']],
-			doGenerateSubmoduleConfigurations: false,
-			extensions: [[$class: 'RelativeTargetDirectory',
-			relativeTargetDir: 'cicrc-devops']],
-			submoduleCfg: [],
-			userRemoteConfigs:
-			[[url: 'https://github.com/CBIIT/cicrc-devops.git']]])
+  		script {
+
+			    sh label: 'aws test', script: '''#!/bin/bash
+
+				whoami
+
+				groups
+
+				which aws
+
+				pwd
+
+				'''
+
+			}
 
         }
 
@@ -71,7 +78,7 @@ pipeline {
 
  			script {
 
-			    sh label: 'Task-Definition-Update', script: '''#!/bin/bash
+			    sh label: 'Backup-DB', script: '''#!/bin/bash
 
 				whoami
 
