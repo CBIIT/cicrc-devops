@@ -108,7 +108,7 @@ pipeline {
 
                 mkdir $WORKSPACE/mysqldump
                 dumpcmd="mysqldump -u $BAK_DB_USER –p $BAK_DB_PASS --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME > $WORKSPACE/mysqldump/$BACKUP_FILE"
-                dumpout=$(${dumpcmd})
+                dumpout=$("$dumpcmd")
 
 				"""
 
