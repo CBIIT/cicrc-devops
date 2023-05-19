@@ -102,14 +102,17 @@ pipeline {
 
  			script {
 
-			    sh label: 'Backup-DB', script: """#!/bin/bash
+			    echo("Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER")
+                mysqldump --version
+                
+                //sh label: 'Backup-DB', script: """#!/bin/bash
 
-				echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER"
+				//echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER"
 
-                mkdir $WORKSPACE/mysqldump
-                mysqldump -u $BAK_DB_USER –p $BAK_DB_PASS --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME > $WORKSPACE/mysqldump/$BACKUP_FILE
+                //mkdir $WORKSPACE/mysqldump
+                //mysqldump -u $BAK_DB_USER –p $BAK_DB_PASS --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME > $WORKSPACE/mysqldump/$BACKUP_FILE
 
-				"""
+				//"""
 
 			}
 
