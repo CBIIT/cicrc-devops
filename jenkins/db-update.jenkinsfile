@@ -103,15 +103,22 @@ pipeline {
 
  			script {
 
-                BACKUP = sh(label: 'Get DB Backup', returnStdout: true, script: "mysqldump --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF -h $BAK_DB_HOST $BAK_DB_NAME > $WORKSPACE/$BACKUP_FILE -u $BAK_DB_USER -p$BAK_DB_PASS")
-                //sh label: 'Backup-DB', script: """#!/bin/bash
+                //BACKUP = sh(label: 'Get DB Backup', returnStdout: true, script: "mysqldump --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF -h $BAK_DB_HOST $BAK_DB_NAME > $WORKSPACE/$BACKUP_FILE -u $BAK_DB_USER -p$BAK_DB_PASS")
+                sh label: 'Backup-DB', script: """#!/bin/bash
 
-				//echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER"
+				echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER"
 
-                //mkdir $WORKSPACE/mysqldump
-                //mysqldump --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME -h $BAK_DB_HOST -u $BAK_DB_USER -p$BAK_DB_PASS > $WORKSPACE/mysqldump/$BACKUP_FILE
+                mkdir $WORKSPACE/mysqldump
+                echo "[client]" > $WORKSPACE/sql.conf
+                echo "host=$BAK_DB_HOST" >> $WORKSPACE/sql.conf
+                echo "user=$BAK_DB_USER" >> $WORKSPACE/sql.conf
+                ##echo "host=$BAK_DB_HOST" >> $WORKSPACE/sql.conf
+                
+                cat $WORKSPACE/sql.conf
 
-				//"""
+                ##mysqldump --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME -h $BAK_DB_HOST -u $BAK_DB_USER -p$BAK_DB_PASS > $WORKSPACE/mysqldump/$BACKUP_FILE
+
+				"""
 
 			}
 
