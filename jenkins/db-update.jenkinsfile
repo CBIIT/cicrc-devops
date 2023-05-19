@@ -112,13 +112,12 @@ pipeline {
                 echo "[client]" > $WORKSPACE/sql.conf
                 echo "host=$BAK_DB_HOST" >> $WORKSPACE/sql.conf
                 echo "user=$BAK_DB_USER" >> $WORKSPACE/sql.conf
-                ##echo "host=$BAK_DB_HOST" >> $WORKSPACE/sql.conf
-                
+
                 cat $WORKSPACE/sql.conf
 
-                ##mysqldump --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME -h $BAK_DB_HOST -u $BAK_DB_USER -p$BAK_DB_PASS > $WORKSPACE/mysqldump/$BACKUP_FILE
-
 				"""
+
+                //##mysqldump --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME -h $BAK_DB_HOST -u $BAK_DB_USER -p$BAK_DB_PASS > $WORKSPACE/mysqldump/$BACKUP_FILE
 
 			}
 
