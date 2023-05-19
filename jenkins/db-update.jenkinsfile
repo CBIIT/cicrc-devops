@@ -53,12 +53,20 @@ pipeline {
 
     stage('set variables'){
 
-		steps {
+		environment {
+
+	        BACKUP_TIER  = "${params.Backup_Tier}"
+            RESTORE_TIER  = "${params.Restore_Tier}"
+
+        }
+
+        steps {
 
   		    script {
 
-			    env.DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/dev --query SecretString --output text | jq -r '.DB_NAME'")
-				echo(env.DB_NAME)
+			    env.BAK_DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_NAME'")
+                env.BAK_DB_USER = sh(label: 'Get DB User', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_USER'")
+				
 
 			}
 
@@ -95,9 +103,10 @@ pipeline {
 
 			    sh label: 'Backup-DB', script: '''#!/bin/bash
 
-				echo "Backing up DB:    $BACKUP_FILE"
+				echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER"
 
 				#mysqldump --version
+                #mysqldump -u [user name] –p [password] [options] [database_name] [tablename] > [dumpfilename.sql]
 
 				'''
 
