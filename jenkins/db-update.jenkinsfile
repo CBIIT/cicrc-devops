@@ -108,7 +108,7 @@ pipeline {
 				echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER"
 
                 mkdir $WORKSPACE/mysqldump
-                mysqldump -u $BAK_DB_USER –p $BAK_DB_PASS --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF --host $BAK_DB_HOST $BAK_DB_NAME -r $WORKSPACE/mysqldump/$BACKUP_FILE
+                mysqldump --host $BAK_DB_HOST --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME > $WORKSPACE/mysqldump/$BACKUP_FILE -u $BAK_DB_USER –p$BAK_DB_PASS
 
 				"""
 
