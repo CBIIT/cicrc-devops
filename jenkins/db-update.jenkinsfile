@@ -103,8 +103,8 @@ pipeline {
  			script {
 
 			    echo("Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER")
-                //mysqlout = sh(label: 'Dump DB', returnStdout: true, script: "mkdir $WORKSPACE/mysqldump && mysqldump -u $BAK_DB_USER –p $BAK_DB_PASS --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME > $WORKSPACE/mysqldump/$BACKUP_FILE")
-                mysqlout = sh(label: 'Dump DB', returnStdout: true, script: "mkdir $WORKSPACE/mysqldump && mysqldump --help")
+                mysqlout = sh(label: 'Dump DB', returnStdout: true, script: "mkdir $WORKSPACE/mysqldump && mysqldump -u $BAK_DB_USER –p $BAK_DB_PASS -y --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME > $WORKSPACE/mysqldump/$BACKUP_FILE")
+                //mysqlout = sh(label: 'Dump DB', returnStdout: true, script: "mkdir $WORKSPACE/mysqldump && mysqldump --help")
                 echo("$mysqlout")
                 
                 //sh label: 'Backup-DB', script: """#!/bin/bash
@@ -112,7 +112,7 @@ pipeline {
 				//echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER"
 
                 //mkdir $WORKSPACE/mysqldump
-                //mysqldump -u $BAK_DB_USER –p $BAK_DB_PASS --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME > $WORKSPACE/mysqldump/$BACKUP_FILE
+                //mysqldump -u $BAK_DB_USER –p $BAK_DB_PASS --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME > $WORKSPACE/mysqldump/$BACKUP_FILE
 
 				//"""
 
