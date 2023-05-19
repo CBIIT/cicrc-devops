@@ -57,8 +57,8 @@ pipeline {
 
   		    script {
 
-			    env.DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/dev --query DB_NAME --output text")
-				echo(env.DB_NAME)
+			     def DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/dev --query DB_NAME --output text")
+				echo(DB_NAME.getClass())
 
 			}
 
