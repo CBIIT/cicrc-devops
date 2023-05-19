@@ -114,7 +114,7 @@ pipeline {
                 echo "user=$BAK_DB_USER" >> $WORKSPACE/sql.conf
                 echo "password=$BAK_DB_PASS" >> $WORKSPACE/sql.conf
 
-                mysqldump --defaults-file=$WORKSPACE/sql.conf --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME > $WORKSPACE/mysqldump/$BACKUP_FILE
+                mysqldump --defaults-file=$WORKSPACE/sql.conf --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME -r $WORKSPACE/mysqldump/$BACKUP_FILE
 
 				"""
 
