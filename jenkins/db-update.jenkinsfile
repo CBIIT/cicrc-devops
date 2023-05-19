@@ -66,7 +66,7 @@ pipeline {
 
 			    env.BAK_DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_NAME'")
                 env.BAK_DB_USER = sh(label: 'Get DB User', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_USER'")
-                //env.BAK_DB_PASS = sh(label: 'Get DB Passsword', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_PASS'")
+                env.BAK_DB_PASS = sh(label: 'Get DB Passsword', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_PASS'")
 				
 
 			}
