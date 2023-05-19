@@ -103,7 +103,7 @@ pipeline {
 
  			script {
 
-                BACKUP = sh(label: 'Get DB Backup', returnStdout: true, script: "mysqldump --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF -h $BAK_DB_HOST -u $BAK_DB_USER -p$BAK_DB_PASS $BAK_DB_NAME > $WORKSPACE/$BACKUP_FILE")
+                BACKUP = sh(label: 'Get DB Backup', returnStdout: true, script: "mysqldump --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF -h $BAK_DB_HOST $BAK_DB_NAME > $WORKSPACE/$BACKUP_FILE -u $BAK_DB_USER -p$BAK_DB_PASS")
                 //sh label: 'Backup-DB', script: """#!/bin/bash
 
 				//echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER"
