@@ -103,7 +103,8 @@ pipeline {
  			script {
 
 			    echo("Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER")
-                mysqldump --version
+                mysqlout = sh(label: 'Dump DB', returnStdout: true, script: "mysqldump --version")
+                echo("$mysqlout")
                 
                 //sh label: 'Backup-DB', script: """#!/bin/bash
 
