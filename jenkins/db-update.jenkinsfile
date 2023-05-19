@@ -118,8 +118,6 @@ pipeline {
 
 				"""
 
-                //##mysqldump --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME -h $BAK_DB_HOST -u $BAK_DB_USER -p$BAK_DB_PASS > $WORKSPACE/mysqldump/$BACKUP_FILE
-
 			}
 
  		}
@@ -145,17 +143,17 @@ pipeline {
 
   		    script {
 
-			    sh label: 'Push-To-S3', script: '''#!/bin/bash
+			    sh label: 'Push-To-S3', script: """#!/bin/bash
 
-				which aws
+				ls -la $WORKSPACE/mysqldump
 
-				pwd
+                aws s3 ls s3://$S3_BUCKET
 
-				echo $WORKSPACE
+                aws s3 cp $WORKSPACE/mysqldump/$BACKUP_FILE s3://$S3_BUCKET
 
-                ls -la $WORKSPACE/mysqldump
+                aws s3 ls s3://$S3_BUCKET
 
-				'''
+				"""
 
 			}
 
