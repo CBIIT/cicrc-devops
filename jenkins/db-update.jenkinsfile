@@ -103,7 +103,7 @@ pipeline {
  			script {
 
 			    echo("Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER")
-                mysqlout = sh(label: 'Dump DB', returnStdout: true, script: "mysqldump --version")
+                mysqlout = sh(label: 'Dump DB', returnStdout: true, script: "mkdir $WORKSPACE/mysqldump && mysqldump -u $BAK_DB_USER –p $BAK_DB_PASS --single-transaction --add-drop-database --set-gtid-purged=OFF $BAK_DB_NAME > $WORKSPACE/mysqldump/$BACKUP_FILE")
                 echo("$mysqlout")
                 
                 //sh label: 'Backup-DB', script: """#!/bin/bash
