@@ -162,7 +162,7 @@ pipeline {
 	    when {
             //allOf {
                 //expression { return params.Restore_Database; }
-                expression { fileExists("mysqldump/$params.Backup_File") == 'false' }
+                expression { fileExists("mysqldump/$params.Backup_File") == false }
             //}
         }
 
