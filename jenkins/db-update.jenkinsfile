@@ -162,7 +162,7 @@ pipeline {
 	    when {
             allOf {
                 //expression { return params.Restore_Database; }
-                expression { return ("$WORKSPACE/mysqldump/$params.Backup_File" == 'false') }
+                expression { "$WORKSPACE/mysqldump/$params.Backup_File" == 'true' }
             }
         }
 
