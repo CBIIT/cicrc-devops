@@ -160,10 +160,10 @@ pipeline {
 	stage('pull backup from S3'){
 
 	    when {
-            allOf {
+            //allOf {
                 //expression { return params.Restore_Database; }
                 expression { "$WORKSPACE/mysqldump/$params.Backup_File" == 'true' }
-            }
+            //}
         }
 
  		environment {
