@@ -145,13 +145,9 @@ pipeline {
 
 			    sh label: 'Push-To-S3', script: """#!/bin/bash
 
-				ls -la $WORKSPACE/mysqldump
-
-                aws s3 ls s3://$S3_BUCKET
-
                 aws s3 cp $WORKSPACE/mysqldump/$BACKUP_FILE s3://$S3_BUCKET
 
-                aws s3 ls s3://$S3_BUCKET
+                echo "Backup File:  $BACKUP_FILE   Has been uploaded to:  $S3_BUCKET"
 
 				"""
 
@@ -164,8 +160,9 @@ pipeline {
 	stage('pull backup from S3'){
 
 	    when {
-            expression {
-                return params.Restore_Database;
+            allof {
+                expression { return params.Restore_Database; }
+                expression { "$WORKSPACE/mysqldump/$params.Backup_File" == 'false' }
             }
         }
 
