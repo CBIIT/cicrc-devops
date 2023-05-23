@@ -85,7 +85,7 @@ pipeline {
                 if (params.Backup_File == 'cicrc-daily-backup') {
 
                     params.Backup_File = sh(label: 'Set Backup file name', returnStdout: true, script: "echo cicrc_\$(date +%m%d%Y).sql").trim()
-                    echo("${params.Backup_File}")
+                    //echo("${params.Backup_File}")
 
                 }
 
