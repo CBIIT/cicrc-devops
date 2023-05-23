@@ -68,6 +68,11 @@ pipeline {
                 env.BAK_DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_NAME'")
                 env.BAK_DB_USER = sh(label: 'Get DB User', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_USER'")
                 env.BAK_DB_PASS = sh(label: 'Get DB Passsword', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_PASS'")
+
+                env.RES_DB_HOST = sh(label: 'Get DB Host', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_HOST'")
+                env.RES_DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_NAME'")
+                env.RES_DB_USER = sh(label: 'Get DB User', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_USER'")
+                env.RES_DB_PASS = sh(label: 'Get DB Passsword', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_PASS'")
 				
 
 			}
@@ -181,7 +186,7 @@ pipeline {
 
 				aws s3 cp s3://$S3_BUCKET/$BACKUP_FILE $WORKSPACE/mysqldump
 
-                ls -la $WORKSPACE/mysqldump
+                ls -la $WORKSPACE/mysqldump/
                 
                 echo "Backup File:  $BACKUP_FILE   Has been copied from:  $S3_BUCKET"
 
@@ -220,11 +225,18 @@ pipeline {
 
  			script {
 
-			    sh label: 'Restore-DB', script: '''#!/bin/bash
+			    sh label: 'Restore-DB', script: """#!/bin/bash
 
-				echo "test:    $ECR_REPO"
+				echo "Restoring backup to $RESTORE_TIER:    $BACKUP_FILE - user:   $BAK_DB_USER"
 
-				'''
+                echo "[client]" > $WORKSPACE/sql.conf
+                echo "host=$RES_DB_HOST" >> $WORKSPACE/sql.conf
+                echo "user=$RES_DB_USER" >> $WORKSPACE/sql.conf
+                echo "password=$RES_DB_PASS" >> $WORKSPACE/sql.conf
+
+                mysql --defaults-file=$WORKSPACE/sql.conf --default-character-set=utf8 -e "source $WORKSPACE/mysqldump/$BACKUP_FILE" $RES_DB_NAME
+
+				"""
 
 			}
 
