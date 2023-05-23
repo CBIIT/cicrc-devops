@@ -84,9 +84,12 @@ pipeline {
 				
                 if (params.Backup_File == 'cicrc-daily-backup') {
 
-                    params.Backup_File = sh(label: 'Set Backup file name', returnStdout: true, script: "echo cicrc_\$(date +%m%d%Y).sql").trim()
-                    //echo("${params.Backup_File}")
+                    env.Backup_File = sh(label: 'Set Backup file name', returnStdout: true, script: "echo cicrc_\$(date +%m%d%Y).sql").trim()
+                    echo("${env.Backup_File}")
 
+                } else {
+
+                    env.Backup_File = "${params.Backup_File}"
                 }
 
 			}
@@ -112,7 +115,7 @@ pipeline {
 
  		environment {
 
-	        BACKUP_FILE  = "${params.Backup_File}"
+	        //BACKUP_FILE  = "${params.Backup_File}"
 	        BACKUP_TIER  = "${params.Backup_Tier}"
 
         }
@@ -152,7 +155,7 @@ pipeline {
 
  		environment {
 
-	        BACKUP_FILE  = "${params.Backup_File}"
+	        //BACKUP_FILE  = "${params.Backup_File}"
 	        S3_BUCKET    = "${params.S3_Bucket}"
 
         }
@@ -186,7 +189,7 @@ pipeline {
 
  		environment {
 
-	        BACKUP_FILE  = "${params.Backup_File}"
+	        //BACKUP_FILE  = "${params.Backup_File}"
 	        S3_BUCKET    = "${params.S3_Bucket}"
 
         }
@@ -228,7 +231,7 @@ pipeline {
 		
  		environment {
 
-	        BACKUP_FILE  = "${params.Backup_File}"
+	        //BACKUP_FILE  = "${params.Backup_File}"
 	        RESTORE_TIER = "${params.Restore_Tier}"
 
         }
