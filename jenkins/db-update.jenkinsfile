@@ -64,15 +64,23 @@ pipeline {
 
   		    script {
 
-			    env.BAK_DB_HOST = sh(label: 'Get DB Host', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_HOST'")
-                env.BAK_DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_NAME'")
-                env.BAK_DB_USER = sh(label: 'Get DB User', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_USER'")
-                env.BAK_DB_PASS = sh(label: 'Get DB Passsword', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_PASS'")
+			    if (params.Backup_Database) {
 
-                env.RES_DB_HOST = sh(label: 'Get DB Host', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_HOST'")
-                env.RES_DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_NAME'")
-                env.RES_DB_USER = sh(label: 'Get DB User', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_USER'")
-                env.RES_DB_PASS = sh(label: 'Get DB Passsword', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_PASS'")
+                    env.BAK_DB_HOST = sh(label: 'Get DB Host', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_HOST'")
+                    env.BAK_DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_NAME'")
+                    env.BAK_DB_USER = sh(label: 'Get DB User', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_USER'")
+                    env.BAK_DB_PASS = sh(label: 'Get DB Passsword', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$BACKUP_TIER --query SecretString --output text | jq -r '.DB_PASS'")
+
+                }
+
+                if (params.Restore_Database) {
+
+                    env.RES_DB_HOST = sh(label: 'Get DB Host', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_HOST'")
+                    env.RES_DB_NAME = sh(label: 'Get DB Name', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_NAME'")
+                    env.RES_DB_USER = sh(label: 'Get DB User', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_USER'")
+                    env.RES_DB_PASS = sh(label: 'Get DB Passsword', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/db/$RESTORE_TIER --query SecretString --output text | jq -r '.DB_PASS'")
+
+                }
 				
 
 			}
@@ -92,7 +100,6 @@ pipeline {
 		agent {
             docker {
                 image 'mysql:8.0'
-                //args '--net=host -u root -v /var/run/docker.sock:/var/run/docker.sock'
                 reuseNode true
             }
         }
@@ -108,7 +115,6 @@ pipeline {
 
  			script {
 
-                //BACKUP = sh(label: 'Get DB Backup', returnStdout: true, script: "mysqldump --no-tablespaces --single-transaction --add-drop-database --set-gtid-purged=OFF -h $BAK_DB_HOST $BAK_DB_NAME > $WORKSPACE/$BACKUP_FILE -u $BAK_DB_USER -p$BAK_DB_PASS")
                 sh label: 'Backup-DB', script: """#!/bin/bash
 
 				echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER"
@@ -209,7 +215,6 @@ pipeline {
 		agent {
             docker {
                 image 'mysql:8.0'
-                //args '--net=host -u root -v /var/run/docker.sock:/var/run/docker.sock'
                 reuseNode true
             }
         }
@@ -234,6 +239,8 @@ pipeline {
                 echo "user=$RES_DB_USER" >> $WORKSPACE/sql.conf
                 echo "password=$RES_DB_PASS" >> $WORKSPACE/sql.conf
 
+                cat $WORKSPACE/sql.conf
+                
                 mysql --defaults-file=$WORKSPACE/sql.conf --default-character-set=utf8 -e "source $WORKSPACE/mysqldump/$BACKUP_FILE" $RES_DB_NAME
 
 				"""
