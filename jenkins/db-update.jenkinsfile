@@ -160,10 +160,10 @@ pipeline {
 	stage('pull backup from S3'){
 
 	    when {
-            //allOf {
-                //expression { return params.Restore_Database; }
+            allOf {
+                expression { return params.Restore_Database; }
                 expression { fileExists("mysqldump/$params.Backup_File") == false }
-            //}
+            }
         }
 
  		environment {
@@ -179,11 +179,11 @@ pipeline {
 
 			    sh label: 'Pull-From-S3', script: '''#!/bin/bash
 
-				which aws
+				aws s3 cp s3://$S3_BUCKET/$BACKUP_FILE $WORKSPACE/mysqldump
 
-				pwd
-
-				echo $WORKSPACE
+                ls -la $WORKSPACE/mysqldump
+                
+                echo "Backup File:  $BACKUP_FILE   Has been copied from:  $S3_BUCKET"
 
 				'''
 
