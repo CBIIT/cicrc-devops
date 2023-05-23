@@ -40,6 +40,8 @@ resource "aws_s3_bucket_versioning" "s3" {
 }
 
 resource "aws_s3_bucket_intelligent_tiering_configuration" "s3" {
+  count = var.s3_enable_intelligent_tiering == true ? 1 : 0
+  
   bucket = aws_s3_bucket.s3.bucket
   name   = "${local.bucket_name}-intelligent-tiering"
 
