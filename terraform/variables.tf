@@ -99,6 +99,13 @@ variable "application_subdomain" {
   type        = string
 }
 
+# RDS
+variable "create_rds_backup_bucket" {
+  type        = bool
+  default     = false
+  description = "choose whether to create an s3 bucket for db backups"
+}
+
 ####### UNUSED #######
 #variable "iam_prefix" {
 #  type        = string

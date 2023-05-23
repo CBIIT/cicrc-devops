@@ -75,6 +75,7 @@ module "rds" {
 
 # S3
 module "s3" {
+  count                         = var.create_rds_backup_bucket ? 1 : 0
   source                        = "./modules/s3"
   bucket_name                   = local.rds_backup_bucket_name
   project                       = var.project
