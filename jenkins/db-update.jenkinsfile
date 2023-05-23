@@ -17,6 +17,11 @@ pipeline {
             description: 'The S3 bucket to store the backup file',
             name: 'S3_Bucket')
 
+        booleanParam(
+            defaultValue: true,
+			description: 'Perform DB backup task',
+            name: 'Backup_Database')
+
         extendedChoice(
             name: 'Backup_Tier',
             defaultValue: 'dev',
@@ -24,22 +29,17 @@ pipeline {
             type: 'PT_SINGLE_SELECT',
             value: 'dev,qa')
 
+        booleanParam(
+            defaultValue: true,
+			description: 'Perform DB restore task',
+            name: 'Restore_Database')
+
         extendedChoice(
             name: 'Restore_Tier',
             defaultValue: 'dev',
             description: 'Choose the environment to restore to',
             type: 'PT_SINGLE_SELECT',
             value: 'dev,qa')
-
-        booleanParam(
-            defaultValue: true,
-			description: 'Perform DB backup task',
-            name: 'Backup_Database')
-
-        booleanParam(
-            defaultValue: true,
-			description: 'Perform DB restore task',
-            name: 'Restore_Database')
 
   }
 
