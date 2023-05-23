@@ -1,3 +1,3 @@
 locals {
-  bucket_name = "${var.project}-${var.env}-${var.bucket_name}"
+  bucket_name = "${var.bucket_name}"
 }
