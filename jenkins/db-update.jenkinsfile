@@ -184,7 +184,7 @@ pipeline {
 
 			    sh label: 'Pull-From-S3', script: """#!/bin/bash
 
-				aws s3 cp s3://$S3_BUCKET/$BACKUP_FILE $WORKSPACE/mysqldump
+				aws s3 cp s3://$S3_BUCKET/$BACKUP_FILE $WORKSPACE/mysqldump/$BACKUP_FILE
 
                 ls -la $WORKSPACE/mysqldump/
                 
