@@ -177,7 +177,7 @@ pipeline {
 
   		    script {
 
-			    sh label: 'Pull-From-S3', script: '''#!/bin/bash
+			    sh label: 'Pull-From-S3', script: """#!/bin/bash
 
 				aws s3 cp s3://$S3_BUCKET/$BACKUP_FILE $WORKSPACE/mysqldump
 
@@ -185,7 +185,7 @@ pipeline {
                 
                 echo "Backup File:  $BACKUP_FILE   Has been copied from:  $S3_BUCKET"
 
-				'''
+				"""
 
 			}
 
