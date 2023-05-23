@@ -61,6 +61,12 @@ variable "s3_access_log_bucket_id" {
   type        = string
 }
 
+variable "s3_enable_acl" {
+  description = "set to true to enable s3 acl"
+  type        = bool
+  default     = true
+}
+
 variable "s3_enable_intelligent_tiering" {
   description = "set to true to enable s3 intelligent tiering"
   type        = bool

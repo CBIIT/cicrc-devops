@@ -88,4 +88,5 @@ module "s3-rds" {
   s3_access_log_bucket_id       = ""
   s3_enable_bucket_expiration   = true
   s3_enable_intelligent_tiering = false
+  s3_enable_acl                 = false
 }
