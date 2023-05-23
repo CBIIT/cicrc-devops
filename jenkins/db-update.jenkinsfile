@@ -232,7 +232,7 @@ pipeline {
 
 			    sh label: 'Restore-DB', script: """#!/bin/bash
 
-				echo "Restoring backup to $RESTORE_TIER:    $BACKUP_FILE - user:   $BAK_DB_USER"
+				echo "Restoring backup to $RESTORE_TIER:    $BACKUP_FILE - user:   $RES_DB_USER"
 
                 echo "[client]" > $WORKSPACE/sql.conf
                 echo "host=$RES_DB_HOST" >> $WORKSPACE/sql.conf
