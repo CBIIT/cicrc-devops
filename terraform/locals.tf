@@ -25,6 +25,9 @@ locals {
   fargate_security_group_ports = ["80", "443", "3306"]
   efs_security_group_ports = ["2049"]
 
+  # RDS
+  rds_backup_bucket_name = "${var.project}-nonprod-db-backups"
+
   ##### UNUSED #####
   #alb_log_bucket_name = var.cloud_platform == "leidos" ? "alb-access-logs" : "${var.cloud_platform}-alb-access-logs"
   #acm_certificate_issued_type = var.cloud_platform == "leidos" ? "AMAZON_ISSUED" : "IMPORTED"

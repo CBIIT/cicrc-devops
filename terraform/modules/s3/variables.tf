@@ -60,3 +60,15 @@ variable "s3_access_log_bucket_id" {
   description = "The destination bucket of access logs for an S3 bucket"
   type        = string
 }
+
+variable "s3_enable_bucket_expiration" {
+  description = "set to true to enable s3 bucket expiration policy"
+  type        = bool
+  default     = false
+}
+
+variable "s3_expiration_days" {
+  description = "Number of days of days to keep bucket items"
+  type        = number
+  default     = 30
+}

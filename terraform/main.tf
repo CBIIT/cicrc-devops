@@ -73,3 +73,17 @@ module "rds" {
   tags               = var.tags
 }
 
+# S3
+module "s3" {
+  source                        = "./modules/s3"
+  bucket_name                   = local.rds_backup_bucket_name
+  project                       = var.project
+  env                           = terraform.workspace
+  tags                          = var.tags
+  s3_force_destroy              = var.s3_force_destroy
+  days_for_archive_tiering      = 125
+  days_for_deep_archive_tiering = 180
+  s3_enable_access_logging      = false
+  s3_access_log_bucket_id       = ""
+  s3_enable_bucket_expiration   = true
+}

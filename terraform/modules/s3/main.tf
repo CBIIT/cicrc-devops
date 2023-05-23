@@ -63,3 +63,19 @@ resource "aws_s3_bucket_logging" "s3" {
   target_bucket = var.s3_access_log_bucket_id
   target_prefix = var.s3_log_prefix
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "s3" {
+  count = var.s3_enable_bucket_expiration == true ? 1 : 0
+  
+  bucket = aws_s3_bucket.s3.id
+
+  rule {
+    id = "expiration"
+
+    expiration {
+      days = var.s3_expiration_days
+    }
+
+    status = "Enabled"
+  }
+}
