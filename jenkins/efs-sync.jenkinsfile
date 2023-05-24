@@ -37,7 +37,9 @@ pipeline {
 
 				echo "Synchronizing EFS Filesystems from Dev to QA"
 
-                aws datasync start-task-execution --task-arn $TASK_ARN
+                #aws datasync start-task-execution --task-arn $TASK_ARN
+
+                echo "$TASK_ARN"
 
 				"""
 
