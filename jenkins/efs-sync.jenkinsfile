@@ -1,0 +1,63 @@
+pipeline {
+	agent {
+		node {
+			label 'slave-ncias-d2999-c'
+		}
+	}
+
+  options {
+
+	timestamps()
+
+  }
+
+  stages{
+
+    stage('set variables') {
+
+        steps {
+
+  		    script {
+
+                    env.TASK_ARN = sh(label: 'Get Datasync Task ARN', returnStdout: true, script: "aws secretsmanager get-secret-value --secret-id cicrc/nonprod --query SecretString --output text | jq -r '.DATASYNC_TASK_ARN'")
+
+			}
+
+        }
+
+  	}
+
+  	stage('sync filesystems') {
+
+		steps {
+
+ 			script {
+
+                sh label: 'Sync-EFS', script: """#!/bin/bash
+
+				echo "Synchronizing EFS Filesystems from Dev to QA"
+
+                aws datasync start-task-execution --task-arn '$TASK_ARN'
+
+				"""
+
+			}
+
+ 		}
+
+  	}
+
+
+  }
+
+  post {
+
+    cleanup {
+
+        cleanWs()
+
+    }
+
+  }
+
+}
