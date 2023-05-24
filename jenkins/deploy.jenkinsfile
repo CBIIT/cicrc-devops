@@ -29,11 +29,34 @@ pipeline {
 
   environment {
 
-	REGION      = "us-east-1"
+	REGION   = "us-east-1"
+	JOB_PATH = '_default/_lower/CICRC'
 
   }
 
   stages{
+    stage('trigger additional jobs'){
+
+  		steps {
+
+            script {
+			    if (params.Update_Filesystem) {
+				    echo 'Run the EFS synchronization job'
+				    build job: "$JOB_PATH/CICRC-Filesystem-Sync"
+			    }
+		    }
+
+			script {
+			    if (params.Restore_DB) {
+				    echo 'Run the database update job'
+				    build job: "$JOB_PATH/CICRC-DB-Backup-Restore", parameters: [string(name: 'Backup_File', value: "cicrc-${params.Image_Tag}.sql"), booleanParam(name: 'Backup_Database', value: true), extendedChoice(name: 'Backup_Tier', value: "${params.Restore_DB_From}"), booleanParam(name: 'Restore_Database', value: true), extendedChoice(name: 'Restore_Tier', value: "${params.Restore_DB_To}")]
+			    }
+		    }
+
+        }
+
+  	}
+
   	stage('checkout'){
 
   		steps {

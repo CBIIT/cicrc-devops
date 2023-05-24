@@ -13,7 +13,7 @@ pipeline {
             name: 'Backup_File')
 
         string(
-            defaultValue: '',
+            defaultValue: 'cicrc-nonprod-db-backups',
             description: 'The S3 bucket to store the backup file',
             name: 'S3_Bucket')
 
