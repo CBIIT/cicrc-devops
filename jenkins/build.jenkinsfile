@@ -17,12 +17,10 @@ pipeline {
             tagFilter: '*',
             useRepository: 'https://github.com/CBIIT/CICRC.git')
 
-        extendedChoice(
-            name: 'Deploy_Image',
-            defaultValue: 'NO_DEPLOYMENT',
-            description: 'Unless NO_DEPLOYMENT is selected this job will trigger a deployment to the selected environment',
-            type: 'PT_SINGLE_SELECT',
-            value: 'NO_DEPLOYMENT,dev,qa')
+        booleanParam(
+            defaultValue: false,
+			description: 'Perform deployment to the Dev tier',
+            name: 'Deploy_Image')
 
   }
 
@@ -139,9 +137,9 @@ pipeline {
 			}
 
 		script {
-			if (params.Deploy_Image != "NO_DEPLOYMENT") {
-				echo "Deploy the image: ${params.Branch}.$BUILD_NUMBER    to the environment:  ${params.Deploy_Image}"
-				build job: '_default/_lower/CICRC/CICRC-Image-Deploy', parameters: [string(name: 'Image_Tag', value: "${params.Branch}.$BUILD_NUMBER"), extendedChoice(name: 'Environment', value: "${params.Deploy_Image}")]
+			if (params.Deploy_Image) {
+				echo "Deploy the image: ${params.Branch}.$BUILD_NUMBER    to the Dev environment"
+				build job: '_default/_lower/CICRC/CICRC-Image-Deploy', parameters: [string(name: 'Image_Tag', value: "${params.Branch}.$BUILD_NUMBER"), extendedChoice(name: 'Environment', value: 'dev'), booleanParam(name: 'Update_Filesystem', value: false), booleanParam(name: 'Restore_DB', value: false)]
 			}
 		}
     }
