@@ -1,5 +1,5 @@
 # Pull the base image from PHP-Apache
-FROM php:8.1.12-bullseye AS build
+FROM php:8.1.19-bullseye AS build
 MAINTAINER ESI Devops Team
 
 # Install Dependencies
@@ -18,7 +18,7 @@ COPY CICRC /var/www/html
 
 RUN cd /var/www/html/ && composer install
 
-FROM php:8.1.12-apache-bullseye AS final
+FROM php:8.1.19-apache-bullseye AS final
 
 # Install pdo extensions
 RUN docker-php-ext-install pdo_mysql
