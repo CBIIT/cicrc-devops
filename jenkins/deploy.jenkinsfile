@@ -32,7 +32,7 @@ pipeline {
 	REGION    = "us-east-1"
 	ECR_REPO  = "cicrc-web"
 	JOB_PATH  = "_default/_lower/CICRC"
-	IMAGE_TAG = "${params.Image_Tag}"
+	//IMAGE_TAG = "${params.Image_Tag}"
 	ENV       = "${params.Environment}"
 	CLUSTER   = "cicrc-${params.Environment}-ecs"
 	SERVICE   = "cicrc-${params.Environment}-web"
