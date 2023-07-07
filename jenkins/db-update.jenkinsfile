@@ -243,6 +243,15 @@ pipeline {
                 echo "user=$RES_DB_USER" >> $WORKSPACE/sql.conf
                 echo "password=$RES_DB_PASS" >> $WORKSPACE/sql.conf
 
+                ################# DEBUG ###########################
+
+                ls -la $WORKSPACE
+                ls -la $WORKSPACE/mysqldump
+                cat $WORKSPACE/sql.conf
+
+                ################# DEBUG ###########################
+
+
                 mysql --defaults-file=$WORKSPACE/sql.conf --default-character-set=utf8 -e "source $WORKSPACE/mysqldump/$BACKUP_FILE" $RES_DB_NAME
 
 				"""
