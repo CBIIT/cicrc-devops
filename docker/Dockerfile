@@ -22,7 +22,7 @@ FROM php:8.1.19-apache-bullseye AS final
 
 # Install php extensions
 RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install gd
+RUN rm -rf /var/lib/apt/lists/* && docker-php-ext-install gd
 
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
