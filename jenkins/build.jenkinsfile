@@ -11,7 +11,7 @@ pipeline {
             defaultValue: 'main',
             name: 'Branch',
             type: 'PT_BRANCH_TAG',
-            quickFilterEnabled: false,
+            quickFilterEnabled: true,
             selectedValue: 'DEFAULT',
             sortMode: 'ASCENDING_SMART',
             tagFilter: '*',
@@ -45,21 +45,21 @@ pipeline {
 
   		checkout([$class: 'GitSCM',
 			branches: [[name: '*/main']],
-			doGenerateSubmoduleConfigurations: false,
-			extensions: [[$class: 'RelativeTargetDirectory',
+			extensions: [[$class: 'SubmoduleOption', 
+			recursiveSubmodules: true],
+			[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops']],
-			submoduleCfg: [],
 			userRemoteConfigs:
 			[[url: 'https://github.com/CBIIT/cicrc-devops.git']]])
 
 		checkout([$class: 'GitSCM',
             branches: [[name: "${params.Branch}"]], 
-            doGenerateSubmoduleConfigurations: false,
-			quickFilterEnabled: true,
-            extensions: [[$class: 'RelativeTargetDirectory',
+            extensions: [[$class: 'SubmoduleOption', 
+			recursiveSubmodules: true],
+			[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops/docker/CICRC']],
-            submoduleCfg: [], 
-            userRemoteConfigs: [[credentialsId: 'cicrc-github-jenkins', url: 'https://github.com/CBIIT/CICRC.git']]])
+            userRemoteConfigs:
+			[[credentialsId: 'cicrc-github-jenkins', url: 'https://github.com/CBIIT/CICRC.git']]])
 
         }
 
