@@ -55,6 +55,7 @@ pipeline {
 		checkout([$class: 'GitSCM',
             branches: [[name: "${params.Branch}"]], 
             doGenerateSubmoduleConfigurations: false,
+			quickFilterEnabled: true,
             extensions: [[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops/docker/CICRC']],
             submoduleCfg: [], 
