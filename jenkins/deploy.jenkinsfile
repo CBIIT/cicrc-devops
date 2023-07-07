@@ -29,13 +29,6 @@ pipeline {
 
   environment {
 
-	REGION   = "us-east-1"
-	JOB_PATH = '_default/_lower/CICRC'
-
-  }
-
-  environment {
-
 	REGION    = "us-east-1"
 	ECR_REPO  = "cicrc-web"
 	JOB_PATH  = '_default/_lower/CICRC'
