@@ -34,6 +34,18 @@ pipeline {
 
   }
 
+  environment {
+
+	REGION    = "us-east-1"
+	ECR_REPO  = "cicrc-web"
+	JOB_PATH  = '_default/_lower/CICRC'
+	IMAGE_TAG = "${params.Image_Tag}"
+	ENV       = "${params.Environment}"
+	CLUSTER   = "cicrc-${params.Environment}-ecs"
+	SERVICE   = "cicrc-${params.Environment}-web"
+
+  }
+
   stages{
     stage('trigger additional jobs'){
 
@@ -76,14 +88,6 @@ pipeline {
 
   	stage('Update Task Definition'){
 
-	    environment {
-
-			IMG_TAG  = "${params.Image_Tag}"
-			ENV      = "${params.Environment}"
-			ECR_REPO = "cicrc-web"
-
-        }
-
  		steps {
 
  			script {
@@ -91,9 +95,9 @@ pipeline {
 			    sh label: 'Task-Definition-Update', script: '''#!/bin/bash
 
 				# create new revision for CICRC Task Definition
-				echo "Updating Task Defintion to Use: $ECR_REPO:$IMG_TAG"
+				echo "Updating Task Defintion to Use: $ECR_REPO:$IMAGE_TAG"
 				ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-				IMAGE_ID="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMG_TAG"
+				IMAGE_ID="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG"
 				EFS_ID=$(aws efs describe-file-systems  --query "FileSystems[?Name=='cicrc-$ENV-efs'].FileSystemId"  --output text)
 
 				sed -i "s|{{account_id}}|$ACCOUNT_ID|" cicrc-devops/aws/web_task.json
@@ -113,13 +117,6 @@ pipeline {
 
     stage('Update Service'){
 
-	    environment {
-
-			CLUSTER      = "cicrc-${params.Environment}-ecs"
-			SERVICE_NAME = "cicrc-${params.Environment}-web"
-
-        }
-
  		steps {
 
  			script {
@@ -127,10 +124,29 @@ pipeline {
 			    sh label: 'Service-Update', script: '''#!/bin/bash
 
 				# Redeploy Service Using The Latest Task Definition
-				echo "Updating Service: $SERVICE_NAME"
+				echo "Updating Service: $SERVICE"
 
-				TASK_REVISION=$(aws ecs describe-task-definition --task-definition $SERVICE_NAME | egrep "revision" | awk '{print $2}' | sed 's/,//')
-				aws ecs update-service --cluster $CLUSTER --region $REGION --service $SERVICE_NAME --task-definition $SERVICE_NAME:$TASK_REVISION --desired-count 1
+				TASK_REVISION=$(aws ecs describe-task-definition --task-definition $SERVICE | egrep "revision" | awk '{print $2}' | sed 's/,//')
+				aws ecs update-service --cluster $CLUSTER --region $REGION --service $SERVICE --task-definition $SERVICE:$TASK_REVISION --desired-count 1
+
+				'''
+
+			}
+
+ 		}
+
+  	}
+
+	stage('verify deployment'){
+
+		steps {
+
+ 			script {
+
+			    sh label: 'Verify-Deploy', script: '''#!/bin/bash
+
+                # wait untiil the service is stable
+				aws ecs wait services-stable --cluster $CLUSTER --region $REGION --service $SERVICE
 
 				'''
 
