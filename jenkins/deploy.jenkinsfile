@@ -81,7 +81,15 @@ pipeline {
 
   	stage('Update Task Definition'){
 
- 		steps {
+ 		environment {
+
+	        ECR_REPO  = "cicrc-web"
+	        IMAGE_TAG = "${params.Image_Tag}"
+	        ENV       = "${params.Environment}"
+
+        }
+
+		steps {
 
  			script {
 
