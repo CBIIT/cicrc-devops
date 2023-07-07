@@ -85,7 +85,7 @@ pipeline {
 
  			script {
 
-			    sh label: 'Task-Definition-Update', script: '''#!/bin/bash
+			    sh label: 'Task-Definition-Update', script: """#!/bin/bash
 
 				# create new revision for CICRC Task Definition
 				echo "Updating Task Defintion to Use: $ECR_REPO:$IMAGE_TAG"
@@ -100,7 +100,7 @@ pipeline {
 
 				aws ecs register-task-definition --cli-input-json file://cicrc-devops/aws/web_task.json
 
-				'''
+				"""
 
 			}
 
