@@ -35,6 +35,7 @@ RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
 COPY default.conf /etc/apache2/sites-enabled
 COPY --chown=www-data:www-data --chmod=0755 cicrc-entrypoint.sh /var/www/html/cicrc-entrypoint.sh
 
+ENV APACHE_LOG_DIR=/var/log/apache2
 ENV APACHE_DOCUMENT_ROOT=/var/www/html
 WORKDIR /var/www/html
 
