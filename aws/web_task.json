@@ -62,7 +62,6 @@
             "name": "cicrc-efs",
             "efsVolumeConfiguration": {
                 "fileSystemId": "{{efs_id}}",
-                "rootDirectory": "/",
                 "transitEncryption": "ENABLED"
             }
         }
