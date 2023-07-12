@@ -25,7 +25,8 @@
 			"mountPoints": [
                 {
                     "containerPath": "/var/www/html/web/sites/default/files",
-                    "sourceVolume": "cicrc-efs"
+                    "sourceVolume": "cicrc-efs",
+                    "readOnly": false
                 }
             ],
             "secrets": [
