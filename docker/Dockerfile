@@ -42,11 +42,6 @@ ENV APACHE_LOG_DIR=/var/log/apache2
 ENV APACHE_DOCUMENT_ROOT=/var/www/html
 WORKDIR /var/www/html
 
-# DEBUG
-ENV APACHE_RUN_USER=root
-ENV APACHE_RUN_GROUP=root
-
-
 EXPOSE 80
 
 ENTRYPOINT [ "/bin/sh", "-c", "/var/www/html/cicrc-entrypoint.sh && apache2-foreground" ]
