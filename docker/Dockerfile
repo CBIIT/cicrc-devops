@@ -25,7 +25,7 @@ FROM php:8.1.19-apache-bullseye AS final
 RUN apt update && apt install -y libpng-dev && rm -rf /var/lib/apt/lists/* && docker-php-ext-install pdo_mysql gd
 
 # Enable apache rewrite module
-RUN a2enmod rewrite
+#RUN a2enmod rewrite
 
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
@@ -41,6 +41,11 @@ COPY --chown=www-data:www-data --chmod=0755 cicrc-entrypoint.sh /var/www/html/ci
 ENV APACHE_LOG_DIR=/var/log/apache2
 ENV APACHE_DOCUMENT_ROOT=/var/www/html
 WORKDIR /var/www/html
+
+# DEBUG
+ENV APACHE_RUN_USER=root
+ENV APACHE_RUN_GROUP=root
+
 
 EXPOSE 80
 
