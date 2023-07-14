@@ -1,6 +1,5 @@
 # Pull the base image from PHP
 FROM php:8.1.19-bullseye AS build
-MAINTAINER ESI Devops Team
 
 # Install Dependencies
 RUN apt update && apt install -y zlib1g-dev libpng-dev git unzip && rm -rf /var/lib/apt/lists/* && docker-php-ext-install gd
@@ -29,6 +28,7 @@ RUN a2enmod rewrite
 
 #########   DEBUG   ##################
 RUN a2enmod info
+#########   DEBUG   ##################
 
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
