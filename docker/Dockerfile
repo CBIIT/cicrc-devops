@@ -26,6 +26,8 @@ RUN apt update && apt install -y libpng-dev && rm -rf /var/lib/apt/lists/* && do
 #################    DEBUG    ######################
 # Enable apache rewrite module
 RUN a2enmod rewrite
+RUN a2enmod headers
+RUN a2enmod socache_shmcb
 #################    DEBUG    ######################
 
 # Copy code
