@@ -28,6 +28,8 @@ RUN apt update && apt install -y libpng-dev && rm -rf /var/lib/apt/lists/* && do
 RUN a2enmod rewrite
 RUN a2enmod headers
 RUN a2enmod socache_shmcb
+RUN a2enmod proxy
+RUN a2enmod proxy_http
 #################    DEBUG    ######################
 
 # Copy code
