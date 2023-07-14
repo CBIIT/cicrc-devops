@@ -27,6 +27,9 @@ RUN apt update && apt install -y libpng-dev && rm -rf /var/lib/apt/lists/* && do
 # Enable apache rewrite module
 RUN a2enmod rewrite
 
+#########   DEBUG   ##################
+RUN a2enmod info
+
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
 COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
