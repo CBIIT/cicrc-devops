@@ -41,7 +41,7 @@ RUN a2enmod unique_id vhost_alias remoteip userdir
 #RUN a2enmod remoteip
 #RUN a2enmod userdir
 
-RUN a2dismod -f deflate reqtimeout access_compat negotiation watchdog logio
+RUN a2dismod -f deflate reqtimeout access_compat negotiation
 #RUN a2dismod -f reqtimeout
 #RUN a2dismod -f access_compat
 #RUN a2dismod -f negotiation
