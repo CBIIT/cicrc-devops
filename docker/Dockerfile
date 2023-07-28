@@ -36,9 +36,19 @@ RUN a2enmod proxy_ajp
 
 RUN a2enmod authz_groupfile
 
-RUN a2dismod -f deflate
+RUN a2enmod unique_id vhost_alias remoteip userdir
+#RUN a2enmod vhost_alias
+#RUN a2enmod remoteip
+#RUN a2enmod userdir
 
-RUN apt update && apt install -y vim
+RUN a2dismod -f deflate reqtimeout access_compat negotiation watchdog logio
+#RUN a2dismod -f reqtimeout
+#RUN a2dismod -f access_compat
+#RUN a2dismod -f negotiation
+#RUN a2dismod -f watchdog
+#RUN a2dismod -f logio
+
+RUN apt update && apt install -y vim mlocate
 
 #################    DEBUG    ######################
 
