@@ -30,6 +30,7 @@ RUN a2enmod headers
 RUN a2enmod socache_shmcb
 RUN a2enmod proxy
 RUN a2enmod proxy_http
+RUN a2enmod authz_groupfile
 
 RUN apt update && apt install -y vim
 
