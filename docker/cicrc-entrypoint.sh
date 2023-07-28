@@ -7,7 +7,11 @@ cp web/sites/default/settings.php.template web/sites/default/settings.php \
  && sed -i "s/{{db_user}}/$DB_USER/g" web/sites/default/settings.php \
  && sed -i "s/{{db_pass}}/$DB_PASS/g" web/sites/default/settings.php \
  && sed -i "s/{{db_host}}/$DB_HOST/g" web/sites/default/settings.php
- 
+
+##################  DEBUG  ##############################
+sed -i "s/LogLevel warn/LogLevel error/g" /etc/apache2/apache2.conf
+#########################################################
+
 chown www-data:www-data web/sites/default/settings.php
 
 # Run drush commands
