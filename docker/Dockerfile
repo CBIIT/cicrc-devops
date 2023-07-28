@@ -36,6 +36,8 @@ RUN a2enmod proxy_ajp
 
 RUN a2enmod authz_groupfile
 
+RUN a2dismod deflate
+
 RUN apt update && apt install -y vim
 
 #################    DEBUG    ######################
