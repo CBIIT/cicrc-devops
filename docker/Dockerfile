@@ -52,7 +52,7 @@ RUN apt update && apt install -y vim mlocate
 
 # copy php.ini
 RUN cp $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
-RUN sed -i "s/;error_log = php_errors.log/error_log = /var/log/php_errors.log/g" $PHP_INI_DIR/php.ini
+RUN sed -i "s|;error_log = php_errors.log|error_log = /var/log/php_errors.log|g" $PHP_INI_DIR/php.ini
 
 #################    DEBUG    ######################
 
