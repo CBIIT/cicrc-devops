@@ -50,6 +50,9 @@ RUN a2dismod -f deflate reqtimeout access_compat negotiation
 
 RUN apt update && apt install -y vim mlocate
 
+# copy php.ini
+RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
+
 #################    DEBUG    ######################
 
 # Copy code
