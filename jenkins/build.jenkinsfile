@@ -58,7 +58,8 @@ pipeline {
             extensions: [[$class: 'SubmoduleOption', 
 			recursiveSubmodules: true],
 			[$class: 'RelativeTargetDirectory',
-			relativeTargetDir: 'cicrc-devops/docker/CICRC']],
+			//relativeTargetDir: 'cicrc-devops/docker/CICRC']],
+			relativeTargetDir: 'CICRC']],
             userRemoteConfigs:
 			[[credentialsId: 'cicrc-github-jenkins', url: 'https://github.com/CBIIT/CICRC.git']]])
 
@@ -79,7 +80,8 @@ pipeline {
 				aws_account=$(aws sts get-caller-identity --query "Account" --output text)
 				repo_url="$aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO"
 
-				cd $WORKSPACE/cicrc-devops/docker && DOCKER_BUILDKIT=1 docker build -t $repo_url:$CODE_BRANCH.$BUILD_NUMBER .
+				#cd $WORKSPACE/cicrc-devops/docker && DOCKER_BUILDKIT=1 docker build -t $repo_url:$CODE_BRANCH.$BUILD_NUMBER .
+				cd $WORKSPACE/CICRC && DOCKER_BUILDKIT=1 docker build -t $repo_url:$CODE_BRANCH.$BUILD_NUMBER .
 
 				'''
 
