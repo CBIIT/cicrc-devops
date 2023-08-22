@@ -23,35 +23,6 @@ FROM php:8.1.19-apache-bullseye AS final
 # Install php extensions
 RUN apt update && apt install -y libpng-dev && rm -rf /var/lib/apt/lists/* && docker-php-ext-install pdo_mysql gd
 
-#################    DEBUG    ######################
-# Enable apache rewrite module
-RUN a2enmod rewrite
-RUN a2enmod headers
-RUN a2enmod socache_shmcb
-
-RUN a2enmod proxy
-RUN a2enmod proxy_http
-RUN a2enmod proxy_connect
-RUN a2enmod proxy_ajp
-
-RUN a2enmod authz_groupfile
-
-RUN a2enmod unique_id vhost_alias remoteip userdir
-#RUN a2enmod vhost_alias
-#RUN a2enmod remoteip
-#RUN a2enmod userdir
-
-RUN a2dismod -f deflate reqtimeout access_compat negotiation
-#RUN a2dismod -f reqtimeout
-#RUN a2dismod -f access_compat
-#RUN a2dismod -f negotiation
-#RUN a2dismod -f watchdog
-#RUN a2dismod -f logio
-
-RUN apt update && apt install -y vim mlocate
-
-#################    DEBUG    ######################
-
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
 COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
