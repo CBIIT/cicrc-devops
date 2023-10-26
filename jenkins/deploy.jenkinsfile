@@ -101,7 +101,7 @@ pipeline {
 				sed -i "s|{{environment}}|$ENV|" cicrc-devops/aws/web_task.json
 				sed -i "s|{{efs_id}}|$EFS_ID|" cicrc-devops/aws/web_task.json
 
-				aws ecs register-task-definition --cli-input-json file://cicrc-devops/aws/web_task.json
+				aws ecs register-task-definition --region $REGION --cli-input-json file://cicrc-devops/aws/web_task.json
 
 				'''
 
