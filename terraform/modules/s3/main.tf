@@ -7,12 +7,12 @@ resource "aws_s3_bucket" "s3" {
 
 }
 
-resource "aws_s3_bucket_acl" "s3" {
-  count = var.s3_enable_acl == true ? 1 : 0
-
-  bucket = aws_s3_bucket.s3.id
-  acl    = "private"
-}
+//resource "aws_s3_bucket_acl" "s3" {
+//  count = var.s3_enable_acl == true ? 1 : 0
+//
+//  bucket = aws_s3_bucket.s3.id
+//  acl    = "private"
+//}
 
 resource "aws_s3_bucket_public_access_block" "s3" {
   bucket                  = aws_s3_bucket.s3.id
