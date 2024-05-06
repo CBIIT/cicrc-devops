@@ -3,7 +3,7 @@ locals {
   permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/PermissionBoundary_PowerUser"
 
   # ALB
-  alb_subnet_ids      = terraform.workspace == "prod" || terraform.workspace == "stage" ? var.public_subnet_ids : var.private_subnet_ids
+  alb_subnet_ids      = terraform.workspace == "prod" ? var.public_subnet_ids : var.private_subnet_ids
   alb_log_bucket_name = terraform.workspace == "prod" || terraform.workspace == "stage" ? "${var.project}-${terraform.workspace}-prod-alb-access-logs" : "${var.project}-${terraform.workspace}-nonprod-alb-access-logs"
   cert_types          = "IMPORTED"
 
