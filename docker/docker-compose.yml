@@ -1,7 +1,7 @@
 version: '3.4'
 services:
-  cicrc:
-    container_name: cicrc-webserver
+  crcr:
+    container_name: crcr-webserver
     build:
       context: .
       dockerfile: Dockerfile
