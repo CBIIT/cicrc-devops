@@ -60,7 +60,7 @@ pipeline {
             extensions: [[$class: 'SubmoduleOption', 
 			recursiveSubmodules: true],
 			[$class: 'RelativeTargetDirectory',
-			relativeTargetDir: 'cicrc-devops/docker/CICRC']],
+			relativeTargetDir: 'cicrc-devops/docker/CRCR']],
             userRemoteConfigs:
 			[[credentialsId: 'sowmya-jenkins-token', url: 'https://github.com/CBIIT/CRCR.git']]])
 
