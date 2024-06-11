@@ -4,6 +4,18 @@ FROM php:8.1.19-bullseye AS build
 # Install Dependencies
 RUN apt update && apt install -y zlib1g-dev libpng-dev git unzip && rm -rf /var/lib/apt/lists/* && docker-php-ext-install gd
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    zip \
+    unzip
+
+# Install PHP zip extension
+RUN docker-php-ext-install zip
+
+# Install other PHP extensions or dependencies as needed
+RUN docker-php-ext-install gd sodium
+
 # Get composer
 #RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 #  && php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
@@ -20,7 +32,8 @@ RUN composer global require drush/drush:11.3.2
 
 COPY CRCR /var/www/html
 
-RUN cd /var/www/html/ && composer install
+RUN cd /var/www/html/ \
+  && composer install
 
 # Pull the prod image from PHP
 FROM php:8.1.19-apache-bullseye AS final
