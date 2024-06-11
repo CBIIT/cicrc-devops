@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-install zip
 
 # Install other PHP extensions or dependencies as needed
-RUN docker-php-ext-install gd sodium
+RUN docker-php-ext-install gd
 
 # Get composer
 #RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
