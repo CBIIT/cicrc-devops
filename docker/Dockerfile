@@ -11,8 +11,8 @@ RUN apt update && apt install -y zlib1g-dev libpng-dev git unzip && rm -rf /var/
 #  && php -r "unlink('composer-setup.php');" \
 #  && mv composer.phar /usr/local/bin/composer
 
-RUN curl -sS https://getcomposer.org/installer | php 
-  && sudo mv composer.phar /usr/local/bin/composer 
+RUN curl -sS https://getcomposer.org/installer | php \
+  && sudo mv composer.phar /usr/local/bin/composer \
   && export PATH=$PATH:/local/home/drupal/.config/composer/vendor/bin 
   
 
