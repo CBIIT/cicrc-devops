@@ -5,11 +5,16 @@ FROM php:8.1.19-bullseye AS build
 RUN apt update && apt install -y zlib1g-dev libpng-dev git unzip && rm -rf /var/lib/apt/lists/* && docker-php-ext-install gd
 
 # Get composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-  && php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
-  && php composer-setup.php --version=2.4.4 \
-  && php -r "unlink('composer-setup.php');" \
-  && mv composer.phar /usr/local/bin/composer
+#RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+#  && php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+#  && php composer-setup.php --version=2.4.4 \
+#  && php -r "unlink('composer-setup.php');" \
+#  && mv composer.phar /usr/local/bin/composer
+
+RUN curl -sS https://getcomposer.org/installer | php 
+  && sudo mv composer.phar /usr/local/bin/composer 
+  && export PATH=$PATH:/local/home/drupal/.config/composer/vendor/bin 
+  
 
 RUN composer global require drush/drush:11.3.2
 
