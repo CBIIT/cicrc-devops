@@ -12,9 +12,9 @@ RUN apt update && apt install -y zlib1g-dev libpng-dev git unzip && rm -rf /var/
 #  && mv composer.phar /usr/local/bin/composer
 
 RUN curl -sS https://getcomposer.org/installer | php \
-  && sudo mv composer.phar /usr/local/bin/composer \
+  && mv composer.phar /usr/local/bin/composer \
   && export PATH=$PATH:/local/home/drupal/.config/composer/vendor/bin 
-  
+
 
 RUN composer global require drush/drush:11.3.2
 
