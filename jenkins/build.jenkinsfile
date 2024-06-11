@@ -15,7 +15,7 @@ pipeline {
             selectedValue: 'DEFAULT',
             sortMode: 'ASCENDING_SMART',
             tagFilter: '*',
-            useRepository: 'https://github.com/CBIIT/CICRC.git')
+            useRepository: 'https://github.com/CBIIT/CRCR.git')
 
         booleanParam(
             defaultValue: false,
@@ -32,9 +32,12 @@ pipeline {
 
   environment {
 
-	CODE_BRANCH = "${params.Branch}"
-	REGION      = "us-east-1"
-	ECR_REPO    = "cicrc-web"
+	CODE_BRANCH  = "${params.Branch}"
+	REGION       = "us-east-1"
+	PROGRAM      = "doerc"
+    PROJECT      = "crcr"
+	APP          = "backend"
+	ECR_REPO     = "${env.PROGRAM}-${env.PROJECT}-${env.APP}"
 
   }
 
@@ -59,12 +62,28 @@ pipeline {
 			[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops/docker/CICRC']],
             userRemoteConfigs:
-			[[credentialsId: 'cicrc-github-jenkins', url: 'https://github.com/CBIIT/CICRC.git']]])
+			[[credentialsId: 'sowmya-jenkins-token', url: 'https://github.com/CBIIT/CRCR.git']]])
 
         }
 
   	}
+  	stage('Set Environment Variables'){
 
+ 		steps {
+
+ 			script {
+
+                // set ECR account number
+				env.ECR_ACCOUNT = "986019062625"
+
+				// set repo URL
+				env.REPO_URL = "${ECR_ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO}"
+
+			}
+
+ 		}
+
+  	}
   	stage('build'){
 
  		steps {
@@ -75,10 +94,8 @@ pipeline {
 
 				# build CICRC Docker container
 				echo "Building: $ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER"
-				aws_account=$(aws sts get-caller-identity --query "Account" --output text)
-				repo_url="$aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO"
 
-				cd $WORKSPACE/cicrc-devops/docker && DOCKER_BUILDKIT=1 docker build -t $repo_url:$CODE_BRANCH.$BUILD_NUMBER .
+				cd $WORKSPACE/cicrc-devops/docker && DOCKER_BUILDKIT=1 docker build -t $REPO_URL:$CODE_BRANCH.$BUILD_NUMBER .
 
 				'''
 
@@ -130,12 +147,10 @@ pipeline {
 
 				# pushing CICRC container to ECR
 				echo "Pushing: $ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER"
-				aws_account=$(aws sts get-caller-identity --query "Account" --output text)
-				repo_url="$aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO"
-
+				
 				# login and push to ECR
-				docker login -u AWS -p $(aws ecr get-login-password --region $REGION) $repo_url
-				docker push $repo_url:$CODE_BRANCH.$BUILD_NUMBER
+				docker login -u AWS -p $(aws ecr get-login-password --region $REGION) $REPO_URL
+				docker push $REPO_URL:$CODE_BRANCH.$BUILD_NUMBER
 
 				'''
 
