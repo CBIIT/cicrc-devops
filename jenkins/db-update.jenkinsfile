@@ -124,7 +124,7 @@ pipeline {
 
                 sh label: 'Backup-DB', script: """#!/bin/bash
 
-				echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER"
+				echo "Backing up DB:    $BACKUP_FILE - user:   $BAK_DB_USER  - host: $BAK_DB_HOST - user : $BAK_DB_USER - password: $BAK_DB_PASS"
 
                 mkdir $WORKSPACE/mysqldump
                 echo "[client]" > $WORKSPACE/sql.conf
