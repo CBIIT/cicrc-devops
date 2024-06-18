@@ -1,5 +1,5 @@
 {
-    "family": "crcr-{{environment}}-web",
+    "family": "cicrc-{{environment}}-web",
     "taskRoleArn": "arn:aws:iam::{{account_id}}:role/power-user-cicrc-{{environment}}-ecs-task-role",
     "executionRoleArn": "arn:aws:iam::{{account_id}}:role/power-user-cicrc-{{environment}}-ecs-task-execution-role",
     "requiresCompatibilities": [
