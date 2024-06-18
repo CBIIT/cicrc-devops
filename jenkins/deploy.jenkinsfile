@@ -98,7 +98,8 @@ pipeline {
 			    sh label: 'Task-Definition-Update', script: '''#!/bin/bash
 
 				# create new revision for CICRC Task Definition
-				echo "Updating Task Defintion to Use: $ECR_REPO:$IMG_TAG"
+				echo "Updating Task Defintion to Use: $ECR_REPO:$IMG_TAG, env: $ENV"
+				ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 				IMAGE_ID="$REPO_URL:$IMG_TAG"
 				EFS_ID=$(aws efs describe-file-systems  --query "FileSystems[?Name=='cicrc-$ENV-efs'].FileSystemId"  --output text)
 
