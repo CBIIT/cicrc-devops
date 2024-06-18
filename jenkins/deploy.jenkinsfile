@@ -82,10 +82,10 @@ pipeline {
 			ENV      = "${params.Environment}"
 			ECR_REPO = "ccdi-${env.PROJECT}-${env.APP}"
 			// set ECR account number
-			env.ECR_ACCOUNT = "986019062625"
+			ECR_ACCOUNT = "986019062625"
 
 			// set repo URL
-			env.REPO_URL = "${ECR_ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO}"
+			REPO_URL = "${ECR_ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO}"
 
         }
 
