@@ -80,7 +80,12 @@ pipeline {
 
 			IMG_TAG  = "${params.Image_Tag}"
 			ENV      = "${params.Environment}"
-			ECR_REPO = "cicrc-web"
+			ECR_REPO = "ccdi-${env.PROJECT}-${env.APP}"
+			// set ECR account number
+			env.ECR_ACCOUNT = "986019062625"
+
+			// set repo URL
+			env.REPO_URL = "${ECR_ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO}"
 
         }
 
@@ -92,8 +97,7 @@ pipeline {
 
 				# create new revision for CICRC Task Definition
 				echo "Updating Task Defintion to Use: $ECR_REPO:$IMG_TAG"
-				ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-				IMAGE_ID="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMG_TAG"
+				IMAGE_ID="$REPO_URL:$IMG_TAG"
 				EFS_ID=$(aws efs describe-file-systems  --query "FileSystems[?Name=='cicrc-$ENV-efs'].FileSystemId"  --output text)
 
 				sed -i "s|{{account_id}}|$ACCOUNT_ID|" cicrc-devops/aws/web_task.json
