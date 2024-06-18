@@ -168,7 +168,7 @@ pipeline {
     success {
 
         script {
-			withCredentials([string(credentialsId: 'sowmya-jenkins-token', variable: 'git_token')]) {
+			withCredentials([string(credentialsId: 'cicrc-github-token', variable: 'git_token')]) {
 				sh label: 'GIT-Tag Repo', script: '''#!/bin/bash
 
 				cd ${WORKSPACE}/cicrc-devops/docker/CICRC
