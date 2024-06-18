@@ -31,6 +31,8 @@ pipeline {
 
 	REGION   = "us-east-1"
 	JOB_PATH = '_default/_lower/CICRC'
+	PROJECT  = "crcr"
+	APP      = "backend"
 
   }
 
