@@ -160,6 +160,24 @@ pipeline {
 
   	}
 
+  	stage('Update Code Tag'){
+
+ 		steps {
+ 			
+			script {
+
+                tagRepo ( 
+                    gitTag: "${CODE_BRANCH}.${BUILD_NUMBER}",
+                    gitUrl: "github.com/CBIIT/cicrc-devops",
+                    checkoutDirectory: "cicrc-devops"
+                )
+
+            }
+
+ 		}
+
+  	}
+
   }
 
   post {
@@ -167,22 +185,22 @@ pipeline {
 
     success {
 
-        script {
-			withCredentials([string(credentialsId: 'cicrc-github-token', variable: 'git_token')]) {
-				sh label: 'GIT-Tag Repo', script: '''#!/bin/bash
+        // script {
+		// 	withCredentials([string(credentialsId: 'cicrc-github-token', variable: 'git_token')]) {
+		// 		sh label: 'GIT-Tag Repo', script: '''#!/bin/bash
 
-				cd ${WORKSPACE}/cicrc-devops/docker/CICRC
-				gitURL=$(git config remote.origin.url | sed 's|^.*//||')
-				echo "Applying tag ${CODE_BRANCH}.${BUILD_NUMBER} to URL:  $gitURL"
-				git config user.email "cicrc-jenkins@cancer.gov"
-				git config user.name "CICRC Jenkins"
-				git tag --no-sign -a ${CODE_BRANCH}.${BUILD_NUMBER} -m "Jenkins tag: ${CODE_BRANCH}.${BUILD_NUMBER}"
-				git push https://${git_token}:x-oauth-basic@${gitURL} --tags
+		// 		cd ${WORKSPACE}/cicrc-devops/docker/CICRC
+		// 		gitURL=$(git config remote.origin.url | sed 's|^.*//||')
+		// 		echo "Applying tag ${CODE_BRANCH}.${BUILD_NUMBER} to URL:  $gitURL"
+		// 		git config user.email "cicrc-jenkins@cancer.gov"
+		// 		git config user.name "CICRC Jenkins"
+		// 		git tag --no-sign -a ${CODE_BRANCH}.${BUILD_NUMBER} -m "Jenkins tag: ${CODE_BRANCH}.${BUILD_NUMBER}"
+		// 		git push https://${git_token}:x-oauth-basic@${gitURL} --tags
 				
-				'''
+		// 		'''
 			
-				}
-			}
+		// 		}
+		// 	}
 
 		script {
 			if (params.Deploy_Image) {
