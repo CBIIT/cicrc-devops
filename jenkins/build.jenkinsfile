@@ -37,7 +37,7 @@ pipeline {
 	PROGRAM      = "doerc"
     PROJECT      = "crcr"
 	APP          = "backend"
-	ECR_REPO     = "${env.PROGRAM}-${env.PROJECT}-${env.APP}"
+	ECR_REPO     = "ccdi-${env.PROJECT}-${env.APP}"
 
   }
 
