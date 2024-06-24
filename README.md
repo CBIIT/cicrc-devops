@@ -7,6 +7,7 @@
 | EC2          | t3.2xlarge  | ncias-d2999-c     | Jenkins builds   |
 | EC2          | t3.large    | nciws-q2535-c     | QA portal        |
 | EC2          | t3.large    | nciws-d2524-c     | DEV portal       |
+| EC2          | t3.2xlarge  | ncias-d3313-v     | ThinLinc POC     |
 | RDS          | db.t3.micro | cicrc-dev-mysql   | Drupal DB        |
 | RDS          | db.t3.micro | cicrc-qa-mysql    | Drupal DB        |
 | ECS          | fargate     | cicrc-dev-ecs     | portal container |
