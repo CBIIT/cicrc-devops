@@ -1,5 +1,5 @@
 # move default config file
-mv sites/default/settings.php web/sites/default/settings.php.bak
+mv sites/default/settings.php sites/default/settings.php.bak
 
 # update the db credentials in the config file
 cp sites/default/settings.php.template sites/default/settings.php \
@@ -15,7 +15,7 @@ chown www-data:www-data sites/default/settings.php
  && ../vendor/bin/drush cim -y \
  && ../vendor/bin/drush cr \
  && ../vendor/bin/drush updb -y \
- && ../vendor/bin/drush cr
+ && ../vendor/bin/drush cr \
  && ../vendor/bin/drush cim -y \
  && ../vendor/bin/drush cr \
  && ../vendor/bin/drush sapi-c -y \
