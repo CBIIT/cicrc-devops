@@ -28,7 +28,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
   && export PATH=$PATH:/local/home/drupal/.config/composer/vendor/bin 
 
 
-RUN composer global require drush/drush:10.5.0
+RUN composer global require drush/drush:^12.0
 
 COPY CRCR /var/www/html
 
