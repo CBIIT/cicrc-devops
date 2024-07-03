@@ -31,9 +31,9 @@ COPY CRCR /var/www/html
 
 RUN composer global require drush/drush:^12.5.0
 
-RUN composer install
-
 RUN which drush
+
+RUN composer install
 
 RUN ls /var/www/html/vendor/bin \
   && ls -al /var/www/html/
