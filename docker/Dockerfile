@@ -25,18 +25,21 @@ RUN docker-php-ext-install gd
 
 RUN curl -sS https://getcomposer.org/installer | php \
   && mv composer.phar /usr/local/bin/composer \
-  && export PATH=$PATH:/var/www/html/.config/composer/vendor/drush/drush/drush
+  && export PATH=$PATH:/var/www/html/.config/composer/vendor/bin \
+  && source ~/.bashrc
 
 COPY CRCR /var/www/html
 
 RUN composer global require drush/drush:^12.5.0
+
+RUN ls -al /var/www/html
 
 RUN which drush
 
 RUN composer install
 
 RUN ls /var/www/html/vendor/bin \
-  && ls -al /var/www/html/
+  && ls -al /var/www/html/ 
 
 # Pull the prod image from PHP
 FROM php:8.1.19-apache-bullseye AS final
