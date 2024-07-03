@@ -27,9 +27,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
   && mv composer.phar /usr/local/bin/composer \
   && export PATH=$PATH:/var/www/html/.config/composer/vendor/drush/drush/drush
 
-
-# Install Drush locally within the project
-WORKDIR /var/www/html
+RUN which drush 
 
 COPY CRCR /var/www/html
 
