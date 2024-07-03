@@ -28,11 +28,13 @@ RUN curl -sS https://getcomposer.org/installer | php \
   && export PATH=$PATH:/local/home/drupal/.config/composer/vendor/bin 
 
 
-RUN composer global require drush/drush:^12.0
+# Install Drush locally within the project
+WORKDIR /var/www/html
 
 COPY CRCR /var/www/html
 
 RUN cd /var/www/html/ \
+  && RUN composer require drush/drush:^12.0 \
   && composer install
 
 RUN ls /var/www/html/vendor/bin
@@ -44,10 +46,13 @@ FROM php:8.1.19-apache-bullseye AS final
 RUN apt update && apt install -y libpng-dev && rm -rf /var/lib/apt/lists/* && docker-php-ext-install pdo_mysql gd
 
 # Copy code
-COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
-COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
-COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
-COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
+COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
+
+# Copy code
+# COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
+# COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
+# COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
+# COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
 
 # Copy required config files 
 RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
