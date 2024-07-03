@@ -25,8 +25,7 @@ RUN docker-php-ext-install gd
 
 RUN curl -sS https://getcomposer.org/installer | php \
   && mv composer.phar /usr/local/bin/composer \
-  && export PATH=$PATH:/var/www/html/.config/composer/vendor/bin \
-  && source ~/.bashrc
+  && export PATH=$PATH:/var/www/html/.config/composer/vendor/bin 
 
 COPY CRCR /var/www/html
 
