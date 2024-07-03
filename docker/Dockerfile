@@ -29,7 +29,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
 
 COPY CRCR /var/www/html
 
-RUN composer global require drush/drush:^12.5.0 -n 
+RUN composer global require drush/drush:12.5.1 -n 
 
 RUN cd /var/www/html/ && composer install
 
