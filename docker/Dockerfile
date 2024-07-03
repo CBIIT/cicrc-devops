@@ -37,7 +37,8 @@ RUN composer require drush/drush:^12.4
 
 RUN composer install
 
-RUN ls /var/www/html/vendor/bin
+RUN ls /var/www/html/vendor/bin \
+  && ls
 
 # Pull the prod image from PHP
 FROM php:8.1.19-apache-bullseye AS final
@@ -50,7 +51,7 @@ COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
 
 RUN ls -ltr /var/www/html/vendor/bin
 
-RUN /var/www/html/vendor/bin/drush --root="/var/www/html/web" status
+RUN /var/www/html/vendor/bin/drush status
 
 # Copy code
 # COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
