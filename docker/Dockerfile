@@ -51,7 +51,7 @@ COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
 
 RUN ls -ltr /var/www/html/vendor/bin
 
-RUN /var/www/html/vendor/bin/drush status
+RUN /var/www/html/vendor/drush/drush/drush status
 
 # Copy code
 # COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
