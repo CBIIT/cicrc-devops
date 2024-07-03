@@ -27,13 +27,13 @@ RUN curl -sS https://getcomposer.org/installer | php \
   && mv composer.phar /usr/local/bin/composer \
   && export PATH=$PATH:/var/www/html/.config/composer/vendor/drush/drush/drush
 
-RUN which drush 
-
 COPY CRCR /var/www/html
 
 RUN composer global require drush/drush:^12.5.0
 
 RUN composer install
+
+RUN which drush
 
 RUN ls /var/www/html/vendor/bin \
   && ls -al /var/www/html/
