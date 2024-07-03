@@ -44,7 +44,7 @@ RUN apt update && apt install -y libpng-dev && rm -rf /var/lib/apt/lists/* && do
 
 RUN curl -L https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar -o drush.phar \
   && chmod +x drush.phar \
-  && sudo mv drush.phar /usr/local/bin/drush 
+  && mv drush.phar /usr/local/bin/drush 
 
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
