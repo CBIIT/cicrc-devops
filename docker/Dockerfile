@@ -35,6 +35,8 @@ COPY CRCR /var/www/html
 RUN cd /var/www/html/ \
   && composer install
 
+RUN ls /var/www/html/vendor/bin
+
 # Pull the prod image from PHP
 FROM php:8.1.19-apache-bullseye AS final
 
