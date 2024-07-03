@@ -33,7 +33,7 @@ WORKDIR /var/www/html
 
 COPY CRCR /var/www/html
 
-RUN composer require drush/drush:^12.0
+RUN composer require drush/drush:^12.4
 
 RUN composer install
 
@@ -65,7 +65,7 @@ COPY --chown=www-data:www-data --chmod=0755 crcr-entrypoint.sh /var/www/html/crc
 
 ENV APACHE_LOG_DIR=/var/log/apache2
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/
-WORKDIR /var/www/html/web
+WORKDIR /var/www/html/
 
 EXPOSE 80
 
