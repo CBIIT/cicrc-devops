@@ -13,11 +13,11 @@ pipeline {
             defaultValue: 'main',
             name: 'Branch',
             type: 'PT_BRANCH_TAG',
-            quickFilterEnabled: true,
+            quickFilterEnabled: false,
             selectedValue: 'DEFAULT',
             sortMode: 'ASCENDING_SMART',
             tagFilter: '*',
-            useRepository: 'https://github.com/CBIIT/CRCR.git')
+            useRepository: 'https://github.com/CBIIT/CRCR')
 
         booleanParam(
             defaultValue: false,
@@ -64,7 +64,7 @@ pipeline {
 			[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops/docker/CRCR']],
             userRemoteConfigs:
-			[[credentialsId: 'sowmya-jenkins-token', url: 'https://github.com/CBIIT/CRCR.git']]])
+			[[credentialsId: 'sowmya-jenkins-token', url: 'https://github.com/CBIIT/CRCR']]])
 
         }
 
