@@ -33,8 +33,6 @@ RUN composer global require drush/drush:^12.5.0
 
 RUN ls -al /var/www/html
 
-RUN which drush
-
 RUN composer install
 
 RUN ls /var/www/html/vendor/bin \
