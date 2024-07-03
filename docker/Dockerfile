@@ -42,12 +42,16 @@ FROM php:8.1.19-apache-bullseye AS final
 # Install php extensions
 RUN apt update && apt install -y libpng-dev && rm -rf /var/lib/apt/lists/* && docker-php-ext-install pdo_mysql gd
 
+RUN wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar \
+  && chmod +x drush.phar \
+  && sudo mv drush.phar /usr/local/bin/drush 
+
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
 
 RUN ls -ltr /var/www/html/vendor/bin
 
-RUN ./vendor/bin/drush status
+RUN /usr/local/bin/drush status
 
 # Copy code
 # COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
