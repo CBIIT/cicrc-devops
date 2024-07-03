@@ -25,7 +25,7 @@ RUN docker-php-ext-install gd
 
 RUN curl -sS https://getcomposer.org/installer | php \
   && mv composer.phar /usr/local/bin/composer \
-  && export PATH=$PATH:/var/www/html/vendor/bin 
+  && export PATH=$HOME/.composer/vendor/bin:$PATH
 
 COPY CRCR /var/www/html
 
@@ -47,7 +47,7 @@ COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
 
 RUN ls -ltr /var/www/html/vendor/bin
 
-RUN drush status
+RUN ./vendor/bin/drush status
 
 # Copy code
 # COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
