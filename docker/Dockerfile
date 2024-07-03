@@ -33,9 +33,9 @@ WORKDIR /var/www/html
 
 COPY CRCR /var/www/html
 
-RUN cd /var/www/html/ \
-  && composer require drush/drush:^12.0 \
-  && composer install
+RUN composer require drush/drush:^12.0
+
+RUN composer install
 
 RUN ls /var/www/html/vendor/bin
 
