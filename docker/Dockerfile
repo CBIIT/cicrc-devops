@@ -48,9 +48,9 @@ RUN apt update && apt install -y libpng-dev && rm -rf /var/lib/apt/lists/* && do
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
 
-RUN ls /var/www/html/vendor/bin
+RUN ls -ltr /var/www/html/vendor/bin
 
-RUN /var/www/html/vendor/bin/drush --version
+RUN /var/www/html/vendor/bin/drush --root="/var/www/html/web" status
 
 # Copy code
 # COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
