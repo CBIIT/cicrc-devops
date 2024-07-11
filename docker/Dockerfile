@@ -1,5 +1,5 @@
 # Pull the base image from PHP
-FROM php:8.1.19-bullseye AS build
+FROM php:8.1.27-bullseye AS build
 
 # Install Dependencies
 RUN apt update && apt install -y zlib1g-dev libpng-dev git unzip && rm -rf /var/lib/apt/lists/* && docker-php-ext-install gd
@@ -8,7 +8,8 @@ RUN apt update && apt install -y zlib1g-dev libpng-dev git unzip && rm -rf /var/
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
-    unzip
+    unzip \
+    openssl
 
 # Install PHP zip extension
 RUN docker-php-ext-install zip
@@ -23,13 +24,15 @@ RUN docker-php-ext-install gd
 #  && php -r "unlink('composer-setup.php');" \
 #  && mv composer.phar /usr/local/bin/composer
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+COPY CRCR /var/www/html
+
 RUN curl -sS https://getcomposer.org/installer | php \
   && mv composer.phar /usr/local/bin/composer \
   && export PATH=$HOME/.composer/vendor/bin:$PATH
 
-COPY CRCR /var/www/html
-
-RUN composer global require drush/drush:12.5.1 -n 
+RUN composer require drush/drush:12.5.1 -n 
 
 RUN cd /var/www/html/ && composer install
 
@@ -37,7 +40,7 @@ RUN ls /var/www/html/vendor/bin \
   && ls -al /var/www/html/ 
 
 # Pull the prod image from PHP
-FROM php:8.1.19-apache-bullseye AS final
+FROM php:8.1.27-bullseye AS final
 
 # Install php extensions
 RUN apt update && apt install -y libpng-dev && rm -rf /var/lib/apt/lists/* && docker-php-ext-install pdo_mysql gd
