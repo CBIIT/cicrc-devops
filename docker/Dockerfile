@@ -67,6 +67,8 @@ RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
 COPY default.conf /etc/apache2/sites-enabled
 COPY --chown=www-data:www-data --chmod=0755 crcr-entrypoint.sh /var/www/html/crcr-entrypoint.sh
 
+RUN php --ini
+
 ENV APACHE_LOG_DIR=/var/log/apache2
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/
 WORKDIR /var/www/html/
