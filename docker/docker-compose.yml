@@ -10,8 +10,9 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
+      - MEMORY_LIMIT=512M
     networks:
       - default
     ports:
-      - 80:80
+      - 80:80      
     restart: always
