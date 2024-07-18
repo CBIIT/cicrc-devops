@@ -38,8 +38,7 @@ RUN composer require drush/drush:12.5.1 -n \
 RUN cd /var/www/html/ && composer install
 
 RUN ls /var/www/html/vendor/bin \
-  && ls -al /var/www/html/ \
-  && drush version
+  && ls -al /var/www/html/
 
 # Pull the prod image from PHP
 FROM php:8.1-apache AS final
