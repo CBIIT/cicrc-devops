@@ -32,12 +32,14 @@ RUN curl -sS https://getcomposer.org/installer | php \
   && mv composer.phar /usr/local/bin/composer \
   && export PATH=$HOME/.composer/vendor/bin:$PATH
 
-RUN composer require drush/drush:12.5.1 -n 
+RUN composer require drush/drush:12.5.1 -n \
+  && export PATH="$HOME/.composer/vendor/bin:$PATH"
 
 RUN cd /var/www/html/ && composer install
 
 RUN ls /var/www/html/vendor/bin \
-  && ls -al /var/www/html/ 
+  && ls -al /var/www/html/ \
+  && drush version
 
 # Pull the prod image from PHP
 FROM php:8.1-apache AS final
@@ -54,7 +56,7 @@ COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
 
 RUN ls -ltr /var/www/html/vendor/bin
 
-RUN /var/www/html/vendor/bin/drush status
+RUN /var/www/html/vendor/bin/drush status -vvv
 
 # Copy code
 # COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
