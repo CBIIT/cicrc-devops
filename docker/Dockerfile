@@ -40,7 +40,7 @@ RUN ls /var/www/html/vendor/bin \
   && ls -al /var/www/html/ 
 
 # Pull the prod image from PHP
-FROM php:8.1.27-bullseye AS final
+FROM php:8.1.27-apache-bullseye AS final
 
 # Install php extensions
 RUN apt update && apt install -y apache2 libpng-dev && rm -rf /var/lib/apt/lists/* && docker-php-ext-install pdo_mysql gd
