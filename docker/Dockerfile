@@ -73,7 +73,7 @@ RUN echo 'memory_limit = 512M' >> /usr/local/etc/php/conf.d/custom-php.ini
 # Set environment variables and working directory
 ENV APACHE_LOG_DIR=/var/log/apache2
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/
-WORKDIR /var/www/html/
+WORKDIR /var/www/html/web
 
 # Expose port 80
 EXPOSE 80
