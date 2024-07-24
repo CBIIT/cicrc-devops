@@ -68,7 +68,7 @@ COPY default.conf /etc/apache2/sites-enabled
 COPY --chown=www-data:www-data --chmod=0755 crcr-entrypoint.sh /var/www/html/crcr-entrypoint.sh
 
 # Set PHP memory limit
-RUN echo 'memory_limit = 512M' >> /usr/local/etc/php/conf.d/custom-php.ini
+RUN echo 'memory_limit = 256M' >> /usr/local/etc/php/conf.d/custom-php.ini
 
 # Set environment variables and working directory
 ENV APACHE_LOG_DIR=/var/log/apache2
