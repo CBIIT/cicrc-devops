@@ -39,7 +39,7 @@ pipeline {
 	PROGRAM      = "doerc"
     PROJECT      = "crcr"
 	APP          = "backend"
-	ECR_REPO     = "ccdi-${env.PROJECT}-${env.APP}"
+	ECR_REPO     = "cicrc-web"
 
   }
 
@@ -76,7 +76,7 @@ pipeline {
  			script {
 
                 // set ECR account number
-				env.ECR_ACCOUNT = "986019062625"
+				env.ECR_ACCOUNT = "002558681621"
 
 				// set repo URL
 				env.REPO_URL = "${ECR_ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO}"

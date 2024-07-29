@@ -82,9 +82,9 @@ pipeline {
 
 			IMG_TAG  = "${params.Image_Tag}"
 			ENV      = "${params.Environment}"
-			ECR_REPO = "ccdi-${env.PROJECT}-${env.APP}"
+			ECR_REPO = "cicrc-web"
 			// set ECR account number
-			ECR_ACCOUNT = "986019062625"
+			ECR_ACCOUNT = "002558681621"
 
 			// set repo URL
 			REPO_URL = "${ECR_ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO}"
