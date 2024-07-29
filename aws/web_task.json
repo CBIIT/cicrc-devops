@@ -51,12 +51,9 @@
                     "logDriver": "splunk",
                     "options": {
                         "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
-                        "tag": "crcr-{{environment}}"
+                        "tag": "crcr-{{environment}}",
+                        "secretOptions":"{{splunk_token}}"
                     },
-                    "secretOptions": [{
-                    "name": "splunk-token",
-                    "valueFrom": "{{splunk_token}}"
-                    }]
             }
         }
     ],
