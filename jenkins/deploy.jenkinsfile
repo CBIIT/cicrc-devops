@@ -29,6 +29,7 @@ pipeline {
 
   environment {
 
+	ENV      = "${params.Environment}"
 	REGION   = "us-east-1"
 	JOB_PATH = '_default/_lower/CICRC'
 	PROJECT  = "crcr"
@@ -76,6 +77,19 @@ pipeline {
 
   	}
 
+  	stage('Set Environment Variables'){
+ 		steps {
+ 			script {
+			    
+				env.SPLUNK_HOST = sh(label: 'Get splunk host', returnStdout: true, script: "aws secretsmanager get-secret-value --region $REGION --secret-id cicrc/db/$ENV --query SecretString --output text | jq -r '.SPLUNK_HOST'").trim()
+				
+                env.SPLUNK_PORT = sh(label: 'Get splunk port', returnStdout: true, script: "aws secretsmanager get-secret-value --region $REGION --secret-id cicrc/db/$ENV --query SecretString --output text | jq -r '.SPLUNK_PORT'").trim()
+                env.SPLUNK_TOKEN = sh(label: 'Get splunk token', returnStdout: true, script: "aws secretsmanager get-secret-value --region $REGION --secret-id cicrc/db/$ENV --query SecretString --output text | jq -r '.SPLUNK_TOKEN'").trim()
+
+			}
+ 		}
+  	}
+
   	stage('Update Task Definition'){
 
 	    environment {
@@ -107,6 +121,9 @@ pipeline {
 				sed -i "s|{{image_id}}|$IMAGE_ID|" cicrc-devops/aws/web_task.json
 				sed -i "s|{{environment}}|$ENV|" cicrc-devops/aws/web_task.json
 				sed -i "s|{{efs_id}}|$EFS_ID|" cicrc-devops/aws/web_task.json
+                sed -i "s|{{splunk_host}}|$SPLUNK_HOST|" cicrc-devops/aws/web_task.json
+                sed -i "s|{{splunk_port}}|$SPLUNK_PORT|" cicrc-devops/aws/web_task.json
+                sed -i "s|{{splunk_token}}|$SPLUNK_TOKEN|" cicrc-devops/aws/web_task.json
 
 				aws ecs register-task-definition --region $REGION --cli-input-json file://cicrc-devops/aws/web_task.json
 
