@@ -47,16 +47,16 @@
                     "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/{{environment}}:DB_USER::"
                 }
             ],
-            "logConfiguration": {
-                "logDriver": "splunk",
-                "options": {
-                    "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
-                    "tag": "crcr-{{environment}}",
-                },
-                "secretOptions": [{
-                "name": "splunk-token",
-                "valueFrom": "{{splunk_token}}"
-                }],
+                "logConfiguration": {
+                    "logDriver": "splunk",
+                    "options": {
+                        "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
+                        "tag": "crcr-{{environment}}"
+                    },
+                    "secretOptions": [{
+                    "name": "splunk-token",
+                    "valueFrom": "{{splunk_token}}"
+                    }]
             }
         }
     ],
