@@ -52,7 +52,7 @@
                     "options": {
                         "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
                         "tag": "crcr-{{environment}}",
-                        "secretOptions":"{{splunk_token}}"
+                        "splunk-token":"{{splunk_token}}"
                     }
             }
         }
