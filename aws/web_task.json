@@ -48,11 +48,11 @@
                 }
             ],
             "logConfiguration": {
-                "logDriver": "awslogs",
+                "logDriver": "splunk",
                 "options": {
-                    "awslogs-group": "cicrc/ecs/{{environment}}/web",
-                    "awslogs-region": "us-east-1",
-                    "awslogs-stream-prefix": "ecs"
+                    "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
+                    "tag": "crcr-{{environment}}",
+                    "splunk-token":"{{splunk_token}}"
                 }
             }
         }
