@@ -15,4 +15,9 @@ vendor/bin/drush cr \
  && vendor/bin/drush cim -y \
  && vendor/bin/drush cr \
  && vendor/bin/drush updb -y \
+ && vendor/bin/drush cr \
+ && vendor/bin/drush cim -y \
+ && vendor/bin/drush cr \
+ && vendor/bin/drush sapi-c -y \
+ && vendor/bin/drush sapi-i -y \
  && vendor/bin/drush cr

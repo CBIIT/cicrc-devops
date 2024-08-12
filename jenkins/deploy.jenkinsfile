@@ -29,8 +29,11 @@ pipeline {
 
   environment {
 
+	ENV      = "${params.Environment}"
 	REGION   = "us-east-1"
 	JOB_PATH = '_default/_lower/CICRC'
+	PROJECT  = "crcr"
+	APP      = "backend"
 
   }
 
@@ -62,7 +65,7 @@ pipeline {
   		steps {
 
   		checkout([$class: 'GitSCM',
-			branches: [[name: '*/main']],
+			branches: [[name: '*/crcr-768']],
 			doGenerateSubmoduleConfigurations: false,
 			extensions: [[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops']],
@@ -74,6 +77,19 @@ pipeline {
 
   	}
 
+  	stage('Set Environment Variables'){
+ 		steps {
+ 			script {
+			    
+				env.SPLUNK_HOST = sh(label: 'Get splunk host', returnStdout: true, script: "aws secretsmanager get-secret-value --region $REGION --secret-id cicrc/db/$ENV --query SecretString --output text | jq -r '.SPLUNK_HOST'").trim()
+				
+                env.SPLUNK_PORT = sh(label: 'Get splunk port', returnStdout: true, script: "aws secretsmanager get-secret-value --region $REGION --secret-id cicrc/db/$ENV --query SecretString --output text | jq -r '.SPLUNK_PORT'").trim()
+                env.SPLUNK_TOKEN = sh(label: 'Get splunk token', returnStdout: true, script: "aws secretsmanager get-secret-value --region $REGION --secret-id cicrc/db/$ENV --query SecretString --output text | jq -r '.SPLUNK_TOKEN'").trim()
+
+			}
+ 		}
+  	}
+
   	stage('Update Task Definition'){
 
 	    environment {
@@ -81,6 +97,11 @@ pipeline {
 			IMG_TAG  = "${params.Image_Tag}"
 			ENV      = "${params.Environment}"
 			ECR_REPO = "cicrc-web"
+			// set ECR account number
+			ECR_ACCOUNT = "002558681621"
+
+			// set repo URL
+			REPO_URL = "${ECR_ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO}"
 
         }
 
@@ -91,15 +112,18 @@ pipeline {
 			    sh label: 'Task-Definition-Update', script: '''#!/bin/bash
 
 				# create new revision for CICRC Task Definition
-				echo "Updating Task Defintion to Use: $ECR_REPO:$IMG_TAG"
+				echo "Updating Task Defintion to Use: $ECR_REPO:$IMG_TAG, env: $ENV"
 				ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-				IMAGE_ID="$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO:$IMG_TAG"
+				IMAGE_ID="$REPO_URL:$IMG_TAG"
 				EFS_ID=$(aws efs describe-file-systems  --query "FileSystems[?Name=='cicrc-$ENV-efs'].FileSystemId"  --output text)
 
 				sed -i "s|{{account_id}}|$ACCOUNT_ID|" cicrc-devops/aws/web_task.json
 				sed -i "s|{{image_id}}|$IMAGE_ID|" cicrc-devops/aws/web_task.json
 				sed -i "s|{{environment}}|$ENV|" cicrc-devops/aws/web_task.json
 				sed -i "s|{{efs_id}}|$EFS_ID|" cicrc-devops/aws/web_task.json
+                sed -i "s|{{splunk_host}}|$SPLUNK_HOST|" cicrc-devops/aws/web_task.json
+                sed -i "s|{{splunk_port}}|$SPLUNK_PORT|" cicrc-devops/aws/web_task.json
+                sed -i "s|{{splunk_token}}|$SPLUNK_TOKEN|" cicrc-devops/aws/web_task.json
 
 				aws ecs register-task-definition --region $REGION --cli-input-json file://cicrc-devops/aws/web_task.json
 

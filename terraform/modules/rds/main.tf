@@ -16,6 +16,7 @@ resource "aws_db_instance" "rds_mysql" {
   backup_retention_period = var.backup_retention_period
   backup_window           = var.backup_window
   copy_tags_to_snapshot   = true
+  storage_encrypted       = true
 
   tags = merge(
     {

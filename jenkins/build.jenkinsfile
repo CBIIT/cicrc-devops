@@ -1,3 +1,5 @@
+@Library('datacommons-jenkins-shared-library@v1.1') _
+
 pipeline {
 	agent {
 		node {
@@ -10,12 +12,12 @@ pipeline {
 		gitParameter(branchFilter: 'origin/(.*)',
             defaultValue: 'main',
             name: 'Branch',
-            type: 'GitParameterDefinition',
-            quickFilterEnabled: true,
+            type: 'PT_BRANCH_TAG',
+            quickFilterEnabled: false,
             selectedValue: 'DEFAULT',
             sortMode: 'ASCENDING_SMART',
             tagFilter: '*',
-            useRepository: 'https://github.com/CBIIT/CICRC.git')
+            useRepository: 'https://github.com/CBIIT/CRCR')
 
         booleanParam(
             defaultValue: false,
@@ -32,9 +34,12 @@ pipeline {
 
   environment {
 
-	CODE_BRANCH = "${params.Branch}"
-	REGION      = "us-east-1"
-	ECR_REPO    = "cicrc-web"
+	CODE_BRANCH  = "${params.Branch}"
+	REGION       = "us-east-1"
+	PROGRAM      = "doerc"
+    PROJECT      = "crcr"
+	APP          = "backend"
+	ECR_REPO     = "cicrc-web"
 
   }
 
@@ -44,7 +49,7 @@ pipeline {
   		steps {
 
   		checkout([$class: 'GitSCM',
-			branches: [[name: '*/main']],
+			branches: [[name: '*/crcr-768']],
 			extensions: [[$class: 'SubmoduleOption', 
 			recursiveSubmodules: true],
 			[$class: 'RelativeTargetDirectory',
@@ -57,14 +62,30 @@ pipeline {
             extensions: [[$class: 'SubmoduleOption', 
 			recursiveSubmodules: true],
 			[$class: 'RelativeTargetDirectory',
-			relativeTargetDir: 'cicrc-devops/docker/CICRC']],
+			relativeTargetDir: 'cicrc-devops/docker/CRCR']],
             userRemoteConfigs:
-			[[credentialsId: 'cicrc-github-jenkins', url: 'https://github.com/CBIIT/CICRC.git']]])
+			[[credentialsId: 'sowmya-jenkins-token', url: 'https://github.com/CBIIT/CRCR']]])
 
         }
 
   	}
+  	stage('Set Environment Variables'){
 
+ 		steps {
+
+ 			script {
+
+                // set ECR account number
+				env.ECR_ACCOUNT = "002558681621"
+
+				// set repo URL
+				env.REPO_URL = "${ECR_ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO}"
+
+			}
+
+ 		}
+
+  	}
   	stage('build'){
 
  		steps {
@@ -75,10 +96,8 @@ pipeline {
 
 				# build CICRC Docker container
 				echo "Building: $ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER"
-				aws_account=$(aws sts get-caller-identity --query "Account" --output text)
-				repo_url="$aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO"
 
-				cd $WORKSPACE/cicrc-devops/docker && DOCKER_BUILDKIT=1 docker build -t $repo_url:$CODE_BRANCH.$BUILD_NUMBER .
+				cd $WORKSPACE/cicrc-devops/docker && DOCKER_BUILDKIT=1 docker build -t $REPO_URL:$CODE_BRANCH.$BUILD_NUMBER .
 
 				'''
 
@@ -106,11 +125,11 @@ pipeline {
 
 				# Test image for vulnerabilities
                 echo "Testing Image with Trivy: $ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER"
-                aws_account=$(aws sts get-caller-identity --query "Account" --output text)
-				repo_url="$aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO"
+                # aws_account=$(aws sts get-caller-identity --query "Account" --output text)
+				# repo_url="$aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO"
 
                 #trivy image --exit-code 1 --severity HIGH,CRITICAL $repo_url:$CODE_BRANCH.$BUILD_NUMBER
-                trivy image --timeout 15m --severity HIGH,CRITICAL $repo_url:$CODE_BRANCH.$BUILD_NUMBER
+                trivy image --timeout 15m --severity HIGH,CRITICAL $REPO_URL:$CODE_BRANCH.$BUILD_NUMBER
 
 				'''
 
@@ -130,16 +149,32 @@ pipeline {
 
 				# pushing CICRC container to ECR
 				echo "Pushing: $ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER"
-				aws_account=$(aws sts get-caller-identity --query "Account" --output text)
-				repo_url="$aws_account.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO"
-
+				
 				# login and push to ECR
-				docker login -u AWS -p $(aws ecr get-login-password --region $REGION) $repo_url
-				docker push $repo_url:$CODE_BRANCH.$BUILD_NUMBER
+				docker login -u AWS -p $(aws ecr get-login-password --region $REGION) $REPO_URL
+				docker push $REPO_URL:$CODE_BRANCH.$BUILD_NUMBER
 
 				'''
 
 			}
+
+ 		}
+
+  	}
+
+  	stage('Update Code Tag'){
+
+ 		steps {
+ 			
+			script {
+
+                tagRepo ( 
+                    gitTag: "${CODE_BRANCH}.${BUILD_NUMBER}",
+                    gitUrl: "github.com/CBIIT/cicrc-devops",
+                    checkoutDirectory: "cicrc-devops"
+                )
+
+            }
 
  		}
 
@@ -152,22 +187,22 @@ pipeline {
 
     success {
 
-        script {
-			withCredentials([string(credentialsId: 'cicrc-github-token', variable: 'git_token')]) {
-				sh label: 'GIT-Tag Repo', script: '''#!/bin/bash
+        // script {
+		// 	withCredentials([string(credentialsId: 'cicrc-github-token', variable: 'git_token')]) {
+		// 		sh label: 'GIT-Tag Repo', script: '''#!/bin/bash
 
-				cd ${WORKSPACE}/cicrc-devops/docker/CICRC
-				gitURL=$(git config remote.origin.url | sed 's|^.*//||')
-				echo "Applying tag ${CODE_BRANCH}.${BUILD_NUMBER} to URL:  $gitURL"
-				git config user.email "cicrc-jenkins@cancer.gov"
-				git config user.name "CICRC Jenkins"
-				git tag --no-sign -a ${CODE_BRANCH}.${BUILD_NUMBER} -m "Jenkins tag: ${CODE_BRANCH}.${BUILD_NUMBER}"
-				git push https://${git_token}:x-oauth-basic@${gitURL} --tags
+		// 		cd ${WORKSPACE}/cicrc-devops/docker/CICRC
+		// 		gitURL=$(git config remote.origin.url | sed 's|^.*//||')
+		// 		echo "Applying tag ${CODE_BRANCH}.${BUILD_NUMBER} to URL:  $gitURL"
+		// 		git config user.email "cicrc-jenkins@cancer.gov"
+		// 		git config user.name "CICRC Jenkins"
+		// 		git tag --no-sign -a ${CODE_BRANCH}.${BUILD_NUMBER} -m "Jenkins tag: ${CODE_BRANCH}.${BUILD_NUMBER}"
+		// 		git push https://${git_token}:x-oauth-basic@${gitURL} --tags
 				
-				'''
+		// 		'''
 			
-				}
-			}
+		// 		}
+		// 	}
 
 		script {
 			if (params.Deploy_Image) {
