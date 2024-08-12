@@ -71,6 +71,7 @@ module "rds" {
   db_subnet_ids      = var.db_subnet_ids
   vpc_id             = var.vpc_id
   tags               = var.tags
+  instance_class     = var.instance_class
 }
 
 # S3
