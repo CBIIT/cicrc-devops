@@ -12,6 +12,7 @@ resource "aws_db_instance" "rds_mysql" {
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.rds.id]
   #alb_internal           = false
+  apply_immediately       = true
 
   backup_retention_period = var.backup_retention_period
   backup_window           = var.backup_window
