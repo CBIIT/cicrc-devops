@@ -10,6 +10,23 @@
     "memory": "2048",
     "containerDefinitions": [
         {
+            "name": "firelens-container",
+            "image": "public.ecr.aws/aws-observability/aws-for-fluent-bit:stable",
+            "essential": false,
+            "cpu": 0,
+            "portMappings": [],
+            "environment": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "user": "0",
+            "firelensConfiguration": {
+                "type": "fluentbit",
+                 "options": {
+                    "enable-ecs-log-metadata": "true"
+                }
+            }
+        },
+        {
             "name": "web",
             "image": "{{image_id}}",
             "cpu": 0,
@@ -48,13 +65,33 @@
                 }
             ],
             "logConfiguration": {
-                "logDriver": "splunk",
+                "logDriver": "awsfirelens",
                 "options": {
-                    "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
-                    "tag": "crcr-{{environment}}",
-                    "splunk-token":"{{splunk_token}}"
+                  "Format": "json_lines",
+                  "Name": "splunk",
+                  "Host": "{{splunk_host}}",
+                  "Port": "{{splunk_port}}",
+                  "Splunk_Token": "{{splunk_token}}",
+                  "tls": "on",
+                  "tls.verify": "off"
                 }
             }
+            // "logConfiguration": {
+            //     "logDriver": "awslogs",
+            //     "options": {
+            //         "awslogs-group": "cicrc/ecs/{{environment}}/web",
+            //         "awslogs-region": "us-east-1",
+            //         "awslogs-stream-prefix": "ecs"
+            //     }
+            // }
+            // "logConfiguration": {
+            //     "logDriver": "splunk",
+            //     "options": {
+            //         "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
+            //         "tag": "crcr-{{environment}}",
+            //         "splunk-token":"{{splunk_token}}"
+            //     }
+            // }
         }
     ],
 	"volumes": [
@@ -64,6 +101,12 @@
                 "fileSystemId": "{{efs_id}}",
                 "transitEncryption": "ENABLED"
             }
+        },
+        {
+          "name": "log-volume",
+          "host": {
+            "sourcePath": "/ecs/logs"
+          }
         }
     ]
 }
