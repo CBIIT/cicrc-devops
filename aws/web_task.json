@@ -15,7 +15,12 @@
             "essential": false,
             "cpu": 0,
             "portMappings": [],
-            "environment": [],
+            "environment": [
+                {
+                    "name": "FLB_LOG_LEVEL",
+                    "value": "debug"
+                }
+            ],
             "mountPoints": [],
             "volumesFrom": [],
             "user": "0",
@@ -24,6 +29,14 @@
                  "options": {
                     "enable-ecs-log-metadata": "true"
                 }
+            },
+            "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                "awslogs-group": "/ecs/cicrc-{{environment}}",
+                "awslogs-region": "us-east-1",
+                "awslogs-stream-prefix": "firelens-container"
+              }
             }
         },
         {
