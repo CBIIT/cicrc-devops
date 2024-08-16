@@ -53,7 +53,7 @@
                     "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
                     "tag": "crcr-{{environment}}",
                     "splunk-token":"{{splunk_token}}",
-                    "splunk-verify-connection":"false"
+                    "splunk-verifyconnection":"false"
                 }
             }
         }
