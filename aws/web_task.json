@@ -54,7 +54,8 @@
                     "tag": "crcr-{{environment}}",
                     "splunk-token":"{{splunk_token}}",
                     "splunk-index": "crcr",
-                    "splunk-verify-connection": "false"
+                    "splunk-verify-connection": "false",
+                    "splunk-ca-path": "/usr/local/share/ca-certificates/splunk-ca/"
                 }
             }
         }
