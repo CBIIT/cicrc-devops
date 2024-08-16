@@ -52,7 +52,9 @@ RUN curl -L https://github.com/drush-ops/drush-launcher/releases/latest/download
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
 
-RUN ls -ltr /var/www/html/vendor/bin
+RUN mkdir /usr/local/share/ca-certificates/splunk-ca
+COPY *.crt /usr/local/share/ca-certificates/splunk-ca
+RUN update-ca-certificates
 
 RUN /var/www/html/vendor/bin/drush status
 

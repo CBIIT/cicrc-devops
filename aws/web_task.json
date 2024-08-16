@@ -10,36 +10,6 @@
     "memory": "2048",
     "containerDefinitions": [
         {
-            "name": "firelens-container",
-            "image": "public.ecr.aws/aws-observability/aws-for-fluent-bit:stable",
-            "essential": false,
-            "cpu": 0,
-            "portMappings": [],
-            "environment": [
-                {
-                    "name": "FLB_LOG_LEVEL",
-                    "value": "debug"
-                }
-            ],
-            "mountPoints": [],
-            "volumesFrom": [],
-            "user": "0",
-            "firelensConfiguration": {
-                "type": "fluentbit",
-                 "options": {
-                    "enable-ecs-log-metadata": "true"
-                }
-            },
-            "logConfiguration": {
-              "logDriver": "awslogs",
-              "options": {
-                "awslogs-group": "/ecs/cicrc-{{environment}}",
-                "awslogs-region": "us-east-1",
-                "awslogs-stream-prefix": "firelens-container"
-              }
-            }
-        },
-        {
             "name": "web",
             "image": "{{image_id}}",
             "cpu": 0,
@@ -78,15 +48,12 @@
                 }
             ],
             "logConfiguration": {
-                "logDriver": "awsfirelens",
+                "logDriver": "splunk",
                 "options": {
-                  "Format": "json_lines",
-                  "Name": "splunk",
-                  "Host": "{{splunk_host}}",
-                  "Port": "{{splunk_port}}",
-                  "Splunk_Token": "{{splunk_token}}",
-                  "tls": "on",
-                  "tls.verify": "off"
+                    "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
+                    "tag": "crcr-{{environment}}",
+                    "splunk-token":"{{splunk_token}}",
+                    "verify_connection":false
                 }
             }
         }
