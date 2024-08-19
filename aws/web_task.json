@@ -55,7 +55,7 @@
                     "splunk-token":"{{splunk_token}}",
                     "splunk-index": "crcr",
                     "splunk-verify-connection": "false",
-                    "splunk-ca-path": "/usr/local/share/ca-certificates/splunk-ca/"
+                    "splunk-capath": "/etc/ssl/nih_ca2.pem"
                 }
             }
         }
