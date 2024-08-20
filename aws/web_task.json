@@ -54,8 +54,8 @@
                     "tag": "crcr-{{environment}}",
                     "splunk-token":"{{splunk_token}}",
                     "splunk-index": "crcr",
-                    "splunk-verify-connection": "false",
-                    "splunk-caname": "nih_ca2.pem"
+                    "splunk-verify-connection": "true",
+                    "splunk-caname": "HHS-FPKI-Intermediate-CA-E1"
                 }
             }
         }
