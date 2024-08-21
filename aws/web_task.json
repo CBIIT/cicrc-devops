@@ -53,7 +53,6 @@
                     "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
                     "tag": "crcr-{{environment}}",
                     "splunk-token":"{{splunk_token}}",
-                    "splunk-index": "crcr",
                     "splunk-verify-connection": "true",
                     "splunk-insecureskipverify": "true",
                     "splunk-caname": "HHS-FPKI-Intermediate-CA-E1"
