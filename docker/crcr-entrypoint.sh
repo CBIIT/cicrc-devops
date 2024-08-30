@@ -23,4 +23,4 @@ vendor/bin/drush cache-rebuild \
  && vendor/bin/drush search-api:clear -y \
  && vendor/bin/drush search-api:index -y \
  && vendor/bin/drush cache-rebuild \
- && vendor/bin/drush config-split:import "/var/www/html/config/$CONF_DIR"
+ && vendor/bin/drush config-split:import "config/$CONF_DIR"
