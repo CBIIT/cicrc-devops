@@ -30,15 +30,18 @@ RUN composer require drush/drush:12.5.1 -n
 
 RUN cd /var/www/html/ && composer install
 
+RUN ls /var/www/html/vendor/bin \
+  && ls -al /var/www/html/
+
 # Pull the prod image from PHP
 FROM php:8.1.29-apache-bullseye AS final
 
 # Install php extensions
 RUN apt update && apt install -y apache2 libpng-dev && rm -rf /var/lib/apt/lists/* && docker-php-ext-install pdo_mysql gd
 
-#RUN curl -L https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar -o drush.phar \
-#  && chmod +x drush.phar \
-#  && mv drush.phar /usr/local/bin/drush
+RUN curl -L https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar -o drush.phar \
+  && chmod +x drush.phar \
+  && mv drush.phar /usr/local/bin/drush
 
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
@@ -54,7 +57,6 @@ COPY --chown=www-data:www-data --chmod=0755 crcr-entrypoint.sh /var/www/html/crc
 # config apache http server
 COPY default.conf /etc/apache2/sites-available/crcr.conf
 RUN a2ensite crcr
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Set PHP memory limit
 RUN echo 'memory_limit = 256M' >> /usr/local/etc/php/conf.d/custom-php.ini
