@@ -49,6 +49,8 @@ RUN update-ca-certificates
 
 RUN /var/www/html/vendor/bin/drush status
 
+COPY --chown=www-data:www-data --chmod=0755 crcr-entrypoint.sh /var/www/html/crcr-entrypoint.sh
+
 # config apache http server
 COPY default.conf /etc/apache2/sites-available/crcr.conf
 RUN a2ensite crcr
@@ -65,4 +67,4 @@ WORKDIR /var/www/html/
 # Expose port 80
 EXPOSE 80
 
-ENTRYPOINT [ "/bin/sh", "-c", "/var/www/html/docker/crcr-entrypoint.sh && apache2-foreground" ]
+ENTRYPOINT [ "/bin/sh", "-c", "/var/www/html/crcr-entrypoint.sh && apache2-foreground" ]
