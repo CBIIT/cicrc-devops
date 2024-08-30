@@ -65,4 +65,4 @@ WORKDIR /var/www/html/
 # Expose port 80
 EXPOSE 80
 
-ENTRYPOINT [ "/bin/sh", "-c", "/var/www/html/crcr-entrypoint.sh && apache2-foreground" ]
+ENTRYPOINT [ "/bin/sh", "-c", "/var/www/html/docker/crcr-entrypoint.sh && apache2-foreground" ]
