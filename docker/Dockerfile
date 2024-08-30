@@ -48,7 +48,7 @@ COPY *.crt /usr/local/share/ca-certificates/splunk-ca
 RUN update-ca-certificates
 
 # config apache http server
-COPY docker/default.conf /etc/apache2/sites-available/crcr.conf
+COPY default.conf /etc/apache2/sites-available/crcr.conf
 RUN a2ensite crcr
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
