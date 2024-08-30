@@ -54,14 +54,14 @@
                 }
             ],
             "logConfiguration": {
-                "logDriver": "splunk",
+                "logDriver": "awslogs",
                 "options": {
-                    "splunk-url": "https://{{splunk_host}}:{{splunk_port}}",
-                    "tag": "crcr-{{environment}}",
-                    "splunk-token":"{{splunk_token}}",
-                    "splunk-verify-connection": "true",
-                    "splunk-insecureskipverify": "true",
-                    "splunk-caname": "HHS-FPKI-Intermediate-CA-E1"
+                    "awslogs-group": "/ecs/cicrc-dev-web",
+                    "mode": "non-blocking",
+                    "max-buffer-size": "25m",
+                    "awslogs-stream-prefix": "crcr-ecs",
+                    "awslogs-create-group": "true",
+                    "awslogs-region": "us-east-1"
                 }
             }
         }
