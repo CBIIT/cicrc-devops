@@ -29,6 +29,12 @@
                     "readOnly": false
                 }
             ],
+            "environment": [
+                {
+                    "name": "CONF_DIR",
+                    "value": "{{environment}}"
+                }
+            ],
             "secrets": [
                 {
                     "name": "DB_NAME",

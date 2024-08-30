@@ -11,13 +11,16 @@ cp web/sites/default/settings.php.template web/sites/default/settings.php \
 chown www-data:www-data web/sites/default/settings.php
 
 # Run drush commands
-vendor/bin/drush cr \
- && vendor/bin/drush cim -y \
- && vendor/bin/drush cr \
- && vendor/bin/drush updb -y \
- && vendor/bin/drush cr \
- && vendor/bin/drush cim -y \
- && vendor/bin/drush cr \
- && vendor/bin/drush sapi-c -y \
- && vendor/bin/drush sapi-i -y \
- && vendor/bin/drush cr
+vendor/bin/drush cache-rebuild \
+ && vendor/bin/drush config-import -y \
+ && vendor/bin/drush cache-rebuild \
+ && vendor/bin/drush updatedb -y \
+ && vendor/bin/drush cache-rebuild \
+ && vendor/bin/drush config:import -y \
+ && vendor/bin/drush cache-rebuild \
+ && vendor/bin/drush state:set system.maintenance_mode 0 \
+ && vendor/bin/drush cache-rebuild \
+ && vendor/bin/drush search-api:clear -y \
+ && vendor/bin/drush search-api:index -y \
+ && vendor/bin/drush cache-rebuild \
+ && vendor/bin/drush config-split:import "$CONF_DIR"

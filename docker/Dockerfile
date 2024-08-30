@@ -1,5 +1,6 @@
 # Pull the base image from PHP
-FROM php:8.2.21-bullseye AS build
+FROM php:8.1.29-bullseye AS build
+
 
 # Install Dependencies
 RUN apt update && apt install -y zlib1g-dev libpng-dev git unzip && rm -rf /var/lib/apt/lists/* && docker-php-ext-install gd
@@ -17,13 +18,6 @@ RUN docker-php-ext-install zip
 # Install other PHP extensions or dependencies as needed
 RUN docker-php-ext-install gd
 
-# Get composer
-#RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-#  && php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
-#  && php composer-setup.php --version=2.4.4 \
-#  && php -r "unlink('composer-setup.php');" \
-#  && mv composer.phar /usr/local/bin/composer
-
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 COPY CRCR /var/www/html
@@ -36,18 +30,15 @@ RUN composer require drush/drush:12.5.1 -n
 
 RUN cd /var/www/html/ && composer install
 
-RUN ls /var/www/html/vendor/bin \
-  && ls -al /var/www/html/ 
-
 # Pull the prod image from PHP
-FROM php:8.2.21-apache-bullseye AS final
+FROM php:8.1.29-apache-bullseye AS final
 
 # Install php extensions
 RUN apt update && apt install -y apache2 libpng-dev && rm -rf /var/lib/apt/lists/* && docker-php-ext-install pdo_mysql gd
 
-RUN curl -L https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar -o drush.phar \
-  && chmod +x drush.phar \
-  && mv drush.phar /usr/local/bin/drush 
+#RUN curl -L https://github.com/drush-ops/drush-launcher/releases/latest/download/drush.phar -o drush.phar \
+#  && chmod +x drush.phar \
+#  && mv drush.phar /usr/local/bin/drush
 
 # Copy code
 COPY --chown=www-data:www-data --from=build /var/www/html /var/www/html
@@ -56,18 +47,10 @@ RUN mkdir /usr/local/share/ca-certificates/splunk-ca
 COPY *.crt /usr/local/share/ca-certificates/splunk-ca
 RUN update-ca-certificates
 
-RUN /var/www/html/vendor/bin/drush status
-
-# Copy code
-# COPY --chown=www-data:www-data --from=build /var/www/html/composer.json /var/www/html/composer.json
-# COPY --chown=www-data:www-data --from=build /var/www/html/web /var/www/html/web
-# COPY --chown=www-data:www-data --from=build /var/www/html/vendor /var/www/html/vendor
-# COPY --chown=www-data:www-data --from=build /var/www/html/config /var/www/html/config
-
-# Copy required config files 
-RUN rm -rf /etc/apache2/sites-enabled/000-default.conf
-COPY default.conf /etc/apache2/sites-enabled
-COPY --chown=www-data:www-data --chmod=0755 crcr-entrypoint.sh /var/www/html/crcr-entrypoint.sh
+# config apache http server
+COPY docker/default.conf /etc/apache2/sites-available/crcr.conf
+RUN a2ensite crcr
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Set PHP memory limit
 RUN echo 'memory_limit = 256M' >> /usr/local/etc/php/conf.d/custom-php.ini
