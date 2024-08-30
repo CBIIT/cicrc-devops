@@ -47,6 +47,8 @@ RUN mkdir /usr/local/share/ca-certificates/splunk-ca
 COPY *.crt /usr/local/share/ca-certificates/splunk-ca
 RUN update-ca-certificates
 
+RUN /var/www/html/vendor/bin/drush status
+
 # config apache http server
 COPY default.conf /etc/apache2/sites-available/crcr.conf
 RUN a2ensite crcr
