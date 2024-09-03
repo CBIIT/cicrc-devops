@@ -16,10 +16,10 @@ resource "aws_lb_target_group" "target_group" {
     protocol            = "HTTP"
     matcher             = "200"
     port                = each.value.port
-    interval            = 45
+    interval            = 100
     timeout             = 40
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
+    healthy_threshold   = 5
+    unhealthy_threshold = 5
   }
   tags = merge(
     {
