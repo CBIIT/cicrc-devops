@@ -97,7 +97,7 @@ pipeline {
 				# build CICRC Docker container
 				echo "Building: $ECR_REPO:$CODE_BRANCH.$BUILD_NUMBER"
 
-				ls cd $WORKSPACE/cicrc-devops/docker/CRCR && cd $WORKSPACE/cicrc-devops/docker/CRCR/docker && DOCKER_BUILDKIT=1 docker build -t $REPO_URL:$CODE_BRANCH.$BUILD_NUMBER .
+				ls $WORKSPACE/cicrc-devops/docker/CRCR && cd $WORKSPACE/cicrc-devops/docker/CRCR/docker && DOCKER_BUILDKIT=1 docker build -t $REPO_URL:$CODE_BRANCH.$BUILD_NUMBER .
 
 				'''
 
