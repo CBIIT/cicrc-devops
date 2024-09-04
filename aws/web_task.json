@@ -32,7 +32,7 @@
             "environment": [
                 {
                     "name": "CONF_DIR",
-                    "value": "dev"
+                    "value": "{{environment}}"
                 }
             ],
             "secrets": [
