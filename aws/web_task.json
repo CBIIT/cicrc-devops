@@ -58,19 +58,19 @@
                 },
                 {
                     "name": "SAML_CRT",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:saml.crt"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:saml.crt::"
                 },
                 {
                     "name": "SECRETSALT",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:secretsalt"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:secretsalt::"
                 },
                 {
                     "name": "AUTH_ADMINPASSWORD",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:auth.adminpassword"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:auth.adminpassword::"
                 },
                 {
                     "name": "X509CERTIFICATE",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:nih.x509certificate"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:nih.x509certificate::"
                 }
             ],
             "logConfiguration": {
