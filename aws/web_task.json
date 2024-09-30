@@ -71,14 +71,6 @@
                 {
                     "name": "X509CERTIFICATE",
                     "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:nih.x509certificate"
-                },
-                {
-                    "name": "",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:"
-                },
-                {
-                    "name": "",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:"
                 }
             ],
             "logConfiguration": {
