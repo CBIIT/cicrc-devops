@@ -35,6 +35,10 @@
                     "value": "{{environment}}"
                 },
                 {
+                    "name": "ENV_NAME",
+                    "value": "{{environment}}"
+                },
+                {
                     "name": "NIH_SAML2_DOMAIN",
                     "value": "authdev.nih.gov"
                 }
