@@ -65,6 +65,10 @@
                     "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:saml.crt::"
                 },
                 {
+                    "name": "SAML_PEM",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:saml.pem::"
+                },
+                {
                     "name": "SECRETSALT",
                     "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:secretsalt::"
                 },
