@@ -65,7 +65,7 @@ pipeline {
   		steps {
 
   		checkout([$class: 'GitSCM',
-			branches: [[name: '*/main']],
+			branches: [[name: '*/crcr-728']],
 			doGenerateSubmoduleConfigurations: false,
 			extensions: [[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops']],
@@ -117,6 +117,7 @@ pipeline {
 				IMAGE_ID="$REPO_URL:$IMG_TAG"
 				EFS_ID=$(aws efs describe-file-systems  --query "FileSystems[?Name=='cicrc-$ENV-efs'].FileSystemId"  --output text)
 
+				echo "EFS describe passed"
 				sed -i "s|{{account_id}}|$ACCOUNT_ID|" cicrc-devops/aws/web_task.json
 				sed -i "s|{{image_id}}|$IMAGE_ID|" cicrc-devops/aws/web_task.json
 				sed -i "s|{{environment}}|$ENV|" cicrc-devops/aws/web_task.json
@@ -125,6 +126,7 @@ pipeline {
                 sed -i "s|{{splunk_port}}|$SPLUNK_PORT|" cicrc-devops/aws/web_task.json
                 sed -i "s|{{splunk_token}}|$SPLUNK_TOKEN|" cicrc-devops/aws/web_task.json
 
+				echo "aws ecs register-task-definition --region $REGION --cli-input-json file://cicrc-devops/aws/web_task.json"
 				aws ecs register-task-definition --region $REGION --cli-input-json file://cicrc-devops/aws/web_task.json
 
 				'''

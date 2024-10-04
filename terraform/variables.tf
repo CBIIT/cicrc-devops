@@ -107,6 +107,12 @@ variable "create_rds_backup_bucket" {
   description = "choose whether to create an s3 bucket for db backups"
 }
 
+variable "instance_class" {
+  description = "The instance type of the RDS instance"
+  type        = string
+  default     = "db.t3.micro"
+}
+
 ####### UNUSED #######
 #variable "iam_prefix" {
 #  type        = string

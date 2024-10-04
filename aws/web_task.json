@@ -10,36 +10,6 @@
     "memory": "2048",
     "containerDefinitions": [
         {
-            "name": "firelens-container",
-            "image": "public.ecr.aws/aws-observability/aws-for-fluent-bit:stable",
-            "essential": false,
-            "cpu": 0,
-            "portMappings": [],
-            "environment": [
-                {
-                    "name": "FLB_LOG_LEVEL",
-                    "value": "debug"
-                }
-            ],
-            "mountPoints": [],
-            "volumesFrom": [],
-            "user": "0",
-            "firelensConfiguration": {
-                "type": "fluentbit",
-                 "options": {
-                    "enable-ecs-log-metadata": "true"
-                }
-            },
-            "logConfiguration": {
-              "logDriver": "awslogs",
-              "options": {
-                "awslogs-group": "/ecs/cicrc-{{environment}}",
-                "awslogs-region": "us-east-1",
-                "awslogs-stream-prefix": "firelens-container"
-              }
-            }
-        },
-        {
             "name": "web",
             "image": "{{image_id}}",
             "cpu": 0,
@@ -59,7 +29,21 @@
                     "readOnly": false
                 }
             ],
+            "environment": [
+                {
+                    "name": "CONF_DIR",
+                    "value": "{{environment}}"
+                },
+                {
+                    "name": "ENV_NAME",
+                    "value": "{{environment}}"
+                }
+            ],
             "secrets": [
+                {
+                    "name": "NIH_SAML2_DOMAIN",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:nih.saml2.domain::"
+                },
                 {
                     "name": "DB_NAME",
                     "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/{{environment}}:DB_NAME::"
@@ -75,18 +59,37 @@
                 {
                     "name": "DB_USER",
                     "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/db/{{environment}}:DB_USER::"
+                },
+                {
+                    "name": "SAML_CRT",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlcrt/{{environment}}"
+                },
+                {
+                    "name": "SAML_PEM",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlpem/{{environment}}"
+                },
+                {
+                    "name": "SECRETSALT",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:secretsalt::"
+                },
+                {
+                    "name": "AUTH_ADMINPASSWORD",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:auth.adminpassword::"
+                },
+                {
+                    "name": "X509CERTIFICATE",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:nih.x509certificate::"
                 }
             ],
             "logConfiguration": {
-                "logDriver": "awsfirelens",
+                "logDriver": "awslogs",
                 "options": {
-                  "Format": "json_lines",
-                  "Name": "splunk",
-                  "Host": "{{splunk_host}}",
-                  "Port": "{{splunk_port}}",
-                  "Splunk_Token": "{{splunk_token}}",
-                  "tls": "on",
-                  "tls.verify": "off"
+                    "awslogs-group": "/ecs/cicrc-dev-web",
+                    "mode": "non-blocking",
+                    "max-buffer-size": "25m",
+                    "awslogs-stream-prefix": "crcr-ecs",
+                    "awslogs-create-group": "true",
+                    "awslogs-region": "us-east-1"
                 }
             }
         }
