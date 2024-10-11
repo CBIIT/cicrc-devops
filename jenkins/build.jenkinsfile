@@ -170,8 +170,8 @@ pipeline {
 
                 tagRepo ( 
                     gitTag: "${CODE_BRANCH}.${BUILD_NUMBER}",
-                    gitUrl: "github.com/CBIIT/cicrc-devops",
-                    checkoutDirectory: "cicrc-devops"
+                    gitUrl: "github.com/CBIIT/CRCR.git",
+                    checkoutDirectory: "crcr"
                 )
 
             }
