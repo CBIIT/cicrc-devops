@@ -19,8 +19,8 @@ certificate_domain_name = "*.cancer.gov"
 domain_name = "cancer.gov"
 
 #ecr
-create_ecr_repos = false
-ecr_repo_names = [""]
+create_ecr_repos = true
+ecr_repo_names = ["web"]
 
 #ecs
 application_subdomain = "computational"
