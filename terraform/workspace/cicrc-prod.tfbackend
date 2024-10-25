@@ -1,4 +1,4 @@
-    bucket = "cicrc-terraform-remote-state"
+    bucket = "cicrc-terraform-prod-remote-state"
     key = "cicrc/prod/terraform.tfstate"
     workspace_key_prefix = "env"
     region = "us-east-1"
