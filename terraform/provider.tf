@@ -14,7 +14,7 @@ provider "aws" {
     tags = {
       EnvironmentTier = terraform.workspace
       DevLead         = "Saman Moshafi"
-      CreatedBy       = "sowmya karavadi"
+      CreatedBy       = "Mounica Ganta"
       ResourceName    = "NCI-CRCR-${terraform.workspace}"
       FISMA           = "moderate"
       ManagedBy       = "terraform"
