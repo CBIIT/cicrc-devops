@@ -14,10 +14,10 @@ pipeline {
 
         extendedChoice(
             name: 'Environment',
-            defaultValue: 'dev',
+            defaultValue: 'stage',
             description: 'Choose the environment to deploy to',
             type: 'PT_SINGLE_SELECT',
-            value: 'qa,dev')
+            value: 'stage,prod')
 
   }
 
@@ -31,7 +31,7 @@ pipeline {
 
 	ENV      = "${params.Environment}"
 	REGION   = "us-east-1"
-	JOB_PATH = '_default/_lower/CICRC'
+	JOB_PATH = '_default/_higher/CICRC'
 	PROJECT  = "crcr"
 	APP      = "backend"
 
@@ -65,7 +65,7 @@ pipeline {
   		steps {
 
   		checkout([$class: 'GitSCM',
-			branches: [[name: '*/main']],
+			branches: [[name: '*/higher']],
 			doGenerateSubmoduleConfigurations: false,
 			extensions: [[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops']],
@@ -97,7 +97,7 @@ pipeline {
 			IMG_TAG  = "${params.Image_Tag}"
 			ENV      = "${params.Environment}"
 			ECR_REPO = "cicrc-web"
-			// set ECR account number
+			// set ECR account number 718499258026
 			ECR_ACCOUNT = "002558681621"
 
 			// set repo URL
