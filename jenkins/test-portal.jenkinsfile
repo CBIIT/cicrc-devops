@@ -1,0 +1,195 @@
+pipeline {
+    agent {
+        node {
+            label "slave-ncias-d2999-c"
+        }
+    }
+
+    parameters {
+
+        gitParameter(branchFilter: 'origin/(.*)',
+            defaultValue: 'portal-test',
+            name: 'Branch',
+            type: 'PT_BRANCH_TAG',
+            quickFilterEnabled: true,
+            selectedValue: 'DEFAULT',
+            sortMode: 'ASCENDING_SMART',
+            tagFilter: '*',
+            useRepository: "https://github.com/CBIIT/CRCR")
+
+        string(defaultValue: "crcr-portal/portal-test/crcr/CICRC2.prj",
+            description: 'Enter the Katalon Project file (include the path relative to the repo root):',
+            name: 'KatalonPrj')
+
+        string(defaultValue: "Test Suites/CRCR_QA/CRCR_Models_Catalog_Page_QA, Test Suites/CRCR_QA/CRCR_Publications_Page_QA, Test Suites/CRCR_QA/CRCR_Software_Catalog_Page_QA, Test Suites/CRCR_QA/CRCR_Test_All_Page_Hyperlinks_QA, Test Suites/CRCR_QA/CRCR_Education_Page_QA, Test Suites/CRCR_QA/CRCR_Datasets_Page_QA, Test Suites/CRCR_QA/CRCR_Use_Case_Page_QA",
+            description: 'Enter a comma separated list of Katalon Suite Paths (not including the test suite file):',
+            name: 'KatalonSuite')
+
+        string(defaultValue: "tin.tran@nih.gov;NCITestAutoForCICRC@mail.nih.gov",
+            description: 'Enter a list of email addresses to notify in case of test failures:',
+            name: 'EmailRecipients')
+    }
+
+    options {
+        timestamps()
+    }
+
+    environment {
+        //BROWSER   = "Chrome"
+	BROWSER   = "Firefox"
+        GIT_CREDS = "sowmya-jenkins-token"
+        REPO      = "https://github.com/CBIIT/CRCR.git"
+
+    }
+
+    stages {
+        stage('checkout') {
+            steps {
+                checkout([$class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    extensions: [[$class: 'SubmoduleOption',
+                    recursiveSubmodules: true],
+                    [$class: 'RelativeTargetDirectory',
+                    relativeTargetDir: 'cicrc-devops']],
+                    userRemoteConfigs:
+                    [[url: 'https://github.com/CBIIT/cicrc-devops.git']]])
+
+                checkout([$class: 'GitSCM',
+                    branches: [[name: "${params.Branch}"]],
+                    extensions: [
+                        [$class: 'SparseCheckoutPaths',
+                            sparseCheckoutPaths: [
+                                [$class: 'SparseCheckoutPath', path: 'crcr-portal/portal-test']
+                            ]
+                        ],
+                        [$class: 'SubmoduleOption',
+                    recursiveSubmodules: true],
+                    [$class: 'RelativeTargetDirectory',
+                    relativeTargetDir: 'cicrc-devops/docker/CRCR/']],
+                    userRemoteConfigs:
+                    [[credentialsId: 'sowmya-jenkins-token', url: 'https://github.com/CBIIT/CRCR']]])
+            }
+        }
+
+        stage('run tests') {
+            environment {
+                KATALON_BROWSER     = "${env.BROWSER}"
+                KATALON_PRJ         = "${params.KatalonPrj}"
+                KATALON_SUITE_PATHS = "${params.KatalonSuite}"
+		DISPLAY = ':99'
+            }
+
+            agent {
+                docker {
+                    //image 'katalonstudio/katalon:9.3.2'
+			image 'katalonstudio/katalon:9.5.0'
+                    args '--net=host -u root'
+                    reuseNode true
+                }
+            }
+
+            steps {
+                script {
+                    //sh 'unset DISPLAY'
+		    sh 'Xvfb :99 -screen 0 1024x768x24 &'
+		    def suiteList = KATALON_SUITE_PATHS.split(',').collect { it.trim() }
+                    def failures = []
+
+                    suiteList.each { suite ->
+                        try {
+                            echo "Running Test Suite: ${suite}"
+
+                            withCredentials([string(credentialsId: 'Katalon_API_Key', variable: 'api_key'),
+                                             string(credentialsId: 'Katalon_Org_ID', variable: 'org_id')]) {
+
+                                sh label: 'Katalon-Tests', script: """#!/bin/bash
+                               //chrome_ver=\$(google-chrome --version)
+                               //echo "Chrome Version: \$chrome_ver"
+                               //driver_ver=\$("/opt/katalonstudio/configuration/resources/drivers/chromedriver_linux64/chromedriver" --version)
+                               //echo "ChromeDriver Version: \$driver_ver"
+
+                               gecko_ver=\$(firefox --version)
+                               echo "Firefox Version: \$gecko_ver"
+                               driver_ver=\$("/opt/katalonstudio/configuration/resources/drivers/firefox_win64/geckodriver" --version)
+                               echo "Firefox Version: \$driver_ver"
+
+
+
+                                    dateStamp=\$(date +%Y%m%d)
+                                    rm -rf results && mkdir results
+                                    profile_name="default"
+                                    suite_file=\$(basename "${suite}")
+                                    reportFile="\${suite_file}_\${dateStamp}_build_\${BUILD_NUMBER}"
+
+                                    katalonc -noSplash -runMode=console --config -projectPath="\$WORKSPACE/${KATALON_PRJ}" -retry=0 -testSuitePath="${suite}" -executionProfile="\$profile_name" -browserType="\${KATALON_BROWSER} (headless)" -reportFolder=results -reportFileName="\$reportFile" -apiKey=\$api_key -orgID=\$org_id
+                                """
+                            }
+                        } catch (Exception e) {
+                            echo "Error occurred while running suite ${suite}: ${e.getMessage()}"
+                            failures.add(suite)
+                        }
+                    }
+
+                    if (failures) {
+                        currentBuild.result = 'UNSTABLE'
+                        echo "The following test suites failed: ${failures.join(', ')}"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+
+        always {
+
+            publishHTML([
+                allowMissing: true,
+                alwaysLinkToLastBuild: false,
+                includes: '**/*.html',
+                keepAll: true,
+                reportDir: 'crcr-portal/portal-test/crcr/results',
+                reportFiles: '*.html',
+                reportName: 'QA Katalon HTML Report',
+                reportTitles: ''])
+
+
+            withCredentials([string(credentialsId: 'CICRC_Email', variable: 'results_email')]) {
+
+                    emailext(attachmentsPattern: 'crcr-portal/portal-test/crcr/results/*.html',
+                        body: "View Katalon Test Results in Jenkins for CRCR BUILD #${BUILD_NUMBER}.",
+                        subject: 'QA Katalon Test Results for CRCR Build #${BUILD_NUMBER}',
+                        to: "${params.EmailRecipients}, ${results_email}",
+                        mimeType: 'text/html')
+            }
+
+script {
+    // Capture the output of the shell command
+    def reportLink = sh(script: 'echo $BUILD_URL/QA_20Katalon_20HTML_20Report/*zip*/', returnStdout: true)
+
+    // Remove any newline character that might be at the end of the captured output
+    reportLink = reportLink.replaceAll("\n", "")
+
+    // Construct the Slack message
+    def slackMessage = "Katalon Automated Test Build #${BUILD_NUMBER} Completed.\n"
+    slackMessage += "Katalon Test Report: <${reportLink}|Click To Download Test Report(s)>\n"
+
+    // Send the message to Slack
+    slackSend(
+        channel: "#cicrc-pipeline_qa-automation-tests-jenkins-notifications",
+        token: "0GBqGODN3wqEmBX6iHQhU5gQ",
+        color: "good",
+        message: slackMessage
+    )
+}
+
+	}
+
+
+        cleanup {
+
+            cleanWs()
+
+        }
+    }
+  }
