@@ -59,7 +59,7 @@ pipeline {
                     extensions: [
                         [$class: 'SparseCheckoutPaths',
                             sparseCheckoutPaths: [
-                                [$class: 'SparseCheckoutPath', path: 'crcr-portal/portal-test']
+                                [$class: 'SparseCheckoutPath', path: 'CRCR/crcr-portal/portal-test']
                             ]
                         ],
                         [$class: 'SubmoduleOption',
