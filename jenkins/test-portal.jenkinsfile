@@ -86,13 +86,13 @@ pipeline {
                 KATALON_BROWSER     = "${env.BROWSER}"
                 KATALON_PRJ         = "${params.KatalonPrj}"
                 KATALON_SUITE_PATHS = "${params.KatalonSuite}"
-		DISPLAY = ':99'
+		        DISPLAY = ':99'
             }
 
             agent {
                 docker {
                     //image 'katalonstudio/katalon:9.3.2'
-			image 'katalonstudio/katalon:9.5.0'
+			        image 'katalonstudio/katalon:9.5.0'
                     args '--net=host -u root'
                     reuseNode true
                 }
@@ -101,8 +101,8 @@ pipeline {
             steps {
                 script {
                     //sh 'unset DISPLAY'
-		    sh 'Xvfb :99 -screen 0 1024x768x24 &'
-		    def suiteList = KATALON_SUITE_PATHS.split(',').collect { it.trim() }
+                    sh 'Xvfb :99 -screen 0 1024x768x24 &'
+                    def suiteList = KATALON_SUITE_PATHS.split(',').collect { it.trim() }
                     def failures = []
 
                     suiteList.each { suite ->
@@ -123,15 +123,13 @@ pipeline {
                                driver_ver=\$("/opt/katalonstudio/configuration/resources/drivers/firefox_win64/geckodriver" --version)
                                echo "Firefox Version: \$driver_ver"
 
+                                dateStamp=\$(date +%Y%m%d)
+                                rm -rf results && mkdir results
+                                profile_name="default"
+                                suite_file=\$(basename "${suite}")
+                                reportFile="\${suite_file}_\${dateStamp}_build_\${BUILD_NUMBER}"
 
-
-                                    dateStamp=\$(date +%Y%m%d)
-                                    rm -rf results && mkdir results
-                                    profile_name="default"
-                                    suite_file=\$(basename "${suite}")
-                                    reportFile="\${suite_file}_\${dateStamp}_build_\${BUILD_NUMBER}"
-
-                                    katalonc -noSplash -runMode=console --config -projectPath="\$WORKSPACE/${KATALON_PRJ}" -retry=0 -testSuitePath="${suite}" -executionProfile="\$profile_name" -browserType="\${KATALON_BROWSER} (headless)" -reportFolder=results -reportFileName="\$reportFile" -apiKey=\$api_key -orgID=\$org_id
+                                katalonc -noSplash -runMode=console --config -projectPath="\$WORKSPACE/${KATALON_PRJ}" -retry=0 -testSuitePath="${suite}" -executionProfile="\$profile_name" -browserType="\${KATALON_BROWSER} (headless)" -reportFolder=results -reportFileName="\$reportFile" -apiKey=\$api_key -orgID=\$org_id
                                 """
                             }
                         } catch (Exception e) {
@@ -158,7 +156,7 @@ pipeline {
                 alwaysLinkToLastBuild: false,
                 includes: '**/*.html',
                 keepAll: true,
-                reportDir: 'crcr-portal/portal-test/crcr/results',
+                reportDir: 'CRCR/crcr-portal/portal-test/crcr/results',
                 reportFiles: '*.html',
                 reportName: 'QA Katalon HTML Report',
                 reportTitles: ''])
@@ -166,7 +164,7 @@ pipeline {
 
             withCredentials([string(credentialsId: 'CICRC_Email', variable: 'results_email')]) {
 
-                    emailext(attachmentsPattern: 'crcr-portal/portal-test/crcr/results/*.html',
+                    emailext(attachmentsPattern: 'CRCR/crcr-portal/portal-test/crcr/results/*.html',
                         body: "View Katalon Test Results in Jenkins for CRCR BUILD #${BUILD_NUMBER}.",
                         subject: 'QA Katalon Test Results for CRCR Build #${BUILD_NUMBER}',
                         to: "${params.EmailRecipients}, ${results_email}",
