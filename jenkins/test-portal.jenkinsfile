@@ -35,7 +35,7 @@ pipeline {
             description: 'Enter a comma separated list of Katalon Suite Paths (not including the test suite file):',
             name: 'KatalonSuite')
 
-        string(defaultValue: "computational-tech-cancer2nih.gov;NCITestAutoForCICRC@mail.nih.gov",
+        string(defaultValue: "computational-cancer-tech@nih.gov;NCITestAutoForCICRC@mail.nih.gov",
             description: 'Enter a list of email addresses to notify in case of test failures:',
             name: 'EmailRecipients')
     }
@@ -46,7 +46,7 @@ pipeline {
 
     environment {
         //BROWSER   = "Chrome"
-	BROWSER   = "Firefox"
+	    BROWSER   = "Firefox"
         GIT_CREDS = "sowmya-jenkins-token"
         REPO      = "https://github.com/CBIIT/CRCR.git"
 
