@@ -46,7 +46,7 @@ pipeline {
         stage('checkout') {
             steps {
                 checkout([$class: 'GitSCM',
-                    branches: [[name: '*/main']],
+                    branches: [[name: "${params.DevOpsBranch}"]],
                     extensions: [[$class: 'SubmoduleOption',
                     recursiveSubmodules: true],
                     [$class: 'RelativeTargetDirectory',
@@ -55,7 +55,7 @@ pipeline {
                     [[url: 'https://github.com/CBIIT/cicrc-devops.git']]])
 
                 checkout([$class: 'GitSCM',
-                    branches: [[name: "${params.Branch}"]],
+                    branches: [[name: "${params.PortalBranchOrTag}"]],
                     extensions: [
                         [$class: 'SparseCheckoutPaths',
                             sparseCheckoutPaths: [
@@ -65,7 +65,7 @@ pipeline {
                         [$class: 'SubmoduleOption',
                     recursiveSubmodules: true],
                     [$class: 'RelativeTargetDirectory',
-                    relativeTargetDir: 'cicrc-devops/docker/CRCR/']],
+                    relativeTargetDir: 'cicrc-devops/CRCR/']],
                     userRemoteConfigs:
                     [[credentialsId: 'sowmya-jenkins-token', url: 'https://github.com/CBIIT/CRCR']]])
             }
