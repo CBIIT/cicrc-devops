@@ -156,7 +156,7 @@ pipeline {
                 alwaysLinkToLastBuild: false,
                 includes: '**/*.html',
                 keepAll: true,
-                reportDir: 'CRCR/crcr-portal/portal-test/crcr/results',
+                reportDir: 'cicrc-devops/CRCR/crcr-portal/portal-test/crcr/results',
                 reportFiles: '*.html',
                 reportName: 'QA Katalon HTML Report',
                 reportTitles: ''])
@@ -164,32 +164,32 @@ pipeline {
 
             withCredentials([string(credentialsId: 'CICRC_Email', variable: 'results_email')]) {
 
-                    emailext(attachmentsPattern: 'CRCR/crcr-portal/portal-test/crcr/results/*.html',
+                    emailext(attachmentsPattern: 'cicrc-devops/CRCR/crcr-portal/portal-test/crcr/results/*.html',
                         body: "View Katalon Test Results in Jenkins for CRCR BUILD #${BUILD_NUMBER}.",
                         subject: 'QA Katalon Test Results for CRCR Build #${BUILD_NUMBER}',
                         to: "${params.EmailRecipients}, ${results_email}",
                         mimeType: 'text/html')
             }
 
-script {
-    // Capture the output of the shell command
-    def reportLink = sh(script: 'echo $BUILD_URL/QA_20Katalon_20HTML_20Report/*zip*/', returnStdout: true)
+            script {
+                // Capture the output of the shell command
+                def reportLink = sh(script: 'echo $BUILD_URL/QA_20Katalon_20HTML_20Report/*zip*/', returnStdout: true)
 
-    // Remove any newline character that might be at the end of the captured output
-    reportLink = reportLink.replaceAll("\n", "")
+                // Remove any newline character that might be at the end of the captured output
+                reportLink = reportLink.replaceAll("\n", "")
 
-    // Construct the Slack message
-    def slackMessage = "Katalon Automated Test Build #${BUILD_NUMBER} Completed.\n"
-    slackMessage += "Katalon Test Report: <${reportLink}|Click To Download Test Report(s)>\n"
+                // Construct the Slack message
+                def slackMessage = "Katalon Automated Test Build #${BUILD_NUMBER} Completed.\n"
+                slackMessage += "Katalon Test Report: <${reportLink}|Click To Download Test Report(s)>\n"
 
-    // Send the message to Slack
-    slackSend(
-        channel: "#cicrc-pipeline_qa-automation-tests-jenkins-notifications",
-        token: "0GBqGODN3wqEmBX6iHQhU5gQ",
-        color: "good",
-        message: slackMessage
-    )
-}
+                // Send the message to Slack
+                slackSend(
+                    channel: "#cicrc-pipeline_qa-automation-tests-jenkins-notifications",
+                    token: "0GBqGODN3wqEmBX6iHQhU5gQ",
+                    color: "good",
+                    message: slackMessage
+                )
+            }
 
 	}
 
