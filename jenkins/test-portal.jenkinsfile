@@ -31,7 +31,7 @@ pipeline {
             description: 'Enter the Katalon Project file (include the path relative to the repo root):',
             name: 'KatalonPrj')
 
-        string(defaultValue: "Test Suites/CRCR_QA/CRCR_Models_Catalog_Page_QA",
+        string(defaultValue: "Test Suites/CRCR_QA/CRCR_Models_Catalog_Page_QA, Test Suites/CRCR_QA/CRCR_Publications_Page_QA, Test Suites/CRCR_QA/CRCR_Software_Catalog_Page_QA, Test Suites/CRCR_QA/CRCR_Test_All_Page_Hyperlinks_QA, Test Suites/CRCR_QA/CRCR_Education_Page_QA, Test Suites/CRCR_QA/CRCR_Datasets_Page_QA, Test Suites/CRCR_QA/CRCR_Use_Case_Page_QA",
             description: 'Enter a comma separated list of Katalon Suite Paths (not including the test suite file):',
             name: 'KatalonSuite')
 
