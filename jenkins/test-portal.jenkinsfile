@@ -8,8 +8,18 @@ pipeline {
     parameters {
 
         gitParameter(branchFilter: 'origin/(.*)',
+            defaultValue: 'main',
+            name: 'DevOpsBranch',
+            type: 'PT_BRANCH',
+            quickFilterEnabled: true,
+            selectedValue: 'DEFAULT',
+            sortMode: 'ASCENDING_SMART',
+            tagFilter: '*',
+            useRepository: "https://github.com/CBIIT/cicrc-devops")
+
+        gitParameter(branchFilter: 'origin/(.*)',
             defaultValue: 'portal-test',
-            name: 'Branch',
+            name: 'PortalBranchOrTag',
             type: 'PT_BRANCH_TAG',
             quickFilterEnabled: true,
             selectedValue: 'DEFAULT',
@@ -17,7 +27,7 @@ pipeline {
             tagFilter: '*',
             useRepository: "https://github.com/CBIIT/CRCR")
 
-        string(defaultValue: "crcr-portal/portal-test/crcr/CICRC2.prj",
+        string(defaultValue: "cicrc-devops/CRCR/crcr-portal/portal-test/crcr/CICRC2.prj",
             description: 'Enter the Katalon Project file (include the path relative to the repo root):',
             name: 'KatalonPrj')
 
@@ -25,7 +35,7 @@ pipeline {
             description: 'Enter a comma separated list of Katalon Suite Paths (not including the test suite file):',
             name: 'KatalonSuite')
 
-        string(defaultValue: "tin.tran@nih.gov;NCITestAutoForCICRC@mail.nih.gov",
+        string(defaultValue: "computational-cancer-tech@nih.gov;NCITestAutoForCICRC@mail.nih.gov",
             description: 'Enter a list of email addresses to notify in case of test failures:',
             name: 'EmailRecipients')
     }
@@ -36,7 +46,7 @@ pipeline {
 
     environment {
         //BROWSER   = "Chrome"
-	BROWSER   = "Firefox"
+	    BROWSER   = "Firefox"
         GIT_CREDS = "sowmya-jenkins-token"
         REPO      = "https://github.com/CBIIT/CRCR.git"
 
@@ -76,13 +86,13 @@ pipeline {
                 KATALON_BROWSER     = "${env.BROWSER}"
                 KATALON_PRJ         = "${params.KatalonPrj}"
                 KATALON_SUITE_PATHS = "${params.KatalonSuite}"
-		DISPLAY = ':99'
+		        DISPLAY = ':99'
             }
 
             agent {
                 docker {
                     //image 'katalonstudio/katalon:9.3.2'
-			image 'katalonstudio/katalon:9.5.0'
+			        image 'katalonstudio/katalon:9.5.0'
                     args '--net=host -u root'
                     reuseNode true
                 }
@@ -91,8 +101,8 @@ pipeline {
             steps {
                 script {
                     //sh 'unset DISPLAY'
-		    sh 'Xvfb :99 -screen 0 1024x768x24 &'
-		    def suiteList = KATALON_SUITE_PATHS.split(',').collect { it.trim() }
+                    sh 'Xvfb :99 -screen 0 1024x768x24 &'
+                    def suiteList = KATALON_SUITE_PATHS.split(',').collect { it.trim() }
                     def failures = []
 
                     suiteList.each { suite ->
@@ -113,15 +123,13 @@ pipeline {
                                driver_ver=\$("/opt/katalonstudio/configuration/resources/drivers/firefox_win64/geckodriver" --version)
                                echo "Firefox Version: \$driver_ver"
 
+                                dateStamp=\$(date +%Y%m%d)
+                                rm -rf results && mkdir results
+                                profile_name="default"
+                                suite_file=\$(basename "${suite}")
+                                reportFile="\${suite_file}_\${dateStamp}_build_\${BUILD_NUMBER}"
 
-
-                                    dateStamp=\$(date +%Y%m%d)
-                                    rm -rf results && mkdir results
-                                    profile_name="default"
-                                    suite_file=\$(basename "${suite}")
-                                    reportFile="\${suite_file}_\${dateStamp}_build_\${BUILD_NUMBER}"
-
-                                    katalonc -noSplash -runMode=console --config -projectPath="\$WORKSPACE/${KATALON_PRJ}" -retry=0 -testSuitePath="${suite}" -executionProfile="\$profile_name" -browserType="\${KATALON_BROWSER} (headless)" -reportFolder=results -reportFileName="\$reportFile" -apiKey=\$api_key -orgID=\$org_id
+                                katalonc -noSplash -runMode=console --config -projectPath="\$WORKSPACE/${KATALON_PRJ}" -retry=0 -testSuitePath="${suite}" -executionProfile="\$profile_name" -browserType="\${KATALON_BROWSER} (headless)" -reportFolder=results -reportFileName="\$reportFile" -apiKey=\$api_key -orgID=\$org_id
                                 """
                             }
                         } catch (Exception e) {
@@ -148,7 +156,7 @@ pipeline {
                 alwaysLinkToLastBuild: false,
                 includes: '**/*.html',
                 keepAll: true,
-                reportDir: 'crcr-portal/portal-test/crcr/results',
+                reportDir: 'cicrc-devops/CRCR/crcr-portal/portal-test/crcr/results',
                 reportFiles: '*.html',
                 reportName: 'QA Katalon HTML Report',
                 reportTitles: ''])
@@ -156,32 +164,32 @@ pipeline {
 
             withCredentials([string(credentialsId: 'CICRC_Email', variable: 'results_email')]) {
 
-                    emailext(attachmentsPattern: 'crcr-portal/portal-test/crcr/results/*.html',
+                    emailext(attachmentsPattern: 'cicrc-devops/CRCR/crcr-portal/portal-test/crcr/results/*.html',
                         body: "View Katalon Test Results in Jenkins for CRCR BUILD #${BUILD_NUMBER}.",
                         subject: 'QA Katalon Test Results for CRCR Build #${BUILD_NUMBER}',
                         to: "${params.EmailRecipients}, ${results_email}",
                         mimeType: 'text/html')
             }
 
-script {
-    // Capture the output of the shell command
-    def reportLink = sh(script: 'echo $BUILD_URL/QA_20Katalon_20HTML_20Report/*zip*/', returnStdout: true)
+            script {
+                // Capture the output of the shell command
+                def reportLink = sh(script: 'echo $BUILD_URL/QA_20Katalon_20HTML_20Report/*zip*/', returnStdout: true)
 
-    // Remove any newline character that might be at the end of the captured output
-    reportLink = reportLink.replaceAll("\n", "")
+                // Remove any newline character that might be at the end of the captured output
+                reportLink = reportLink.replaceAll("\n", "")
 
-    // Construct the Slack message
-    def slackMessage = "Katalon Automated Test Build #${BUILD_NUMBER} Completed.\n"
-    slackMessage += "Katalon Test Report: <${reportLink}|Click To Download Test Report(s)>\n"
+                // Construct the Slack message
+                def slackMessage = "Katalon Automated Test Build #${BUILD_NUMBER} Completed.\n"
+                slackMessage += "Katalon Test Report: <${reportLink}|Click To Download Test Report(s)>\n"
 
-    // Send the message to Slack
-    slackSend(
-        channel: "#cicrc-pipeline_qa-automation-tests-jenkins-notifications",
-        token: "0GBqGODN3wqEmBX6iHQhU5gQ",
-        color: "good",
-        message: slackMessage
-    )
-}
+                // Send the message to Slack
+                slackSend(
+                    channel: "#cicrc-pipeline_qa-automation-tests-jenkins-notifications",
+                    token: "0GBqGODN3wqEmBX6iHQhU5gQ",
+                    color: "good",
+                    message: slackMessage
+                )
+            }
 
 	}
 
