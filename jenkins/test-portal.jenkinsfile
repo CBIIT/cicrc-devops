@@ -27,7 +27,7 @@ pipeline {
             tagFilter: '*',
             useRepository: "https://github.com/CBIIT/CRCR")
 
-        string(defaultValue: "crcr-portal/portal-test/crcr/CICRC2.prj",
+        string(defaultValue: "cicrc-devops/CRCR/crcr-portal/portal-test/crcr/CICRC2.prj",
             description: 'Enter the Katalon Project file (include the path relative to the repo root):',
             name: 'KatalonPrj')
 
