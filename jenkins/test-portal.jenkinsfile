@@ -38,6 +38,10 @@ pipeline {
         string(defaultValue: "computational-cancer-tech@nih.gov;NCITestAutoForCICRC@mail.nih.gov",
             description: 'Enter a list of email addresses to notify in case of test failures:',
             name: 'EmailRecipients')
+
+	string(defaultValue: "QA_Tier",
+            description: 'Enter name of Profile',
+            name: 'profile_name')
     }
 
     options {
@@ -86,8 +90,15 @@ pipeline {
                 KATALON_BROWSER     = "${env.BROWSER}"
                 KATALON_PRJ         = "${params.KatalonPrj}"
                 KATALON_SUITE_PATHS = "${params.KatalonSuite}"
+		KATALON_PROFILE = "${params.profile_name}".trim()
 		        DISPLAY = ':99'
-            }
+                    }
+
+steps {
+    script {
+        echo "Debugging KATALON_PROFILE: ${KATALON_PROFILE}"
+    }
+}	
 
             agent {
                 docker {
@@ -101,6 +112,8 @@ pipeline {
             steps {
                 script {
                     //sh 'unset DISPLAY'
+		    echo "Using Profile: ${KATALON_PROFILE}"
+
                     sh 'Xvfb :99 -screen 0 1024x768x24 &'
                     def suiteList = KATALON_SUITE_PATHS.split(',').collect { it.trim() }
                     def failures = []
@@ -112,7 +125,12 @@ pipeline {
                             withCredentials([string(credentialsId: 'Katalon_API_Key', variable: 'api_key'),
                                              string(credentialsId: 'Katalon_Org_ID', variable: 'org_id')]) {
 
+				 def KATALON_PROFILE = "${params.profile_name}"
+       				 echo "Katalon Profile: ${KATALON_PROFILE}"
+
                                 sh label: 'Katalon-Tests', script: """#!/bin/bash
+				echo "Running with Profile: \$KATALON_PROFILE"   # Debug statement
+
                                //chrome_ver=\$(google-chrome --version)
                                //echo "Chrome Version: \$chrome_ver"
                                //driver_ver=\$("/opt/katalonstudio/configuration/resources/drivers/chromedriver_linux64/chromedriver" --version)
@@ -129,7 +147,7 @@ pipeline {
                                 suite_file=\$(basename "${suite}")
                                 reportFile="\${suite_file}_\${dateStamp}_build_\${BUILD_NUMBER}"
 
-                                katalonc -noSplash -runMode=console --config -projectPath="\$WORKSPACE/${KATALON_PRJ}" -retry=0 -testSuitePath="${suite}" -executionProfile="\$profile_name" -browserType="\${KATALON_BROWSER} (headless)" -reportFolder=results -reportFileName="\$reportFile" -apiKey=\$api_key -orgID=\$org_id
+                                katalonc -noSplash -runMode=console --config -projectPath="\$WORKSPACE/${KATALON_PRJ}" -retry=0 -testSuitePath="${suite}" -executionProfile=\"${KATALON_PROFILE}\" -browserType="\${KATALON_BROWSER} (headless)" -reportFolder=results -reportFileName="\$reportFile" -apiKey=\$api_key -orgID=\$org_id
                                 """
                             }
                         } catch (Exception e) {
