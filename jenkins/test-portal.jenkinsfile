@@ -94,12 +94,6 @@ pipeline {
 		        DISPLAY = ':99'
                     }
 
-steps {
-    script {
-        echo "Debugging KATALON_PROFILE: ${KATALON_PROFILE}"
-    }
-}	
-
             agent {
                 docker {
                     //image 'katalonstudio/katalon:9.3.2'
