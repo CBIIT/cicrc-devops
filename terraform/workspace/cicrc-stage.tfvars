@@ -10,7 +10,7 @@ private_subnet_ids = [
 
 vpc_id = "vpc-c29e1dba"
 project = "cicrc"
-instance_class=db.m6g.large
+instance_class= "db.m6g.large"
 
 region = "us-east-1"
 create_rds_backup_bucket=true
