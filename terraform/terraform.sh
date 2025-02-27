@@ -1,6 +1,6 @@
 #!/bin/bash 
-wget https://releases.hashicorp.com/terraform/1.3.6/terraform_1.3.6_linux_amd64.zip
-unzip terraform_1.3.6_linux_amd64.zip
+wget https://releases.hashicorp.com/terraform/1.10.5/terraform_1.10.5_linux_amd64.zip
+unzip terraform_1.10.5_linux_amd64.zip
 mkdir ~/bin
 mv terraform ~/bin
 git clone https://github.com/CBIIT/cicrc-devops.git
