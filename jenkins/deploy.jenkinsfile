@@ -1,7 +1,7 @@
 pipeline {
 	agent {
 		node {
-			label 'slave-ncias-s3580-c'
+			label 'cicrc-deploy-agent'
 		}
 	}
 
