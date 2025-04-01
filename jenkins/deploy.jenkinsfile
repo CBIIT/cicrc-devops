@@ -71,7 +71,7 @@ pipeline {
 			relativeTargetDir: 'cicrc-devops']],
 			submoduleCfg: [],
 			userRemoteConfigs:
-			[[url: 'https://github.com/CBIIT/cicrc-devops.git']]])
+			[[credentialsId: 'sowmya-jenkins-token',url: 'https://github.com/CBIIT/cicrc-devops.git']]])
 
         }
 
