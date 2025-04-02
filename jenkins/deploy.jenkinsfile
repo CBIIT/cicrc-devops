@@ -115,7 +115,7 @@ pipeline {
 				echo "Updating Task Defintion to Use: $ECR_REPO:$IMG_TAG, env: $ENV"
 				ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 				IMAGE_ID="$REPO_URL:$IMG_TAG"
-				EFS_ID=$(aws efs describe-file-systems  --query "FileSystems[?Name=='cicrc-$ENV-efs'].FileSystemId"  --output text)
+				EFS_ID=$(aws efs describe-file-systems  --region $REGION --query "FileSystems[?Name=='cicrc-$ENV-efs'].FileSystemId"  --output text)
 
 				echo "EFS describe passed"
 				sed -i "s|{{account_id}}|$ACCOUNT_ID|" cicrc-devops/aws/web_task.json
