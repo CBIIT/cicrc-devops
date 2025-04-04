@@ -35,3 +35,7 @@ terraform plan -var-file=workspace/cicrc-stage.tfvars
 **This will run one terraform module**
 
 terraform plan -target=module.alb -var-file=workspace/cicrc-stage.tfvars
+
+**If no error and plan looks OK and will add, delete and modify as expected then apply**
+
+terraform apply -target=module.alb -var-file=workspace/cicrc-stage.tfvars
