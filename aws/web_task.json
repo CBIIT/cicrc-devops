@@ -24,7 +24,7 @@
             "essential": true,
 			"mountPoints": [
                 {
-                    "containerPath": "/www/html/web/sites/default/files",
+                    "containerPath": "/var/www/html/web/sites/default/files",
                     "sourceVolume": "cicrc-efs",
                     "readOnly": false
                 }
@@ -103,7 +103,7 @@
             "name": "cicrc-efs",
             "efsVolumeConfiguration": {
                 "fileSystemId": "{{efs_id}}",
-                "rootDirectory": "/var",
+                "rootDirectory": "/",
                 "transitEncryption": "ENABLED"
             }
         }
