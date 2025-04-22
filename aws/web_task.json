@@ -104,7 +104,10 @@
             "efsVolumeConfiguration": {
                 "fileSystemId": "{{efs_id}}",
                 "rootDirectory": "/",
-                "transitEncryption": "ENABLED"
+                "transitEncryption": "ENABLED",
+                "authorizationConfig": {
+                    "iam": "ENABLED"
+                }
             }
         }
     ]
