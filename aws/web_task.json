@@ -44,6 +44,10 @@
                     "name": "NIH_SAML2_DOMAIN",
                     "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:nih.saml2.domain::"
                 },
+	        {
+                    "name": "NIH_SAML2_HTTP",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:nih.saml2.http::"
+                },
                 {
                     "name": "NIH_IDP_PATH",
                     "valueFrom": "arn:aws:secretsmanager:us-east-1:{{account_id}}:secret:cicrc/simplesamlphp/{{environment}}:nih.idp.path::"
