@@ -70,7 +70,7 @@ pipeline {
 			[$class: 'RelativeTargetDirectory',
 			relativeTargetDir: 'cicrc-devops/docker/CRCR/']],
             userRemoteConfigs:
-			[[credentialsId: 'githubaccess-token', url: 'https://github.com/CBIIT/CRCR']]])
+			[[credentialsId: 'sowmya-jenkins-token', url: 'https://github.com/CBIIT/CRCR']]])
 
         }
 
